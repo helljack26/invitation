@@ -1,0 +1,7 @@
+./server/logs/*
+server/logs/*
+server/mysql/*
+*.pyc
+./mysql
+.env
+client/react-app/node_modules/*
