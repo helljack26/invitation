@@ -1,0 +1,83 @@
+version: "3"
+services:
+   # Database service
+   mysql:
+      image: mysql:8.0
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      environment:
+         MYSQL_ROOT_PASSWORD: hacked5430367aA!
+         MYSQL_PASSWORD: hacked5430367aA!
+         MYSQL_DATABASE: bill_manager_c
+         TZ: "Europe/Kiev" # Установка временной зоны
+      ports:
+         - "3306:3306"
+      volumes:
+         - mysql_data:/var/lib/mysql # Добавляем volume для хранения данных
+
+   # phpMyAdmin service
+   phpmyadmin:
+      container_name: phpmyadmin
+      image: phpmyadmin/phpmyadmin:latest
+      ports:
+         - "8082:80"
+      environment:
+         PMA_HOST: mysql
+         UPLOAD_LIMIT: 500M
+
+   # PHP service with PHP-FPM
+   php:
+      build: ./server/images
+      links:
+         - mysql
+      volumes:
+         - ./server/www:/var/www
+         - ./server/www/erp/certs:/etc/ssl/certs:rw
+         - ./server/images/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+         - ./tmp/nomenclature_images:/tmp/nomenclature_images
+
+      environment:
+         - DB_HOST=mysql
+         - DB_DATABASE=bill_manager_c
+         - DB_USERNAME=root
+         - DB_PASSWORD=hacked5430367aA!
+         - API_SECRET=your_secret_key
+         - REDIS_SERVERS=redis-node1:6379,redis-node2:6379,redis-node3:6379
+         - PHP_MEMORY_LIMIT=1G
+         - ENCRYPTION_KEY=asdzxc123
+   # Nginx service
+   nginx:
+      image: nginx:latest
+      ports:
+         - "80:80"
+         - "443:443"
+      volumes:
+         - ./server/hosts:/etc/nginx/conf.d:ro
+         - ./server/www:/var/www
+         - ./server/logs:/var/log/nginx
+      links:
+         - php
+      environment:
+         - DB_HOST=mysql
+         - DB_DATABASE=bill_manager_c
+         - DB_USERNAME=root
+         - DB_PASSWORD=hacked5430367aA!
+
+   # React frontend service
+   react-app:
+      build:
+         context: ./client/react-app # ✅ Ensure this path is correct
+         dockerfile: Dockerfile
+      ports:
+         - "3000:3000"
+      volumes:
+         - ./client/react-app:/app
+      environment: # ✅ Moved environment outside of build
+         - WATCHPACK_POLLING=true
+         - NODE_ENV=production
+         - REACT_APP_PATH=http://127.0.0.1
+
+# Добавляем секцию volumes
+volumes:
+   mysql_data:
+   rabbitmq_data:

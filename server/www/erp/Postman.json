@@ -1,0 +1,205 @@
+{
+    "info": {
+        "name": "ERP API Collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Register",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"username\": \"testuser\", \"email\": \"test@example.com\", \"password\": \"yourpassword\", \"first_name\": \"Test\", \"second_name\": \"User\", \"last_name\": \"Example\"}"
+                },
+                "url": {
+                    "raw": "http://localhost/api/auth/register",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "auth", "register"]
+                }
+            }
+        },
+        {
+            "name": "Create Company",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                    },
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "company_name",
+                            "value": "Название Компании",
+                            "type": "text"
+                        },
+                        {
+                            "key": "address",
+                            "value": "Адрес Компании",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://localhost/api/company/create",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "company", "create"]
+                }
+            }
+        },
+        {
+            "name": "List Subscriptions",
+            "request": {
+                "method": "GET",
+                "header": [
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "url": {
+                    "raw": "http://localhost/api/subscription/available",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "subscription", "available"]
+                }
+            }
+        },
+        {
+            "name": "View All Company Subscriptions",
+            "request": {
+                "method": "GET",
+                "header": [
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "url": {
+                    "raw": "http://localhost/api/subscription/vievall?limit=10&page=1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "subscription", "vievall"],
+                    "query": [
+                        { "key": "limit", "value": "10" },
+                        { "key": "page", "value": "1" }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Subscribe",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Authorization", "value": "Bearer {{token}}" },
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"subscription_type_id\": \"1\"}"
+                },
+                "url": {
+                    "raw": "http://localhost/api/subscription/subscribe",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "subscription", "subscribe"]
+                }
+            }
+        },
+        {
+            "name": "Change Subscription",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Authorization", "value": "Bearer {{token}}" },
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"new_subscription_type_id\": \"2\"}"
+                },
+                "url": {
+                    "raw": "http://localhost/api/subscription/update",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "subscription", "update"]
+                }
+            }
+        },
+        {
+            "name": "Assign Role",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" },
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"target_user_id\": \"2\", \"role_id\": \"3\"}"
+                },
+                "url": {
+                    "raw": "http://localhost/api/role/assign",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "role", "assign"]
+                }
+            }
+        },
+        {
+            "name": "Calculate Taxes",
+            "request": {
+                "method": "GET",
+                "header": [
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "url": {
+                    "raw": "http://localhost/api/tax/calculate",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "tax", "calculate"]
+                }
+            }
+        },
+        {
+            "name": "Get Current User Info",
+            "request": {
+                "method": "GET",
+                "header": [
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "url": {
+                    "raw": "http://localhost/api/user/current",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "user", "current"]
+                }
+            }
+        },
+        {
+            "name": "Update User Info",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" },
+                    { "key": "Authorization", "value": "Bearer {{token}}" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"user_name\": \"new_user_name\", \"first_name\": \"NewFirstName\", \"last_name\": \"NewLastName\", \"email\": \"newemail@example.com\"}"
+                },
+                "url": {
+                    "raw": "http://localhost/api/user/updateSelfInfo",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "path": ["api", "user", "updateSelfInfo"]
+                }
+            }
+        }
+    ]
+}
