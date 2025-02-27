@@ -1,23 +1,23 @@
-# Use a specific Node.js version
+# Use a lightweight Node.js image
 FROM node:18-alpine
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy package files first (for caching layers)
+# Copy package.json first to leverage Docker layer caching
 COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy the app source code
+# Copy all project files
 COPY . .
 
-# Build the Next.js app
-RUN npm run build
+# Ensure all dependencies are properly installed
+RUN npm rebuild && npm install @babel/runtime
 
-# Expose the port Next.js runs on
+# Expose Next.js port
 EXPOSE 3000
 
-# Start Next.js server
+# Start the Next.js app
 CMD ["npm", "run", "dev"]
