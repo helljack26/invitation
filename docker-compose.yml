@@ -72,9 +72,10 @@ services:
          - "3000:3000"
       volumes:
          - ./client/react-app:/app
+         - /app/node_modules
       environment: # ✅ Moved environment outside of build
          - WATCHPACK_POLLING=true
-         - NODE_ENV=production
+         - NODE_ENV=development
          - REACT_APP_PATH=http://127.0.0.1
 
 # Добавляем секцию volumes
