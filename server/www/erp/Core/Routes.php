@@ -11,7 +11,7 @@ use Middleware\AuthMiddleware;
 use Middleware\AuthService;
 use Controller\UserController;
 use Controller\AuthController;
-use Controller\WarehouseController;
+use Controller\GuestController;
 
 // Создаём экземпляр Database, который автоматически инициализирует соединения с MySQL и Redis
 $database = new Database();
@@ -28,14 +28,13 @@ $authMiddleware = new AuthMiddleware();
 $authService = new AuthService();
 
 // Создаём экземпляры моделей, передавая необходимые зависимости
-$warehouseModel = new \Model\WarehouseModel($conn, $cacheService);
-
+$guestModel = new \Model\GuestModel($conn);
 
 // Создаём экземпляры контроллеров, передавая необходимые зависимости
 $userController = new UserController($conn, $cacheService, $authMiddleware, $userModel);
 $authController = new AuthController();
 
-$warehouseController = new WarehouseController($warehouseModel, $userModel, $companyModel, $authMiddleware);
+$guestController = new GuestController($guestModel);
 // Определение маршрутов
 $routes = [
     '/api/user/list' => [$userController, 'list', 'auth' => true, 'subscription' => false],
@@ -46,13 +45,13 @@ $routes = [
     '/api/auth/register' => [$authController, 'register'],
     '/api/auth/authenticate' => [$authController, 'authenticate'],
 
-    // Склад
-    '/api/warehouse/createWarehouse' => [$warehouseController, 'createWarehouse', 'auth' => true, 'subscription' => true],
-    '/api/warehouse/editWarehouse' => [$warehouseController, 'editWarehouse', 'auth' => true, 'subscription' => true],
-    '/api/warehouse/deleteWarehouse' => [$warehouseController, 'deleteWarehouse', 'auth' => true, 'subscription' => true],
-    '/api/warehouse/listWarehouses' => [$warehouseController, 'listWarehouses', 'auth' => true, 'subscription' => true],
-    '/api/warehouse/getWarehouseById' => [$warehouseController, 'getWarehouseById', 'auth' => true, 'subscription' => true],
-
+    // Guest routes
+    '/api/guest/createGuest'   => [$guestController, 'createGuest', 'auth' => false],
+    '/api/guest/updateGuest'   => [$guestController, 'updateGuest', 'auth' => false],
+    '/api/guest/listGuests'    => [$guestController, 'listGuests', 'auth' => false],
+    '/api/guest/getGuestById'  => [$guestController, 'getGuestById', 'auth' => false],
+    '/api/guest/getGuestByUniquePath'  => [$guestController, 'getGuestByUniquePath', 'auth' => false],
+    '/api/guest/deleteGuest'   => [$guestController, 'deleteGuest', 'auth' => false],
 ];
 
 // Обработка предзапросов (CORS)
