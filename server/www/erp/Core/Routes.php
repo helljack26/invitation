@@ -9,7 +9,6 @@ namespace Router;
 use Model\Database;
 use Middleware\AuthMiddleware;
 use Middleware\AuthService;
-use Controller\UserController;
 use Controller\AuthController;
 use Controller\GuestController;
 
@@ -27,18 +26,16 @@ $fileServerManager  = new \Service\FileService\FileServerManager($conn);
 $authMiddleware = new AuthMiddleware();
 $authService = new AuthService();
 
+
 // Создаём экземпляры моделей, передавая необходимые зависимости
 $guestModel = new \Model\GuestModel($conn);
 
 // Создаём экземпляры контроллеров, передавая необходимые зависимости
-$userController = new UserController($conn, $cacheService, $authMiddleware, $userModel);
 $authController = new AuthController();
 
 $guestController = new GuestController($guestModel);
 // Определение маршрутов
 $routes = [
-    '/api/user/list' => [$userController, 'list', 'auth' => true, 'subscription' => false],
-    '/api/user/current' => [$userController, 'getCurrentUser', 'auth' => true, 'subscription' => false],
     // Аутентификация
     '/api/auth/login' => [$authController, 'login'],
     '/api/auth/logout' => [$authController, 'logout'],

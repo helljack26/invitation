@@ -1,7 +1,28 @@
+import Head from "next/head";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { gsap, Power3 } from "gsap";
+// Store
 import GuestStore from "../../stores/GuestStore";
+import { SmoothScrollProvider } from "../../stores/scroll";
+
+import style from "../../styles/main.module.scss";
+
+// Components
+import { Navbar } from "../../components/navbar";
+import { SideMenu } from "../../components/sideMenu";
+import { LeafsFalling } from "../../components/leafsFalling";
+import { NatureNeedsYou } from "../../components/Intro/natureNeedsYou";
+import { MembersAndParrot } from "../../components/Intro/membersAndParrot";
+import { Blog } from "../../components/blog";
+import { FirstSlider } from "../../components/firstSlider";
+import { OurTeam } from "../../components/ourTeam";
+import { TheScaleOf } from "../../components/theScaleOf";
+import { GetStartedForm } from "../../components/getStartedForm";
+import { ReadyAccordion } from "../../components/readyAccordion";
+import { SecondSlider } from "../../components/secondSlider";
+import { Footer } from "../../components/footer";
 
 const InvitationPage = observer(() => {
 	const router = useRouter();
@@ -13,33 +34,114 @@ const InvitationPage = observer(() => {
 		GuestStore.getGuestByUniquePath(uniquePath);
 	}, [uniquePath]);
 
-	if (GuestStore.loading) return <p>Loading...</p>;
-	if (GuestStore.error) return <p>Error: {GuestStore.error.message}</p>;
-
 	// Guest data from the store after fetching
 	const guest = GuestStore.guestData;
 
+	// Gsap
+	useEffect(() => {
+		gsap.fromTo(
+			".header_block",
+			{
+				opacity: 0,
+				y: -15,
+			},
+			{
+				duration: 2,
+				y: 0,
+				opacity: 1,
+				ease: Power3.easeInOut,
+				delay: 0.6,
+			}
+		);
+		gsap.fromTo(
+			".header_button",
+			{
+				opacity: 0,
+			},
+			{
+				duration: 2,
+				opacity: 1,
+				ease: Power3.easeInOut,
+				delay: 0.6,
+			}
+		);
+	});
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+	}, []);
+	if (GuestStore.loading) return <p>Loading...</p>;
+	if (GuestStore.error) return <p>Error: {GuestStore.error.message}</p>;
 	// If no guest found
 	if (!guest) {
 		return <p>No guest found for this invitation.</p>;
 	}
-
 	return (
-		<div style={{ padding: "20px" }}>
-			<h1>Wedding Invitation</h1>
-			<h2>
-				Welcome, {guest.first_name} {guest.last_name}!
-			</h2>
-			{guest.has_plus_one && guest.plus_one_name ? (
-				<p>Plus One: {guest.plus_one_name}</p>
-			) : (
-				<p>No plus one added.</p>
-			)}
-			{/* 
-        Here you can display any additional fields, 
-        e.g. wedding details, RSVP button, etc. 
-      */}
-		</div>
+		<>
+			<Head>
+				<title>Rootz</title>
+				<link
+					rel="icon"
+					href="/favicon.svg"
+				/>
+				<meta charSet="utf-8" />
+			</Head>
+
+			<LeafsFalling />
+
+			<SmoothScrollProvider>
+				<style
+					global
+					jsx
+				>{`
+					@font-face {
+						font-family: "Poppins-Regular";
+						src: url("/static/fonts/Poppins-Regular/Poppins-Regular.eot");
+						src: local("☺"),
+							url("/static/fonts/Poppins-Regular/Poppins-Regular.woff")
+								format("woff"),
+							url("/static/fonts/Poppins-Regular/Poppins-Regular.ttf")
+								format("truetype"),
+							url("/static/fonts/Poppins-Regular/Poppins-Regular.svg")
+								format("svg");
+						font-weight: normal;
+						font-style: normal;
+					}
+					@font-face {
+						font-family: "Poppins-Bold";
+						src: url("/static/fonts/Poppins-Bold/Poppins-Bold.eot");
+						src: local("☺"),
+							url("/static/fonts/Poppins-Bold/Poppins-Bold.woff")
+								format("woff"),
+							url("/static/fonts/Poppins-Bold/Poppins-Bold.ttf")
+								format("truetype"),
+							url("/static/fonts/Poppins-Bold/Poppins-Bold.svg")
+								format("svg");
+						font-weight: normal;
+						font-style: normal;
+					}
+				`}</style>
+
+				<Navbar />
+				<SideMenu />
+
+				<div
+					id="home"
+					className={style.intro}
+					data-scroll-section
+				>
+					<NatureNeedsYou />
+					<MembersAndParrot />
+				</div>
+				<Blog />
+				<FirstSlider />
+				<OurTeam />
+				<TheScaleOf />
+				<GetStartedForm />
+				<ReadyAccordion />
+				<SecondSlider />
+				<Footer />
+			</SmoothScrollProvider>
+		</>
 	);
 });
 

@@ -20,9 +20,9 @@ class GuestModel
     public function createGuest(array $data): array
     {
         $query = "INSERT INTO guests (
-                    first_name, last_name, unique_path, rsvp_status, rsvp_status_plus_one, special_requests, first_name_plus_1, last_name_plus_1
+                    first_name, last_name, unique_path, rsvp_status, rsvp_status_plus_one, alcohol_preferences, first_name_plus_1, last_name_plus_1
                   ) VALUES (
-                    :first_name, :last_name, :unique_path, :rsvp_status, :rsvp_status_plus_one, :special_requests, :first_name_plus_1, :last_name_plus_1
+                    :first_name, :last_name, :unique_path, :rsvp_status, :rsvp_status_plus_one, :alcohol_preferences, :first_name_plus_1, :last_name_plus_1
                   )";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':first_name', $data['first_name']);
@@ -32,7 +32,7 @@ class GuestModel
         $stmt->bindParam(':unique_path', $data['unique_path']);
         $stmt->bindParam(':rsvp_status', $data['rsvp_status']);
         $stmt->bindParam(':rsvp_status_plus_one', $data['rsvp_status_plus_one']);
-        $stmt->bindParam(':special_requests', $data['special_requests']);
+        $stmt->bindParam(':alcohol_preferences', $data['alcohol_preferences']);
 
         if (!$stmt->execute()) {
             throw new Exception("Failed to insert guest record.");
@@ -92,7 +92,7 @@ class GuestModel
                     unique_path = :unique_path,
                     rsvp_status = :rsvp_status,
                     rsvp_status_plus_one = :rsvp_status_plus_one,
-                    special_requests = :special_requests,
+                    alcohol_preferences = :alcohol_preferences,
                     updated_at = CURRENT_TIMESTAMP
                   WHERE guest_id = :guest_id";
         $stmt = $this->conn->prepare($query);
@@ -103,7 +103,7 @@ class GuestModel
         $stmt->bindParam(':unique_path', $data['unique_path']);
         $stmt->bindParam(':rsvp_status', $data['rsvp_status']);
         $stmt->bindParam(':rsvp_status_plus_one', $data['rsvp_status_plus_one']);
-        $stmt->bindParam(':special_requests', $data['special_requests']);
+        $stmt->bindParam(':alcohol_preferences', $data['alcohol_preferences']);
         $stmt->bindParam(':guest_id', $guestId, PDO::PARAM_INT);
 
         if (!$stmt->execute()) {

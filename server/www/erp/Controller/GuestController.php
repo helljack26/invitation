@@ -31,7 +31,7 @@ class GuestController
                 'unique_path'           => $data['unique_path'],
                 'rsvp_status'           => $data['rsvp_status'] ?? 'pending',
                 'rsvp_status_plus_one'  => $data['rsvp_status_plus_one'] ?? 'pending',
-                'special_requests'      => $data['special_requests'] ?? ''
+                'alcohol_preferences'      => $data['alcohol_preferences'] ?? ''
             ];
 
             $result = $this->guestModel->createGuest($guestData);
@@ -69,7 +69,7 @@ class GuestController
                 'unique_path'           => $data['unique_path'],
                 'rsvp_status'           => $data['rsvp_status'] ?? 'pending',
                 'rsvp_status_plus_one'  => $data['rsvp_status_plus_one'] ?? 'pending',
-                'special_requests'      => $data['special_requests'] ?? ''
+                'alcohol_preferences'      => $data['alcohol_preferences'] ?? ''
             ];
 
             $result = $this->guestModel->updateGuest($guestId, $guestData);
@@ -95,6 +95,7 @@ class GuestController
     {
         try {
             $guests = $this->guestModel->listGuests();
+
             http_response_code(200);
             echo json_encode(["guests" => $guests]);
         } catch (Exception $e) {
@@ -161,7 +162,7 @@ class GuestController
             http_response_code(400);
             echo json_encode(["error" => $e->getMessage()]);
         } catch (\Exception $e) {
-            http_response_code(600);
+            http_response_code(500);
             echo json_encode(["error" => "Failed to retrieve guest", "details" => $e->getMessage()]);
         }
     }
