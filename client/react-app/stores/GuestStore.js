@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
 
 class GuestStore {
+	apiUrl = "http://127.0.0.1";
 	guestData = null; // For single guest details
 	guestsList = []; // For list of guests
 	loading = false;
@@ -20,13 +21,15 @@ class GuestStore {
 		this.error = null;
 		try {
 			const response = await axios.post(
-				"http://127.0.0.1/api/guest/getGuestByUniquePath",
+				`${this.apiUrl}/api/guest/getGuestByUniquePath`,
 				{ unique_path: uniquePath },
 				{
 					headers: { "Content-Type": "application/json" },
-					withCredentials: false,
+					withCredentials: true,
 				}
 			);
+			console.log(response);
+
 			runInAction(() => {
 				this.guestData = response.data.guest;
 			});
@@ -50,7 +53,10 @@ class GuestStore {
 		this.loading = true;
 		this.error = null;
 		try {
-			const response = await axios.post("/api/guest/createGuest", guest);
+			const response = await axios.post(
+				`${this.apiUrl}/api/guest/createGuest`,
+				guest
+			);
 			// Assuming the controller returns { guest_id: newId, ... }
 			// Optionally, update guestData or refresh the list.
 			this.guestData = response.data;
@@ -71,7 +77,10 @@ class GuestStore {
 		try {
 			// Combining guestId and guest properties into one object
 			const payload = { guest_id: guestId, ...guest };
-			const response = await axios.put("/api/guest/updateGuest", payload);
+			const response = await axios.put(
+				`${this.apiUrl}/api/guest/updateGuest`,
+				payload
+			);
 			// Assuming the controller returns { guest: { ... } }
 			this.guestData = response.data.guest;
 		} catch (err) {
@@ -88,7 +97,14 @@ class GuestStore {
 		this.loading = true;
 		this.error = null;
 		try {
-			const response = await axios.get("/api/guest/listGuests");
+			const response = await axios.post(
+				`${this.apiUrl}/api/guest/listGuests`,
+				{
+					headers: { "Content-Type": "application/json" },
+					withCredentials: true,
+				}
+			);
+			console.log("🚀 ~ GuestStore ~ listGuests= ~ response:", response);
 			// Assuming the controller returns { guests: [ ... ] }
 			this.guestsList = response.data.guests;
 		} catch (err) {
@@ -106,9 +122,12 @@ class GuestStore {
 		this.loading = true;
 		this.error = null;
 		try {
-			const response = await axios.post("/api/guest/getGuestById", {
-				guest_id: guestId,
-			});
+			const response = await axios.post(
+				`${this.apiUrl}/api/guest/getGuestById`,
+				{
+					guest_id: guestId,
+				}
+			);
 			// Assuming the controller returns { guest: { ... } }
 			this.guestData = response.data.guest;
 		} catch (err) {
@@ -127,7 +146,7 @@ class GuestStore {
 		this.error = null;
 		try {
 			// When using axios.delete with data, it must be provided as the 'data' option.
-			await axios.delete("/api/guest/deleteGuest", {
+			await axios.delete(`${this.apiUrl}/api/guest/deleteGuest`, {
 				data: { guest_id: guestId },
 			});
 			// Optionally, remove the guest from the list if it exists there.

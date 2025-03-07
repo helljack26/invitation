@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import GuestStore from "../../stores/GuestStore";
+import { transliterate } from "../../components/helpers/transliterate";
+// import { Link } from "react-router-dom";
 
 const AdminPage = observer(() => {
 	const [showModal, setShowModal] = useState(false);
 	const [guestToDelete, setGuestToDelete] = useState(null);
 
-	// Temporary states for new guest creation
+	// Тимчасові стани для створення нового гостя
 	const [newGuestFirstName, setNewGuestFirstName] = useState("");
 	const [newGuestLastName, setNewGuestLastName] = useState("");
 	const [plusOne, setPlusOne] = useState(false);
 	const [plusOneName, setPlusOneName] = useState("");
 
 	useEffect(() => {
-		// On page load, fetch the list of guests
+		// При завантаженні сторінки отримуємо список гостей
 		GuestStore.listGuests();
 	}, []);
 
 	const handleAddGuest = async () => {
 		if (!newGuestFirstName || !newGuestLastName) {
-			alert("Please fill in first and last name!");
+			alert("Будь ласка, заповніть ім'я та прізвище!");
 			return;
 		}
 
@@ -28,19 +30,21 @@ const AdminPage = observer(() => {
 			last_name: newGuestLastName,
 			has_plus_one: plusOne,
 			plus_one_name: plusOne ? plusOneName : "",
-			// Possibly generate a unique_path or let the backend do it
-			unique_path: `${newGuestFirstName}-${newGuestLastName}`.toLowerCase(),
+			// Можливо, згенерувати унікальний шлях або дозволити backend зробити це
+			unique_path: `${transliterate(newGuestFirstName)}_${transliterate(
+				newGuestLastName
+			)}`.toLowerCase(),
 		};
 
 		await GuestStore.createGuest(guestPayload);
 
-		// Clear inputs
+		// Очистити поля введення
 		setNewGuestFirstName("");
 		setNewGuestLastName("");
 		setPlusOne(false);
 		setPlusOneName("");
 
-		// Refresh the guest list
+		// Оновити список гостей
 		GuestStore.listGuests();
 	};
 
@@ -62,23 +66,23 @@ const AdminPage = observer(() => {
 		setShowModal(false);
 	};
 
-	// Render a loading or error state if needed
-	if (GuestStore.loading) return <p>Loading...</p>;
-	if (GuestStore.error) return <p>Error: {GuestStore.error.message}</p>;
+	// Відображення стану завантаження або помилки, якщо потрібно
+	if (GuestStore.loading) return <p>Завантаження...</p>;
+	if (GuestStore.error) return <p>Помилка: {GuestStore.error.message}</p>;
 
 	return (
 		<div style={{ padding: "20px" }}>
-			<h1>Admin - Guest List</h1>
+			<h1>Адміністратор - Список гостей</h1>
 
-			<h2>Add New Guest</h2>
+			<h2>Додати нового гостя</h2>
 			<div style={{ marginBottom: "1rem" }}>
 				<input
-					placeholder="First Name"
+					placeholder="Ім'я"
 					value={newGuestFirstName}
 					onChange={(e) => setNewGuestFirstName(e.target.value)}
 				/>
 				<input
-					placeholder="Last Name"
+					placeholder="Прізвище"
 					value={newGuestLastName}
 					onChange={(e) => setNewGuestLastName(e.target.value)}
 				/>
@@ -88,12 +92,12 @@ const AdminPage = observer(() => {
 						checked={plusOne}
 						onChange={() => setPlusOne(!plusOne)}
 					/>
-					Plus One?
+					Додатковий гість?
 				</label>
 				{plusOne && (
 					<input
 						style={{ marginLeft: "1rem" }}
-						placeholder="Plus One Name"
+						placeholder="Ім'я додаткового гостя"
 						value={plusOneName}
 						onChange={(e) => setPlusOneName(e.target.value)}
 					/>
@@ -102,11 +106,11 @@ const AdminPage = observer(() => {
 					style={{ marginLeft: "1rem" }}
 					onClick={handleAddGuest}
 				>
-					Add Guest
+					Додати гостя
 				</button>
 			</div>
 
-			<h2>All Guests</h2>
+			<h2>Всі гості</h2>
 			<table
 				border="1"
 				cellPadding="8"
@@ -115,11 +119,11 @@ const AdminPage = observer(() => {
 				<thead>
 					<tr>
 						<th>ID</th>
-						<th>Unique Path</th>
-						<th>Link</th>
-						<th>Full Name</th>
-						<th>Plus One</th>
-						<th>Actions</th>
+						<th>Унікальний шлях</th>
+						<th>Посилання</th>
+						<th>Повне ім'я</th>
+						<th>Додатковий гість</th>
+						<th>Дії</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -128,21 +132,21 @@ const AdminPage = observer(() => {
 							<td>{guest.guest_id}</td>
 							<td>{guest.unique_path}</td>
 							<td>
-								<Link href={`/invite/${guest.unique_path}`}>
-									View Invitation
-								</Link>
+								{/* <Link href={`/invite/${guest.unique_path}`}>
+									Переглянути запрошення
+								</Link> */}
 							</td>
 							<td>
 								{guest.first_name} {guest.last_name}
 							</td>
-							<td>{guest.has_plus_one ? guest.plus_one_name : "No"}</td>
+							<td>{guest.has_plus_one ? guest.plus_one_name : "Ні"}</td>
 							<td>
 								<button onClick={() => confirmDelete(guest)}>
-									Remove
+									Видалити
 								</button>
-								{/* 
-                  You could also add an "Edit" button here to open a form 
-                  that updates the guest with `GuestStore.updateGuest()`.
+								{/*
+                  Ви також можете додати кнопку "Редагувати", яка відкриває форму 
+                  для оновлення гостя за допомогою `GuestStore.updateGuest()`.
                 */}
 							</td>
 						</tr>
@@ -150,7 +154,7 @@ const AdminPage = observer(() => {
 				</tbody>
 			</table>
 
-			{/* Confirm Deletion Modal */}
+			{/* Модальне вікно підтвердження видалення */}
 			{showModal && (
 				<div
 					style={{
@@ -166,9 +170,9 @@ const AdminPage = observer(() => {
 					}}
 				>
 					<div style={{ background: "#fff", padding: "2rem" }}>
-						<p>Are you sure you want to delete guest?</p>
-						<button onClick={handleDelete}>Yes</button>
-						<button onClick={handleCancelDelete}>No</button>
+						<p>Ви впевнені, що хочете видалити гостя?</p>
+						<button onClick={handleDelete}>Так</button>
+						<button onClick={handleCancelDelete}>Ні</button>
 					</div>
 				</div>
 			)}
