@@ -1,84 +1,100 @@
-import { useState, useEffect, useRef } from 'react';
-import { isOnTop } from './helpers/isOnTop';
-import { detectActiveLink } from './helpers/detectActiveLink';
+import { useState, useEffect, useRef } from "react";
+import { isOnTop } from "./helpers/isOnTop";
+import { detectActiveLink } from "./helpers/detectActiveLink";
 
-import style from '../styles/main.module.scss';
-
-import { menuData } from '../res/menuLinks';
-import { observer } from 'mobx-react'
-import GlobalState from '../stores/GlobalState'
-import { runInAction } from 'mobx';
+import { menuData } from "../res/menuLinks";
+import { observer } from "mobx-react";
+import GlobalState from "../stores/GlobalState";
+import { runInAction } from "mobx";
 
 export const SideMenu = observer(() => {
-  const sideMenuRef = useRef(null);
+	const sideMenuRef = useRef(null);
 
-  const scrollY = GlobalState.locoScroll;
-  const scroll = GlobalState.scroll;
-  const { onTop } = isOnTop(scrollY);
-  const activeLink = detectActiveLink({ y: scrollY });
+	const scrollY = GlobalState.locoScroll;
+	const scroll = GlobalState.scroll;
+	const { onTop } = isOnTop(scrollY);
+	const activeLink = detectActiveLink({ y: scrollY });
 
-  const [isAnimateBackground, setAnimateBackground] = useState(false);
+	const [isAnimateBackground, setAnimateBackground] = useState(false);
 
-  const isOpen = GlobalState.isSideMenuOpen
-  const [isShowMenu, setShowMenu] = useState(false);
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setShowMenu(true)
-    }
-  }, []);
+	const isOpen = GlobalState.isSideMenuOpen;
+	const [isShowMenu, setShowMenu] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add("no_scroll")
-      setTimeout(() => { setAnimateBackground(true) }, 400);
-    } else {
-      document.body.classList.remove("no_scroll")
-      setAnimateBackground(false)
-    }
-  }, [isOpen]);
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			setShowMenu(true);
+		}
+	}, []);
 
-  const showSideMenu = (bool) => {
-    runInAction(() => {
-      GlobalState.isSideMenuOpen = bool;
-    })
-  }
+	useEffect(() => {
+		if (isOpen) {
+			document.body.classList.add("no_scroll");
+			setTimeout(() => {
+				setAnimateBackground(true);
+			}, 400);
+		} else {
+			document.body.classList.remove("no_scroll");
+			setAnimateBackground(false);
+		}
+	}, [isOpen]);
 
-  const navigateTo = (hash) => {
-    document.body.classList.remove("no_scroll")
-    showSideMenu(false)
-    scroll.scrollTo(hash)
-  }
+	const showSideMenu = (bool) => {
+		runInAction(() => {
+			GlobalState.isSideMenuOpen = bool;
+		});
+	};
 
-  return (
-    <>
-      <div className={`${style.sideMenu_bg} ${isAnimateBackground ? style.sideMenu_Bg_Open : null} `}
-        onClick={() => { showSideMenu(false) }} data-scroll-section></div>
-      <div className={`${style.sideMenu} ${isOpen ? style.sideMenuOpen : null} ${onTop ? style.sideMenuDefault : style.sideMenuExpand}`}>
+	const navigateTo = (hash) => {
+		document.body.classList.remove("no_scroll");
+		showSideMenu(false);
+		scroll.scrollTo(hash);
+	};
 
-        <nav className={style.sideMenu_nav} ref={sideMenuRef}>
-          {isShowMenu &&
-            menuData.map((link, id) => {
-              const { linkHash, linkName } = link;
-              let hash = document.querySelector(`${linkHash}`)
+	return (
+		<>
+			<div
+				className={`sideMenu_bg ${
+					isAnimateBackground ? "sideMenu_Bg_Open" : ""
+				}`}
+				onClick={() => showSideMenu(false)}
+				data-scroll-section
+			></div>
+			<div
+				className={`sideMenu ${isOpen ? "sideMenuOpen" : ""} ${
+					onTop ? "sideMenuDefault" : "sideMenuExpand"
+				}`}
+			>
+				<nav
+					className="sideMenu_nav"
+					ref={sideMenuRef}
+				>
+					{isShowMenu &&
+						menuData.map((link, id) => {
+							const { linkHash, linkName } = link;
+							let hash = document.querySelector(`${linkHash}`);
 
-              return (
-                <a
-                  key={id}
-                  onClick={() => { navigateTo(hash) }}
-                  className={activeLink === id ? style.sideMenu_navlink_active : null}
-                >{linkName}
-                </a>
-              )
-            })}
-        </nav>
+							return (
+								<a
+									key={id}
+									onClick={() => navigateTo(hash)}
+									className={
+										activeLink === id ? "sideMenu_navlink_active" : ""
+									}
+								>
+									{linkName}
+								</a>
+							);
+						})}
+				</nav>
 
-        <button
-          onClick={() => { navigateTo('#getStartedForm') }}
-          type='button' className={style.sideMenu_header_button}>
-          Apply
-        </button>
-      </div >
-    </>
-
-  );
-})
+				<button
+					onClick={() => navigateTo("#getStartedForm")}
+					type="button"
+					className="sideMenu_header_button"
+				>
+					Apply
+				</button>
+			</div>
+		</>
+	);
+});

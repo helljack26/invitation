@@ -1,0 +1,17 @@
+/* main.scss */
+@import "./mixins";
+@import "./variables";
+
+section {
+	min-height: 100vh;
+}
+
+/* Each block’s SCSS */
+@import "./sections/HeroSection.scss";
+@import "./sections/WeddingDateAndTime.scss";
+@import "./sections/LocationBlock.scss";
+@import "./sections/DressCodeBlock.scss";
+@import "./sections/GiftBlock.scss";
+@import "./sections/ChatBlock.scss";
+@import "./sections/CoupleBlock.scss";
+@import "./sections/InvitationFooter.scss";

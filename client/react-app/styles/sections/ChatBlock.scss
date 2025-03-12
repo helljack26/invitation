@@ -1,0 +1,49 @@
+.chatBlock {
+	position: relative;
+	width: 100%;
+	padding: 4rem 2rem;
+	text-align: center;
+
+	h2 {
+		font-size: 2rem;
+		margin-bottom: 1rem;
+		color: $link-color;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.4;
+		margin-bottom: 1.5rem;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	a {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		background: $primary-color;
+		color: $button-text-color;
+		text-decoration: none;
+		border-radius: 6px;
+		transition: background 0.3s ease;
+
+		&:hover {
+			background: $link-color;
+		}
+	}
+
+	@media (max-width: 767px) {
+		padding: 2rem 1rem;
+
+		h2 {
+			font-size: 1.6rem;
+		}
+		p {
+			font-size: 1rem;
+		}
+		a {
+			padding: 0.6rem 1rem;
+		}
+	}
+}

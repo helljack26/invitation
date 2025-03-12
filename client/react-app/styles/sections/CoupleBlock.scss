@@ -1,0 +1,51 @@
+.coupleBlock {
+	position: relative;
+	width: 100%;
+	padding: 4rem 2rem;
+	text-align: center;
+
+	.coupleImages {
+		display: inline-flex;
+		gap: 2rem;
+		margin-bottom: 2rem;
+
+		.couplePhoto {
+			width: 300px;
+			height: 400px;
+			position: relative;
+			/* next/image will handle the actual <img> inside */
+		}
+	}
+
+	h2 {
+		font-size: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	p {
+		font-size: 1.2rem;
+		color: $plain-text-secondary-color;
+	}
+
+	@media (max-width: 767px) {
+		padding: 2rem 1rem;
+
+		.coupleImages {
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+
+			.couplePhoto {
+				width: 250px;
+				height: 320px;
+			}
+		}
+
+		h2 {
+			font-size: 1.6rem;
+		}
+		p {
+			font-size: 1rem;
+		}
+	}
+}
