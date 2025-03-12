@@ -2,6 +2,7 @@
 import React from "react";
 import "../styles/styles.css";
 import "@csstools/normalize.css";
+import "../styles/main.scss";
 
 export default function MyApp({ Component, pageProps }) {
 	return (

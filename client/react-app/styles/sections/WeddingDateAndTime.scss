@@ -1,0 +1,42 @@
+.dateTimeSection {
+	position: relative;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+
+	.dateTimeContent {
+		padding: 3rem;
+		background-color: rgba(255, 255, 255, 0.7); /* Subtle overlay box */
+		border-radius: 8px;
+
+		h2 {
+			font-size: 2rem;
+			margin-bottom: 1rem;
+		}
+
+		p {
+			font-size: 1.2rem;
+			line-height: 1.5;
+
+			strong {
+				color: #c0392b; /* Example highlight color */
+			}
+		}
+	}
+
+	@media (max-width: 767px) {
+		min-height: auto;
+		.dateTimeContent {
+			padding: 2rem 1rem;
+
+			h2 {
+				font-size: 1.6rem;
+			}
+			p {
+				font-size: 1rem;
+			}
+		}
+	}
+}

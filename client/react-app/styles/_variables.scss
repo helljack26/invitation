@@ -3,11 +3,24 @@ $fRegular: Poppins-Regular, sans-serif;
 $fBold: Poppins-Bold, sans-serif;
 
 // Colors
-$cBlack: #000000;
-$cBlackSecond: #807c7c;
-$cWhite: #ffffff;
-$cBorder: #222433;
-$cOrange: #f2726c;
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+
+// Header colors
+$header-bg-color: #ffffff;
+$header-text-color: #d35400;
+
+// Plain text colors
+$plain-text-color: #444444;
+$plain-text-secondary-color: #7f8c8d;
+
+// Button colors
+$button-bg-color: #e74c3c;
+$button-text-color: #ffffff;
+
+// Additional colors (if needed)
+$link-color: #2980b9;
+$border-color: #dddddd;
 
 // Other
 $mainTransition: all 0.3s ease-in-out;

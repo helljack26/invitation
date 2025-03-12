@@ -1,0 +1,32 @@
+.dressCodeBlock {
+	position: relative;
+	width: 100%;
+	padding: 4rem 2rem;
+	text-align: center;
+
+	background: url("/images/dresscode_bg.jpg") center center / cover no-repeat;
+	/* or remove this if you don't need a background image */
+
+	h2 {
+		font-size: 2rem;
+		margin-bottom: 1.2rem;
+	}
+
+	p {
+		font-size: 1.2rem;
+		line-height: 1.4;
+		max-width: 700px;
+		margin: 0 auto;
+	}
+
+	@media (max-width: 767px) {
+		padding: 2rem 1rem;
+
+		h2 {
+			font-size: 1.6rem;
+		}
+		p {
+			font-size: 1rem;
+		}
+	}
+}

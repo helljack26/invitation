@@ -1,0 +1,24 @@
+.invitationFooter {
+	position: relative;
+	width: 100%;
+	padding: 3rem 2rem;
+	text-align: center;
+	background-color: #f7f7f7;
+
+	p {
+		font-size: 1.2rem;
+		line-height: 1.4;
+		margin-bottom: 1rem;
+		color: #2c3e50;
+
+		strong {
+			color: #c0392b;
+		}
+	}
+
+	@media (max-width: 767px) {
+		p {
+			font-size: 1rem;
+		}
+	}
+}

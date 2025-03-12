@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { gsap, Power3 } from "gsap";
 import { SmoothScrollProvider } from "../stores/scroll";
 
-import style from "../styles/main.module.scss";
-
 // Components
 import { Navbar } from "../components/navbar";
 import { SideMenu } from "../components/sideMenu";

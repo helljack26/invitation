@@ -24,16 +24,16 @@ const AdminPage = observer(() => {
 			alert("Будь ласка, заповніть ім'я та прізвище!");
 			return;
 		}
-
+		const inique_path = `${transliterate(newGuestFirstName)}_${transliterate(
+			newGuestLastName
+		)}`.toLowerCase();
 		const guestPayload = {
 			first_name: newGuestFirstName,
 			last_name: newGuestLastName,
 			has_plus_one: plusOne,
 			plus_one_name: plusOne ? plusOneName : "",
 			// Можливо, згенерувати унікальний шлях або дозволити backend зробити це
-			unique_path: `${transliterate(newGuestFirstName)}_${transliterate(
-				newGuestLastName
-			)}`.toLowerCase(),
+			unique_path: inique_path,
 		};
 
 		await GuestStore.createGuest(guestPayload);
