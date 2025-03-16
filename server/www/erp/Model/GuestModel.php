@@ -20,15 +20,13 @@ class GuestModel
     public function createGuest(array $data): array
     {
         $query = "INSERT INTO guests (
-                    first_name, last_name, unique_path, rsvp_status, rsvp_status_plus_one, alcohol_preferences, first_name_plus_1, last_name_plus_1
+                    first_name, unique_path, rsvp_status, rsvp_status_plus_one, alcohol_preferences, first_name_plus_1
                   ) VALUES (
-                    :first_name, :last_name, :unique_path, :rsvp_status, :rsvp_status_plus_one, :alcohol_preferences, :first_name_plus_1, :last_name_plus_1
+                    :first_name, :unique_path, :rsvp_status, :rsvp_status_plus_one, :alcohol_preferences, :first_name_plus_1
                   )";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':first_name', $data['first_name']);
-        $stmt->bindParam(':last_name', $data['last_name']);
         $stmt->bindParam(':first_name_plus_1', $data['first_name_plus_1']);
-        $stmt->bindParam(':last_name_plus_1', $data['last_name_plus_1']);
         $stmt->bindParam(':unique_path', $data['unique_path']);
         $stmt->bindParam(':rsvp_status', $data['rsvp_status']);
         $stmt->bindParam(':rsvp_status_plus_one', $data['rsvp_status_plus_one']);
@@ -86,9 +84,7 @@ class GuestModel
     {
         $query = "UPDATE guests SET
                     first_name = :first_name,
-                    last_name = :last_name,
                     first_name_plus_1 = :first_name_plus_1,
-                    last_name_plus_1 = :last_name_plus_1,
                     unique_path = :unique_path,
                     rsvp_status = :rsvp_status,
                     rsvp_status_plus_one = :rsvp_status_plus_one,
@@ -97,9 +93,7 @@ class GuestModel
                   WHERE guest_id = :guest_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':first_name', $data['first_name']);
-        $stmt->bindParam(':last_name', $data['last_name']);
         $stmt->bindParam(':first_name_plus_1', $data['first_name_plus_1']);
-        $stmt->bindParam(':last_name_plus_1', $data['last_name_plus_1']);
         $stmt->bindParam(':unique_path', $data['unique_path']);
         $stmt->bindParam(':rsvp_status', $data['rsvp_status']);
         $stmt->bindParam(':rsvp_status_plus_one', $data['rsvp_status_plus_one']);
@@ -124,5 +118,45 @@ class GuestModel
         if (!$stmt->execute()) {
             throw new Exception("Failed to delete guest record.");
         }
+    }
+
+    public function updateGuestSingleColumn(int $guestId, array $data): array
+    {
+        // Define allowed fields for update.
+        $allowedFields = ['rsvp_status', 'rsvp_status_plus_one', 'alcohol_preferences'];
+        $updateData = [];
+
+        // Collect only allowed fields from the input data.
+        foreach ($allowedFields as $field) {
+            if (array_key_exists($field, $data)) {
+                $updateData[$field] = $data[$field];
+            }
+        }
+
+        if (empty($updateData)) {
+            throw new Exception("No valid fields provided for update.");
+        }
+
+        // Build the SQL update statement dynamically.
+        $fieldsToUpdate = [];
+        $params = [];
+        foreach ($updateData as $column => $value) {
+            $fieldsToUpdate[] = "$column = :$column";
+            $params[":$column"] = $value;
+        }
+
+        // Always update the updated_at timestamp.
+        $fieldsToUpdate[] = "updated_at = CURRENT_TIMESTAMP";
+        $params[':guest_id'] = $guestId;
+
+        $query = "UPDATE guests SET " . implode(", ", $fieldsToUpdate) . " WHERE guest_id = :guest_id";
+
+        $stmt = $this->conn->prepare($query);
+        if (!$stmt->execute($params)) {
+            throw new Exception("Failed to update guest RSVP record.");
+        }
+
+        // Return the updated guest record.
+        return $this->getGuestById($guestId);
     }
 }

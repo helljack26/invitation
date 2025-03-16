@@ -4,6 +4,7 @@ import Image from "next/image";
 export const CoupleBlock = () => {
 	return (
 		<section
+			id="coupleBlock"
 			className="coupleBlock"
 			data-scroll-section
 		>

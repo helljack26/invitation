@@ -1,0 +1,30 @@
+.rsvpBlock {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+	margin: 20px 0;
+	.guestRow {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		margin-top: 10px;
+	}
+
+	button {
+		background-color: #f3ebe6;
+		border: 1px solid #d1b7a1;
+		padding: 10px 15px;
+		cursor: pointer;
+		font-size: 16px;
+		border-radius: 8px;
+		transition: 0.3s;
+	}
+
+	button.selected {
+		background-color: #d1b7a1;
+		color: white;
+	}
+}

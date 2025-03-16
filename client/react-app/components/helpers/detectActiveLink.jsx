@@ -1,54 +1,47 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { menuData } from "../../res/menuLinks";
 
 export const detectActiveLink = ({ y }) => {
-    const [paragraphPosition, setParagraphPosition] = useState([])
+	const [paragraphPosition, setParagraphPosition] = useState([]);
+	const [activeLink, setActiveLink] = useState(0);
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    const [activeLink, setActiveLink] = useState(0);
+	// Update windowWidth on resize
+	useEffect(() => {
+		const handleResize = () => setWindowWidth(window.innerWidth);
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
-    // For update block position
-    const [windowWidth, setWindowWidth] = useState(0);
-    useEffect(() => {
-        function resize() { setWindowWidth(window.innerWidth) }
-        window.onresize = resize;
-    }, [])
+	useEffect(() => {
+		// Map over menuData and retrieve elements by id (removing '#' from linkHash)
+		const paragraphs = menuData.map((item) =>
+			document.getElementById(item.linkHash.slice(1))
+		);
+		// Ensure at least one element is available before proceeding
+		if (paragraphs.length && paragraphs[0]) {
+			const localPosition = paragraphs.map((p, index) => {
+				const offsetTop = p.offsetTop - 70;
+				// Use 0 for the first element; otherwise, use the computed offset
+				const paragraphBegin = index === 0 ? 0 : offsetTop;
+				const paragraphEnd = offsetTop + p.offsetHeight;
+				return { paragraphBegin, paragraphEnd };
+			});
+			setParagraphPosition(localPosition);
+		}
+	}, [windowWidth]);
 
-    useEffect(() => {
-        const home = document.getElementById('home')
-        const ourMission = document.getElementById('ourMission')
-        const places = document.getElementById('places')
-        const team = document.getElementById('team')
-        if (team || windowWidth) {
-            const paragraphs = [home, ourMission, places, team]
-            const localPosition = []
+	useEffect(() => {
+		for (let i = 0; i < paragraphPosition.length; i++) {
+			const { paragraphBegin, paragraphEnd } = paragraphPosition[i];
+			if (paragraphBegin <= y && paragraphEnd >= y) {
+				setActiveLink(i);
+				return;
+			}
+		}
+		// If no section is currently active, set activeLink to undefined
+		setActiveLink(undefined);
+	}, [y, paragraphPosition]);
 
-            paragraphs.forEach((p, id) => {
-                const offsetTop = p.offsetTop - 70
-
-                const isFirst = id === 0 ? 0 : offsetTop
-                const isLast = offsetTop + p.offsetHeight
-
-                const newParagraphPosition = {
-                    paragraphBegin: isFirst,
-                    paragraphEnd: isLast,
-                }
-                localPosition.push(newParagraphPosition)
-            });
-            setParagraphPosition(localPosition)
-        }
-    }, [windowWidth])
-
-    useEffect(() => {
-        for (let i = 0; i < paragraphPosition.length; i++) {
-            const elem = paragraphPosition[i];
-            if (elem.paragraphBegin <= y && elem.paragraphEnd >= y) {
-                setActiveLink(i)
-            }
-            if (i === paragraphPosition.length - 1 && elem.paragraphEnd < y) {
-                setActiveLink(undefined)
-            }
-        }
-    }, [y])
-
-    return activeLink
-}
+	return activeLink;
+};

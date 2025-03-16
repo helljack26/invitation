@@ -2,6 +2,7 @@
 export const GiftBlock = () => {
 	return (
 		<section
+			id="giftBlock"
 			className="giftBlock"
 			data-scroll-section
 		>

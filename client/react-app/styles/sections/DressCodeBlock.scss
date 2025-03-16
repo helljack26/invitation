@@ -3,6 +3,10 @@
 	width: 100%;
 	padding: 4rem 2rem;
 	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 
 	background: url("/images/dresscode_bg.jpg") center center / cover no-repeat;
 	/* or remove this if you don't need a background image */
@@ -28,5 +32,13 @@
 		p {
 			font-size: 1rem;
 		}
+	}
+
+	.dressCodeBlock_colors {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+		gap: 16px;
 	}
 }

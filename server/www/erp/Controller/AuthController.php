@@ -1,4 +1,5 @@
 <?php
+
 namespace Controller;
 
 use PDO;
@@ -23,7 +24,7 @@ class AuthController
             $json = file_get_contents('php://input');
             $postData = json_decode($json);
 
-            if (!isset ($postData->username, $postData->email, $postData->password, $postData->first_name, $postData->second_name, $postData->last_name)) {
+            if (!isset($postData->username, $postData->email, $postData->password, $postData->first_name, $postData->second_name, $postData->last_name)) {
                 http_response_code(400); // Bad Request
                 echo json_encode(["message" => "Not all registration data was provided!"]);
                 return;
@@ -76,7 +77,7 @@ class AuthController
             $json = file_get_contents('php://input');
             $postData = json_decode($json);
 
-            if (isset ($postData->email, $postData->password)) {
+            if (isset($postData->email, $postData->password)) {
                 $email = $postData->email;
                 $password = $postData->password;
 
@@ -101,7 +102,7 @@ class AuthController
             }
 
             // If email/password login fails, check for Google login
-            if (!empty ($postData->googleAccessToken)) {
+            if (!empty($postData->googleAccessToken)) {
 
                 $googleUserInfo = $postData;
                 if ($googleUserInfo->email) {
@@ -266,7 +267,7 @@ class AuthController
 
         if ($authHeader) {
             // Удаляем куки с JWT, устанавливая срок действия в прошлое
-            if (isset ($_COOKIE['token'])) {
+            if (isset($_COOKIE['token'])) {
                 unset($_COOKIE['token']);
                 setcookie('token', '', time() - 3600, '/'); // set the expiration date to one hour ago
                 http_response_code(200); // OK
@@ -299,4 +300,3 @@ class AuthController
         echo ($jsonData);
     }
 }
-?>
