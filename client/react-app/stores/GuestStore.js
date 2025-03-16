@@ -5,7 +5,7 @@ class GuestStore {
 	apiUrl = "http://127.0.0.1";
 	guestData = null; // For single guest details
 	guestsList = []; // For list of guests
-	loading = false;
+	loading = true;
 	error = null;
 
 	constructor() {
@@ -13,28 +13,25 @@ class GuestStore {
 	}
 
 	/**
-	 * Fetch a guest by its unique_path.
-	 * Expects a JSON body with { unique_path: "value" }.
+	 * Create a new guest.
+	 * Expects an object with guest properties.
 	 */
-	getGuestByUniquePath = async (uniquePath) => {
-		this.loading = true;
-		this.error = null;
+	createGuest = async (guest) => {
+		runInAction(() => {
+			this.loading = true;
+			this.error = null;
+		});
 		try {
 			const response = await axios.post(
-				`${this.apiUrl}/api/guest/getGuestByUniquePath`,
-				{ unique_path: uniquePath },
-				{
-					headers: { "Content-Type": "application/json" },
-					withCredentials: true,
-				}
+				`${this.apiUrl}/api/guest/createGuest`,
+				guest
 			);
-			console.log(response);
-
-			runInAction(() => {
-				this.guestData = response.data.guest;
-			});
+			console.log("🚀 ~ GuestStore ~ createGuest= ~ response:", response);
+			if (response.status === 200) {
+				alert("Гостя створено успішно");
+			}
 		} catch (err) {
-			console.log("Error:", err);
+			console.log("🚀 ~ GuestStore ~ createGuest= ~ err:", err);
 			runInAction(() => {
 				this.error = err;
 			});
@@ -46,34 +43,14 @@ class GuestStore {
 	};
 
 	/**
-	 * Create a new guest.
-	 * Expects an object with guest properties.
-	 */
-	createGuest = async (guest) => {
-		this.loading = true;
-		this.error = null;
-		try {
-			const response = await axios.post(
-				`${this.apiUrl}/api/guest/createGuest`,
-				guest
-			);
-			// Assuming the controller returns { guest_id: newId, ... }
-			// Optionally, update guestData or refresh the list.
-			this.guestData = response.data;
-		} catch (err) {
-			this.error = err;
-		} finally {
-			this.loading = false;
-		}
-	};
-
-	/**
 	 * Update an existing guest.
 	 * Expects guest_id and other guest properties.
 	 */
 	updateGuest = async (guestId, guest) => {
-		this.loading = true;
-		this.error = null;
+		runInAction(() => {
+			this.loading = true;
+			this.error = null;
+		});
 		try {
 			// Combining guestId and guest properties into one object
 			const payload = { guest_id: guestId, ...guest };
@@ -84,9 +61,14 @@ class GuestStore {
 			// Assuming the controller returns { guest: { ... } }
 			this.guestData = response.data.guest;
 		} catch (err) {
-			this.error = err;
+			console.log("🚀 ~ GuestStore ~ updateGuest= ~ err:", err);
+			runInAction(() => {
+				this.error = err;
+			});
 		} finally {
-			this.loading = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 
@@ -94,8 +76,10 @@ class GuestStore {
 	 * Retrieve the list of all guests.
 	 */
 	listGuests = async () => {
-		this.loading = true;
-		this.error = null;
+		// this.loading = true;
+		runInAction(() => {
+			this.error = null;
+		});
 		try {
 			const response = await axios.post(
 				`${this.apiUrl}/api/guest/listGuests`,
@@ -106,34 +90,18 @@ class GuestStore {
 			);
 			console.log("🚀 ~ GuestStore ~ listGuests= ~ response:", response);
 			// Assuming the controller returns { guests: [ ... ] }
-			this.guestsList = response.data.guests;
+			runInAction(() => {
+				this.guestsList = response.data.guests;
+			});
 		} catch (err) {
-			this.error = err;
+			console.log("🚀 ~ GuestStore ~ createGuest= ~ err:", err);
+			runInAction(() => {
+				this.error = err;
+			});
 		} finally {
-			this.loading = false;
-		}
-	};
-
-	/**
-	 * Retrieve a guest by its ID.
-	 * Expects a JSON body with { guest_id: value }.
-	 */
-	getGuestById = async (guestId) => {
-		this.loading = true;
-		this.error = null;
-		try {
-			const response = await axios.post(
-				`${this.apiUrl}/api/guest/getGuestById`,
-				{
-					guest_id: guestId,
-				}
-			);
-			// Assuming the controller returns { guest: { ... } }
-			this.guestData = response.data.guest;
-		} catch (err) {
-			this.error = err;
-		} finally {
-			this.loading = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 
@@ -142,21 +110,29 @@ class GuestStore {
 	 * Expects a JSON body with { guest_id: value }.
 	 */
 	deleteGuest = async (guestId) => {
-		this.loading = true;
-		this.error = null;
+		runInAction(() => {
+			this.error = null;
+		});
 		try {
 			// When using axios.delete with data, it must be provided as the 'data' option.
 			await axios.delete(`${this.apiUrl}/api/guest/deleteGuest`, {
 				data: { guest_id: guestId },
 			});
-			// Optionally, remove the guest from the list if it exists there.
-			this.guestsList = this.guestsList.filter(
-				(guest) => guest.guest_id !== guestId
-			);
+			runInAction(() => {
+				// Optionally, remove the guest from the list if it exists there.
+				this.guestsList = this.guestsList.filter(
+					(guest) => guest.guest_id !== guestId
+				);
+			});
 		} catch (err) {
-			this.error = err;
+			console.log("🚀 ~ GuestStore ~ createGuest= ~ err:", err);
+			runInAction(() => {
+				this.error = err;
+			});
 		} finally {
-			this.loading = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 }

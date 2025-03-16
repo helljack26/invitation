@@ -16,9 +16,19 @@
 		}
 	}
 
+	.creator {
+		margin-top: 2rem;
+		font-size: 0.9rem;
+		color: #7f8c8d;
+	}
+
 	@media (max-width: 767px) {
 		p {
 			font-size: 1rem;
+		}
+
+		.creator {
+			font-size: 0.8rem;
 		}
 	}
 }

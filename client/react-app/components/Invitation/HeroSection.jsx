@@ -10,6 +10,23 @@ export const HeroSection = observer(() => {
 	const userGuestStore = useUserGuestStore();
 	const { guestData } = userGuestStore;
 
+	// If guestData isn't loaded yet, you might want to return null or a loading state.
+	if (!guestData) return null;
+
+	// Determine greeting based on whether guestData.first_name_plus_1 exists.
+	let greetingPrefix;
+	if (guestData.first_name_plus_1) {
+		greetingPrefix = "Дорогі";
+	} else {
+		// Assume guestData.gender is either "male" or "female"
+		greetingPrefix = guestData.gender === "male" ? "Дорогий" : "Дорога";
+	}
+
+	// Build the display name: if first_name_plus_1 exists, join the names.
+	const displayName = guestData.first_name_plus_1
+		? `${guestData.first_name} та ${guestData.first_name_plus_1}`
+		: guestData.first_name;
+
 	return (
 		<section
 			id="heroSection"
@@ -27,9 +44,11 @@ export const HeroSection = observer(() => {
 			</div>
 
 			<div className="heroContent">
-				{guestData && <h1>Дорогий, {guestData.first_name}!</h1>}
+				<span className="heroContent_dear">{greetingPrefix}</span>
+				<h1>{displayName}</h1>
 				<h2>
-					запрошуємо тебе на наше весілля <br />
+					Щиро запрошуємо {guestData.first_name_plus_1 ? "Вас" : "Тебе"} на
+					наше весілля <br />
 					<span>1.03.2025</span>
 				</h2>
 

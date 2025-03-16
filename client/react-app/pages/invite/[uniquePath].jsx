@@ -172,9 +172,9 @@ const InvitationPage = observer(() => {
 
 			{/* Now your invitation blocks in logical order */}
 			<div data-scroll-container>
-				<GuestRSVP />
 				<HeroSection />
 				<WeddingDateAndTime />
+				<GuestRSVP />
 				<DressCodeBlock />
 				<GiftBlock />
 				<ChatBlock />

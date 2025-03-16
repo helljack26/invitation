@@ -8,6 +8,7 @@ import dresscode_ivory from "./dresscode_ivory.jpg";
 import dresscode_olive from "./dresscode_olive.jpg";
 import dresscode_pink from "./dresscode_pink.jpg";
 
+import couple from "./couple.png";
 const I = {
 	// Intro
 	bride_groom_child,
@@ -18,6 +19,7 @@ const I = {
 	dresscode_ivory,
 	dresscode_olive,
 	dresscode_pink,
+	couple,
 };
 
 export default I;

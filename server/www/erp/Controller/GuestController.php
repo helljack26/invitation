@@ -15,6 +15,110 @@ class GuestController
     }
 
     /**
+     * Helper: Transliterate Ukrainian characters to their Latin equivalent.
+     */
+    private function transliterate(string $text): string
+    {
+        $map = [
+            'А' => 'A',
+            'а' => 'a',
+            'Б' => 'B',
+            'б' => 'b',
+            'В' => 'V',
+            'в' => 'v',
+            'Г' => 'H',
+            'г' => 'h',
+            'Ґ' => 'G',
+            'ґ' => 'g',
+            'Д' => 'D',
+            'д' => 'd',
+            'Е' => 'E',
+            'е' => 'e',
+            'Є' => 'Ye',
+            'є' => 'ie',
+            'Ж' => 'Zh',
+            'ж' => 'zh',
+            'З' => 'Z',
+            'з' => 'z',
+            'И' => 'Y',
+            'и' => 'y',
+            'І' => 'I',
+            'і' => 'i',
+            'Ї' => 'Yi',
+            'ї' => 'i',
+            'Й' => 'Y',
+            'й' => 'i',
+            'К' => 'K',
+            'к' => 'k',
+            'Л' => 'L',
+            'л' => 'l',
+            'М' => 'M',
+            'м' => 'm',
+            'Н' => 'N',
+            'н' => 'n',
+            'О' => 'O',
+            'о' => 'o',
+            'П' => 'P',
+            'п' => 'p',
+            'Р' => 'R',
+            'р' => 'r',
+            'С' => 'S',
+            'с' => 's',
+            'Т' => 'T',
+            'т' => 't',
+            'У' => 'U',
+            'у' => 'u',
+            'Ф' => 'F',
+            'ф' => 'f',
+            'Х' => 'Kh',
+            'х' => 'kh',
+            'Ц' => 'Ts',
+            'ц' => 'ts',
+            'Ч' => 'Ch',
+            'ч' => 'ch',
+            'Ш' => 'Sh',
+            'ш' => 'sh',
+            'Щ' => 'Shch',
+            'щ' => 'shch',
+            'Ю' => 'Yu',
+            'ю' => 'iu',
+            'Я' => 'Ya',
+            'я' => 'ia',
+            "'" => '',
+            "’" => ''
+        ];
+
+        return strtr($text, $map);
+    }
+
+    /**
+     * Helper: Generate a unique URL-friendly path.
+     *
+     * If plusOneName is provided, it concatenates transliterated first names.
+     * Then it checks for duplicates in the DB and appends a suffix letter (a, b, c, …) if needed.
+     */
+    private function generateUniquePath(string $firstName, ?string $plusOneName = null): string
+    {
+        $base = $this->transliterate($firstName);
+        if ($plusOneName) {
+            $base .= '_' . $this->transliterate($plusOneName);
+        }
+        // Normalize: lowercase and remove any unwanted characters (keeping letters, numbers, and dashes)
+        $base = strtolower($base);
+        $base = preg_replace('/[^a-z0-9\-]/', '', $base);
+
+        $uniquePath = $base;
+        $suffix = 'guest';
+        // Loop until a unique candidate is found.
+        while ($this->guestModel->getByUniquePath($uniquePath)) {
+            $uniquePath = $suffix . '_' . $base;
+            $suffix = chr(ord($suffix) + 1); // go to next letter
+        }
+
+        return $uniquePath;
+    }
+
+    /**
      * Create a new guest record.
      */
     public function createGuest(): void
@@ -23,14 +127,17 @@ class GuestController
             $data = json_decode(file_get_contents('php://input'), true);
             $this->validateGuestData($data);
 
+            // Generate the unique path in the backend:
+            // Use the main guest first name and, if exists, the plus one first name.
+            $plusOneName = isset($data['first_name_plus_1']) ? $data['first_name_plus_1'] : null;
+            $data['unique_path'] = $this->generateUniquePath($data['first_name'], $plusOneName);
+
             $guestData = [
-                'first_name'            => $data['first_name'],
-                'first_name_plus_1'             => $data['first_name_plus_1'],
-                'last_name_plus_1'             => $data['last_name_plus_1'],
-                'unique_path'           => $data['unique_path'],
-                'rsvp_status'           => $data['rsvp_status'] ?? 'pending',
-                'rsvp_status_plus_one'  => $data['rsvp_status_plus_one'] ?? 'pending',
-                'alcohol_preferences'      => $data['alcohol_preferences'] ?? ''
+                'first_name'           => $data['first_name'],
+                'first_name_plus_1'    => $data['first_name_plus_1'] ?? '',
+                'unique_path'          => $data['unique_path'],
+                'rsvp_status'          => $data['rsvp_status'] ?? 'pending',
+                'rsvp_status_plus_one' => $data['rsvp_status_plus_one'] ?? 'pending'
             ];
 
             $result = $this->guestModel->createGuest($guestData);
@@ -45,12 +152,18 @@ class GuestController
             echo json_encode(["error" => $e->getMessage()]);
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(["error" => "Failed to create guest", "details" => $e->getMessage()]);
+            echo json_encode([
+                "error"   => "Failed to create guest",
+                "details" => $e->getMessage()
+            ]);
         }
     }
 
     /**
      * Update an existing guest record.
+     *
+     * Here, if the first name or plus one name is updated, the unique_path is regenerated
+     * following the same logic as in creation.
      */
     public function updateGuest(): void
     {
@@ -60,12 +173,23 @@ class GuestController
 
             $guestId = intval($data['guest_id']);
 
+            // Regenerate the unique path if the first name (or plus one) is provided.
+            if (isset($data['first_name'])) {
+                $plusOneName = $data['first_name_plus_1'] ?? null;
+                $data['unique_path'] = $this->generateUniquePath($data['first_name'], $plusOneName);
+            }
+
             $guestData = [
-                'first_name'            => $data['first_name'],
-                'first_name_plus_1'             => $data['first_name_plus_1'],
-                'unique_path'           => $data['unique_path']
+                'first_name'           => $data['first_name'],
+                'first_name_plus_1'    => $data['first_name_plus_1'] ?? '',
+                'unique_path'          => $data['unique_path'],
+                // You might include other fields such as rsvp_status if needed
+                'rsvp_status'          => $data['rsvp_status'] ?? 'pending',
+                'rsvp_status_plus_one' => $data['rsvp_status_plus_one'] ?? 'pending'
             ];
 
+            echo basename(__FILE__) . ' (Line ' . __LINE__ . ') - $guestData: ';
+            var_dump($guestData);
             $result = $this->guestModel->updateGuest($guestId, $guestData);
 
             http_response_code(200);
@@ -78,7 +202,10 @@ class GuestController
             echo json_encode(["error" => $e->getMessage()]);
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(["error" => "Failed to update guest", "details" => $e->getMessage()]);
+            echo json_encode([
+                "error"   => "Failed to update guest",
+                "details" => $e->getMessage()
+            ]);
         }
     }
 
@@ -198,15 +325,6 @@ class GuestController
     {
         if (empty($data['first_name'])) {
             throw new \InvalidArgumentException("First name is required.");
-        }
-        if (empty($data['unique_path'])) {
-            throw new \InvalidArgumentException("Unique path is required.");
-        }
-        if (isset($data['rsvp_status']) && !in_array($data['rsvp_status'], ['pending', 'accepted', 'declined'])) {
-            throw new \InvalidArgumentException("Invalid rsvp_status value.");
-        }
-        if (isset($data['rsvp_status_plus_one']) && !in_array($data['rsvp_status_plus_one'], ['pending', 'accepted', 'declined'])) {
-            throw new \InvalidArgumentException("Invalid rsvp_status_plus_one value.");
         }
     }
 
