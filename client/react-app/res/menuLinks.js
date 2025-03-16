@@ -1,19 +1,30 @@
-
 export const menuData = [
-    {
-        linkHash: '#home',
-        linkName: 'Home',
-    },
-    {
-        linkHash: '#ourMission',
-        linkName: 'Our Mission',
-    },
-    {
-        linkHash: '#places',
-        linkName: 'Places',
-    },
-    {
-        linkHash: '#team',
-        linkName: 'Team',
-    },
-]
+	{
+		linkHash: "#heroSection",
+		linkName: "Головна",
+	},
+	{
+		linkHash: "#weddingDateAndTime",
+		linkName: "Дата та час",
+	},
+	{
+		linkHash: "#dressCodeBlock",
+		linkName: "Дрес-код",
+	},
+	{
+		linkHash: "#giftBlock",
+		linkName: "Подарунки",
+	},
+	{
+		linkHash: "#chatBlock",
+		linkName: "Чат для гостей",
+	},
+	{
+		linkHash: "#coupleBlock",
+		linkName: "Наречені",
+	},
+	{
+		linkHash: "#invitationFooter",
+		linkName: "Подяка",
+	},
+];

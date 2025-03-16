@@ -5,7 +5,8 @@ import { observer } from "mobx-react-lite";
 import { gsap, Power3 } from "gsap";
 
 // MobX Store
-import GuestStore from "../../stores/GuestStore";
+import { useUserGuestStore } from "../../stores/UserGuestStore";
+
 // SmoothScrollProvider (Locomotive Scroll or similar)
 import { SmoothScrollProvider } from "../../stores/scroll";
 
@@ -17,44 +18,48 @@ import { LeafsFalling } from "../../components/leafsFalling";
 // -- Wedding Blocks --
 import { HeroSection } from "../../components/Invitation/HeroSection";
 import { WeddingDateAndTime } from "../../components/Invitation/WeddingDateAndTime";
-import { LocationBlock } from "../../components/Invitation/LocationBlock";
 import { DressCodeBlock } from "../../components/Invitation/DressCodeBlock";
 import { GiftBlock } from "../../components/Invitation/GiftBlock";
 import { ChatBlock } from "../../components/Invitation/ChatBlock";
 import { CoupleBlock } from "../../components/Invitation/CoupleBlock";
 import { InvitationFooter } from "../../components/Invitation/InvitationFooter";
+import { GuestRSVP } from "../../components/Invitation/GuestRSVP";
 
 const InvitationPage = observer(() => {
 	const router = useRouter();
 	const { uniquePath } = router.query; // from URL: /invitation/[uniquePath]
 
+	const userGuestStore = useUserGuestStore();
+	const { guestData, getGuestByUniquePath, loading, error } = userGuestStore;
 	// Fetch the guest whenever the URL param changes
 	useEffect(() => {
 		if (!uniquePath) return;
-		GuestStore.getGuestByUniquePath(uniquePath);
+		getGuestByUniquePath(uniquePath);
 	}, [uniquePath]);
 
 	// Access guest data from the store
-	const guest = GuestStore.guestData;
+	const guest = guestData;
 
 	// GSAP Animations for initial load
+	// useEffect(() => {
+	// 	gsap.fromTo(
+	// 		".heroSection",
+	// 		{ opacity: 0, y: -15 },
+	// 		{
+	// 			duration: 2,
+	// 			y: 0,
+	// 			opacity: 1,
+	// 			ease: Power3.easeInOut,
+	// 			delay: 0.6,
+	// 		}
+	// 	);
+	// }, []);
 	useEffect(() => {
-		gsap.fromTo(
-			".heroSection",
-			{ opacity: 0, y: -15 },
-			{
-				duration: 2,
-				y: 0,
-				opacity: 1,
-				ease: Power3.easeInOut,
-				delay: 0.6,
-			}
-		);
+		if (typeof window === "undefined") return;
 	}, []);
-
 	// Loading / Error states
-	if (GuestStore.loading) return <p></p>;
-	if (GuestStore.error) return <p>Error: {GuestStore.error.message}</p>;
+	if (loading) return <p></p>;
+	if (error) return <p>Error: {error.message}</p>;
 	if (!guest) return <p>404</p>;
 
 	return (
@@ -78,42 +83,30 @@ const InvitationPage = observer(() => {
 				jsx
 			>{`
 				@font-face {
-					font-family: "Poppins-Regular";
-					src: url("/static/fonts/Poppins-Regular/Poppins-Regular.eot");
-					src: local("☺"),
-						url("/static/fonts/Poppins-Regular/Poppins-Regular.woff")
+					font-family: "CarloMelowSans";
+					src: url("/static/fonts/CarloMelowSans/CarloMelowSans.eot");
+					src: url("/static/fonts/CarloMelowSans/CarloMelowSans.eot")
+							format("embedded-opentype"),
+						url("/static/fonts/CarloMelowSans/CarloMelowSans.woff2")
+							format("woff2"),
+						url("/static/fonts/CarloMelowSans/CarloMelowSans.woff")
 							format("woff"),
-						url("/static/fonts/Poppins-Regular/Poppins-Regular.ttf")
+						url("/static/fonts/CarloMelowSans/CarloMelowSans.ttf")
 							format("truetype"),
-						url("/static/fonts/Poppins-Regular/Poppins-Regular.svg")
+						url("/static/fonts/CarloMelowSans/CarloMelowSans.svg#CarloMelowSans")
 							format("svg");
-					font-weight: normal;
-					font-style: normal;
-				}
-				@font-face {
-					font-family: "Poppins-Bold";
-					src: url("/static/fonts/Poppins-Bold/Poppins-Bold.eot");
-					src: local("☺"),
-						url("/static/fonts/Poppins-Bold/Poppins-Bold.woff")
-							format("woff"),
-						url("/static/fonts/Poppins-Bold/Poppins-Bold.ttf")
-							format("truetype"),
-						url("/static/fonts/Poppins-Bold/Poppins-Bold.svg")
-							format("svg");
-					font-weight: normal;
-					font-style: normal;
 				}
 			`}</style>
 
+			<Navbar />
+			<SideMenu />
 			{/* Example “floating” navbar / side menu if you want to keep them */}
 
 			{/* Now your invitation blocks in logical order */}
 			<div data-scroll-container>
-				<Navbar />
-				<SideMenu />
-				<HeroSection guest={guest} />
+				<HeroSection />
 				<WeddingDateAndTime />
-				<LocationBlock />
+				<GuestRSVP />
 				<DressCodeBlock />
 				<GiftBlock />
 				<ChatBlock />

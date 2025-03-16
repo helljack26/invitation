@@ -1,9 +1,18 @@
 // components/Invitation/HeroSection.jsx
+import { observer } from "mobx-react-lite";
+// MobX Store
+import { useUserGuestStore } from "../../stores/UserGuestStore";
+// Images
 import Image from "next/image";
+import I from "../../img/images";
 
-export const HeroSection = ({ guest }) => {
+export const HeroSection = observer(() => {
+	const userGuestStore = useUserGuestStore();
+	const { guestData } = userGuestStore;
+
 	return (
 		<section
+			id="heroSection"
 			className="heroSection"
 			data-scroll-section
 		>
@@ -18,31 +27,23 @@ export const HeroSection = ({ guest }) => {
 			</div>
 
 			<div className="heroContent">
-				<h1>
-					Приглашаем Вас на нашу свадьбу <br />
+				{guestData && <h1>Дорогий, {guestData.first_name}!</h1>}
+				<h2>
+					запрошуємо тебе на наше весілля <br />
 					<span>1.03.2025</span>
-				</h1>
-				{guest && <p>Дорогий, {guest.name}!</p>}
+				</h2>
 
 				<div className="imagesWrapper">
-					<div className="childPhoto">
-						<Image
-							src="/images/bride_child.png"
-							alt="Bride as a child"
-							width={150}
-							height={200}
-						/>
-					</div>
-					<div className="childPhoto">
-						<Image
-							src="/images/groom_child.png"
-							alt="Groom as a child"
-							width={150}
-							height={200}
-						/>
-					</div>
+					<Image
+						className="childPhoto"
+						alt="bride groom child"
+						src={I.bride_groom_child}
+						height={400}
+						priority
+					/>
 				</div>
+				<span className="city">Київ</span>
 			</div>
 		</section>
 	);
-};
+});

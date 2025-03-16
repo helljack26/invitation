@@ -1,42 +1,38 @@
 .dateTimeSection {
-	position: relative;
-	width: 100%;
 	display: flex;
-	align-items: center;
+	flex-direction: column;
 	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	width: 100%;
+	margin: 0 auto;
 	text-align: center;
+	background-color: $bg-color-pink;
+}
 
-	.dateTimeContent {
-		padding: 3rem;
-		background-color: rgba(255, 255, 255, 0.7); /* Subtle overlay box */
-		border-radius: 8px;
+.dateTimeItem {
+	padding: 2rem;
+	border-radius: 8px;
+}
 
-		h2 {
-			font-size: 2rem;
-			margin-bottom: 1rem;
-		}
+.dateTimeItem h2 {
+	font-size: 1.5rem;
+	margin-bottom: 0.5rem;
+}
 
-		p {
-			font-size: 1.2rem;
-			line-height: 1.5;
+.dateTimeItem p {
+	margin: 0.25rem 0;
+}
 
-			strong {
-				color: #c0392b; /* Example highlight color */
-			}
-		}
-	}
-
-	@media (max-width: 767px) {
-		min-height: auto;
-		.dateTimeContent {
-			padding: 2rem 1rem;
-
-			h2 {
-				font-size: 1.6rem;
-			}
-			p {
-				font-size: 1rem;
-			}
-		}
-	}
+.mapLink {
+	display: inline-block;
+	margin-top: 1rem;
+	padding: 0.5rem 1rem;
+	background-color: #b33;
+	color: #fff;
+	text-decoration: none;
+	border-radius: 4px;
+}
+.mapLink:hover {
+	background-color: #d44;
 }

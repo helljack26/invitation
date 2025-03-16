@@ -2,14 +2,26 @@
 @import "./mixins";
 @import "./variables";
 
+body {
+	font-family: $fRegular;
+	font-size: 1em;
+}
 section {
 	min-height: 100vh;
 }
-
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: $fRegular;
+}
+@import "./common/header.scss";
 /* Each block’s SCSS */
 @import "./sections/HeroSection.scss";
 @import "./sections/WeddingDateAndTime.scss";
-@import "./sections/LocationBlock.scss";
+@import "./sections/Rsvp.scss";
 @import "./sections/DressCodeBlock.scss";
 @import "./sections/GiftBlock.scss";
 @import "./sections/ChatBlock.scss";

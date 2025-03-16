@@ -2,6 +2,7 @@
 export const InvitationFooter = () => {
 	return (
 		<footer
+			id="invitationFooter"
 			className="invitationFooter"
 			data-scroll-section
 		>

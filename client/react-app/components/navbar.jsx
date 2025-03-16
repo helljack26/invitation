@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { isOnTop } from "./helpers/isOnTop";
 import { detectActiveLink } from "./helpers/detectActiveLink";
@@ -9,8 +9,10 @@ import I from "../img/images";
 import GlobalState from "../stores/GlobalState";
 import { observer } from "mobx-react";
 import { runInAction } from "mobx";
+import { gsap, Power3 } from "gsap";
 
 export const Navbar = observer(({ isSideMenuOpen }) => {
+	const headerBlockRef = useRef(null);
 	const scrollY = GlobalState.locoScroll;
 	const scroll = GlobalState.scroll;
 	const { onTop } = isOnTop(scrollY);
@@ -23,6 +25,22 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 		}
 	}, []);
 
+	//
+	useEffect(() => {
+		if (headerBlockRef.current) {
+			gsap.fromTo(
+				headerBlockRef.current,
+				{ opacity: 0, y: -15 },
+				{
+					duration: 2,
+					y: 0,
+					opacity: 1,
+					ease: Power3.easeInOut,
+					delay: 0.6,
+				}
+			);
+		}
+	}, []);
 	const showLeafFalling = () => {
 		runInAction(() => {
 			GlobalState.isShowLeafFalling = !GlobalState.isShowLeafFalling;
@@ -40,19 +58,11 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 			className={`header ${onTop ? "defaultHeader" : "expandedHeader"}`}
 			data-scroll-sticky
 		>
-			<div className="header_block">
-				<button
-					className="logoButton"
-					type="button"
-					onMouseEnter={showLeafFalling}
-				>
-					<Image
-						className="logo"
-						src={I.logo}
-						alt="Site logo"
-					/>
-				</button>
-
+			<div
+				className="header_block"
+				ref={headerBlockRef}
+			>
+				<div></div>
 				<nav className="nav">
 					{isShowMenu &&
 						menuData.map((link, id) => {
@@ -71,17 +81,6 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 							);
 						})}
 				</nav>
-
-				<button
-					type="button"
-					className="header_button"
-					onClick={() => {
-						scroll.scrollTo("#getStartedForm");
-					}}
-					style={{ transform: scrollY > 10 ? "scale(0.75)" : "scale(1)" }}
-				>
-					Apply
-				</button>
 
 				<button
 					onClick={showSideMenu}

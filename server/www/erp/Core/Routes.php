@@ -49,6 +49,7 @@ $routes = [
     '/api/guest/getGuestById'  => [$guestController, 'getGuestById', 'auth' => false],
     '/api/guest/getGuestByUniquePath'  => [$guestController, 'getGuestByUniquePath', 'auth' => false],
     '/api/guest/deleteGuest'   => [$guestController, 'deleteGuest', 'auth' => false],
+    '/api/guest/updateGuestSingleColumn'   => [$guestController, 'updateGuestSingleColumn', 'auth' => false],
 ];
 
 // Обработка предзапросов (CORS)

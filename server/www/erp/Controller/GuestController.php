@@ -25,7 +25,6 @@ class GuestController
 
             $guestData = [
                 'first_name'            => $data['first_name'],
-                'last_name'             => $data['last_name'],
                 'first_name_plus_1'             => $data['first_name_plus_1'],
                 'last_name_plus_1'             => $data['last_name_plus_1'],
                 'unique_path'           => $data['unique_path'],
@@ -63,13 +62,8 @@ class GuestController
 
             $guestData = [
                 'first_name'            => $data['first_name'],
-                'last_name'             => $data['last_name'],
                 'first_name_plus_1'             => $data['first_name_plus_1'],
-                'last_name_plus_1'             => $data['last_name_plus_1'],
-                'unique_path'           => $data['unique_path'],
-                'rsvp_status'           => $data['rsvp_status'] ?? 'pending',
-                'rsvp_status_plus_one'  => $data['rsvp_status_plus_one'] ?? 'pending',
-                'alcohol_preferences'      => $data['alcohol_preferences'] ?? ''
+                'unique_path'           => $data['unique_path']
             ];
 
             $result = $this->guestModel->updateGuest($guestId, $guestData);
@@ -205,9 +199,6 @@ class GuestController
         if (empty($data['first_name'])) {
             throw new \InvalidArgumentException("First name is required.");
         }
-        if (empty($data['last_name'])) {
-            throw new \InvalidArgumentException("Last name is required.");
-        }
         if (empty($data['unique_path'])) {
             throw new \InvalidArgumentException("Unique path is required.");
         }
@@ -229,5 +220,69 @@ class GuestController
         }
         // Reuse creation validation for the rest of the fields.
         $this->validateGuestData($data);
+    }
+
+    /**
+     * Update guest RSVP or alcohol preferences using unique_path.
+     * Only the columns provided in the request will be updated.
+     */
+    public function updateGuestSingleColumn(): void
+    {
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            // Validate unique_path is provided
+            if (!isset($data['unique_path']) || empty($data['unique_path'])) {
+                throw new \InvalidArgumentException("Parameter 'unique_path' is required.");
+            }
+            $uniquePath = trim($data['unique_path']);
+
+            // Retrieve guest by unique_path
+            $guest = $this->guestModel->getByUniquePath($uniquePath);
+            if (!$guest) {
+                throw new Exception("Guest not found.");
+            }
+            $guestId = intval($guest['guest_id']);
+
+            // Define allowed fields for update
+            $allowedFields = ['rsvp_status', 'rsvp_status_plus_one', 'alcohol_preferences'];
+            $allowedStatusValues = ['pending', 'accepted', 'declined'];
+            $updateData = [];
+
+            // Iterate only over allowed fields and validate if necessary
+            foreach ($allowedFields as $field) {
+                if (array_key_exists($field, $data)) {
+                    // If updating RSVP status, validate its value.
+                    if (in_array($field, ['rsvp_status', 'rsvp_status_plus_one'])) {
+                        if (!in_array($data[$field], $allowedStatusValues)) {
+                            throw new \InvalidArgumentException("Invalid value for $field.");
+                        }
+                    }
+                    $updateData[$field] = $data[$field];
+                }
+            }
+
+            if (empty($updateData)) {
+                throw new \InvalidArgumentException("No valid fields provided for update.");
+            }
+
+            // Use the abstracted model method to update only provided fields.
+            $result = $this->guestModel->updateGuestSingleColumn($guestId, $updateData);
+
+            http_response_code(200);
+            echo json_encode([
+                "message" => "Guest RSVP updated successfully",
+                "guest"   => $result
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            http_response_code(400);
+            echo json_encode(["error" => $e->getMessage()]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                "error"   => "Failed to update guest RSVP",
+                "details" => $e->getMessage()
+            ]);
+        }
     }
 }

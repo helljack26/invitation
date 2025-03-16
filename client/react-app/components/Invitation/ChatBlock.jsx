@@ -2,6 +2,7 @@
 export const ChatBlock = () => {
 	return (
 		<section
+			id="chatBlock"
 			className="chatBlock"
 			data-scroll-section
 		>

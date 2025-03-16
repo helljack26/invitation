@@ -29,7 +29,6 @@ const AdminPage = observer(() => {
 		)}`.toLowerCase();
 		const guestPayload = {
 			first_name: newGuestFirstName,
-			last_name: newGuestLastName,
 			has_plus_one: plusOne,
 			plus_one_name: plusOne ? plusOneName : "",
 			// Можливо, згенерувати унікальний шлях або дозволити backend зробити це
@@ -136,9 +135,7 @@ const AdminPage = observer(() => {
 									Переглянути запрошення
 								</Link> */}
 							</td>
-							<td>
-								{guest.first_name} {guest.last_name}
-							</td>
+							<td>{guest.first_name}</td>
 							<td>{guest.has_plus_one ? guest.plus_one_name : "Ні"}</td>
 							<td>
 								<button onClick={() => confirmDelete(guest)}>
