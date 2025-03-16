@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import { gsap, Power3 } from "gsap";
@@ -30,7 +30,14 @@ const InvitationPage = observer(() => {
 	const { uniquePath } = router.query; // from URL: /invitation/[uniquePath]
 
 	const userGuestStore = useUserGuestStore();
-	const { guestData, getGuestByUniquePath, loading, error } = userGuestStore;
+	const {
+		guestData,
+		getGuestByUniquePath,
+		syncRSVPDataToServer,
+		loading,
+		error,
+		isDirty,
+	} = userGuestStore;
 	// Fetch the guest whenever the URL param changes
 	useEffect(() => {
 		if (!uniquePath) return;
@@ -39,6 +46,67 @@ const InvitationPage = observer(() => {
 
 	// Access guest data from the store
 	const guest = guestData;
+
+	// On page unload or unmount, sync the data
+	useEffect(() => {
+		// Only attach the event once the guest data is loaded
+		if (!guestData) return;
+
+		const handleBeforeUnload = (e) => {
+			let alertMessage = "";
+
+			// Check main guest
+			if (
+				guestData.rsvp_status === "accepted" &&
+				guestData.alcohol_preferences === "custom" &&
+				(!guestData.custom_alcohol ||
+					guestData.custom_alcohol.trim() === "")
+			) {
+				alertMessage = `Будь ласка, введіть ваш варіант напою для ${guestData.first_name}!`;
+			}
+
+			// Check plus one
+			if (
+				guestData.rsvp_status_plus_one === "accepted" &&
+				guestData.alcohol_preferences_plus_one === "custom" &&
+				(!guestData.custom_alcohol_plus_one ||
+					guestData.custom_alcohol_plus_one.trim() === "")
+			) {
+				alertMessage = `Будь ласка, введіть ваш варіант напою для ${guestData.first_name_plus_1}.`;
+			}
+
+			if (alertMessage) {
+				e.preventDefault();
+				e.returnValue = alertMessage;
+
+				// Browsers show a generic message
+				return alertMessage;
+			}
+
+			// Otherwise, sync data
+			syncRSVPDataToServer();
+		};
+
+		window.addEventListener("beforeunload", handleBeforeUnload);
+
+		return () => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
+			syncRSVPDataToServer();
+		};
+	}, [guestData, syncRSVPDataToServer]);
+
+	// Every minute, check if there are unsynced changes and sync them.
+	// const stableSyncRSVPDataToServer = useCallback(syncRSVPDataToServer, []);
+
+	// useEffect(() => {
+	// 	const intervalId = setInterval(() => {
+	// 		if (isDirty) {
+	// 			stableSyncRSVPDataToServer();
+	// 		}
+	// 	}, 10000);
+
+	// 	return () => clearInterval(intervalId);
+	// }, [isDirty, stableSyncRSVPDataToServer]);
 
 	// GSAP Animations for initial load
 	// useEffect(() => {
@@ -104,9 +172,9 @@ const InvitationPage = observer(() => {
 
 			{/* Now your invitation blocks in logical order */}
 			<div data-scroll-container>
+				<GuestRSVP />
 				<HeroSection />
 				<WeddingDateAndTime />
-				<GuestRSVP />
 				<DressCodeBlock />
 				<GiftBlock />
 				<ChatBlock />

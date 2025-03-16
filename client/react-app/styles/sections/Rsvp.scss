@@ -1,30 +1,166 @@
 .rsvpBlock {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
+	max-width: 600px;
+	margin: 40px auto;
+	padding: 20px;
+	background-color: $cWhite;
 	text-align: center;
-	margin: 20px 0;
+	color: $plain-text-color;
+	font-family: $fRegular;
+
+	h3 {
+		font-size: 24px;
+		margin-bottom: 20px;
+		color: $plain-text-color;
+	}
+
 	.guestRow {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		gap: 10px;
 		margin-top: 10px;
+
+		span {
+			font-weight: bold;
+			color: $plain-text-color;
+		}
+
+		button {
+			background-color: #f3ebe6;
+			border: 1px solid $border-color;
+			padding: 10px 15px;
+			cursor: pointer;
+			font-size: 16px;
+			border-radius: 8px;
+			transition: $mainTransition;
+
+			&:hover {
+				background-color: $secondary-color;
+				color: $cWhite;
+			}
+
+			&.selected {
+				background-color: $primary-color;
+				color: $cWhite;
+			}
+		}
 	}
 
-	button {
-		background-color: #f3ebe6;
-		border: 1px solid #d1b7a1;
-		padding: 10px 15px;
-		cursor: pointer;
-		font-size: 16px;
-		border-radius: 8px;
-		transition: 0.3s;
+	.alcoholPreferences {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
+		margin-top: 20px;
+
+		// Optional: a heading or text above the radios
+		p {
+			margin-bottom: 10px;
+			color: $plain-text-color;
+			font-family: $fRegular;
+		}
+
+		// Each label holds the hidden radio input, the custom box, and the text
+		label {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+			margin-bottom: 12px;
+			font-family: $fRegular;
+			color: $plain-text-color;
+
+			// Hide the default radio button
+			input[type="radio"] {
+				display: none;
+			}
+
+			// Our custom box that replaces the default radio
+			.customRadio {
+				width: 24px;
+				height: 24px;
+				border: 1px solid $border-color; // or a custom color from your palette
+				background-color: #fff;
+				position: relative;
+				margin-right: 8px;
+				border-radius: 2px; // squared corners; use 50% for circles
+				transition: $mainTransition;
+
+				// The checkmark is an ::after pseudo-element, hidden by default
+				&::after {
+					content: "✔";
+					position: absolute;
+					font-size: 16px;
+					color: $plain-text-color; // or $primary-color if you prefer
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					opacity: 0; // hidden by default
+				}
+			}
+
+			// When the radio is checked, reveal the checkmark
+			input[type="radio"]:checked + .customRadio::after {
+				opacity: 1;
+			}
+
+			// The text after the custom box
+			span:last-child {
+				font-size: 16px;
+				// any additional styling
+			}
+		}
+
+		// Wine type block or custom block can inherit the same styling
+		.wineTypeBlock,
+		.customAlcoholBlock {
+			margin-top: 15px;
+
+			p {
+				margin-bottom: 5px;
+				font-family: $fRegular;
+				color: $plain-text-color;
+			}
+
+			input[type="text"] {
+				border: 1px solid $border-color;
+				padding: 6px 10px;
+				border-radius: 4px;
+				font-family: $fRegular;
+			}
+		}
+
+		// Optional: responsive tweak
+		@media (max-width: 768px) {
+			label {
+				margin-bottom: 10px;
+				.customRadio {
+					width: 20px;
+					height: 20px;
+				}
+				span:last-child {
+					font-size: 14px;
+				}
+			}
+		}
 	}
 
-	button.selected {
-		background-color: #d1b7a1;
-		color: white;
+	// Responsive design for smaller screens
+	@media (max-width: 768px) {
+		max-width: 90%;
+		padding: 15px;
+
+		.guestRow {
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.alcoholPreferences {
+			text-align: center;
+
+			label {
+				display: block;
+				margin-bottom: 8px;
+			}
+		}
 	}
 }

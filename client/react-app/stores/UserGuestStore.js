@@ -1,3 +1,4 @@
+// stores/UserGuestStore.js
 import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
 import { createContext, useContext } from "react";
@@ -5,8 +6,9 @@ import { createContext, useContext } from "react";
 class UserGuestStore {
 	apiUrl = "http://127.0.0.1";
 	guestData = null; // For single guest details
-	loading = false;
+	loading = true;
 	error = null;
+	isDirty = false; // flag to track unsynced changes
 
 	constructor() {
 		makeAutoObservable(this);
@@ -14,10 +16,8 @@ class UserGuestStore {
 
 	/**
 	 * Fetch a guest by its unique_path.
-	 * Expects a JSON body with { unique_path: "value" }.
 	 */
 	getGuestByUniquePath = async (uniquePath) => {
-		this.loading = true;
 		this.error = null;
 		try {
 			const response = await axios.post(
@@ -28,62 +28,144 @@ class UserGuestStore {
 					withCredentials: true,
 				}
 			);
-			console.log(response);
-
+			console.log(
+				"🚀 ~ UserGuestStore ~ getGuestByUniquePath= ~ response:",
+				response
+			);
 			runInAction(() => {
 				this.guestData = response.data.guest;
-				console.log(this.guestData);
+				this.loading = false;
+				this.error = null;
+				this.isDirty = false; // fresh data is synced
 			});
 		} catch (err) {
-			console.log("Error:", err);
 			runInAction(() => {
 				this.error = err;
-			});
-		} finally {
-			runInAction(() => {
 				this.loading = false;
 			});
 		}
 	};
 
-	// Update RSVP in the store and send request to backend
-	updateGuestRSVP = async (status, isPlusOne = false) => {
-		this.error = null;
+	/**
+	 * ===============================
+	 *   LOCAL-ONLY STATE UPDATERS
+	 * ===============================
+	 */
 
+	// 1) Set RSVP status in store only (no request)
+	setRSVPStatusInStore = (status, isPlusOne = false) => {
+		if (!this.guestData) return;
+		runInAction(() => {
+			if (isPlusOne) {
+				this.guestData.rsvp_status_plus_one = status;
+			} else {
+				this.guestData.rsvp_status = status;
+			}
+			this.isDirty = true;
+		});
+	};
+
+	// 2) Alcohol preference
+	setAlcoholPreferenceInStore = (value, isPlusOne = false) => {
+		if (!this.guestData) return;
+		runInAction(() => {
+			if (isPlusOne) {
+				this.guestData.alcohol_preferences_plus_one = value;
+			} else {
+				this.guestData.alcohol_preferences = value;
+			}
+			this.isDirty = true;
+		});
+	};
+
+	// 3) Wine type preference
+	setWineTypeInStore = (value, isPlusOne = false) => {
+		if (!this.guestData) return;
+		runInAction(() => {
+			if (isPlusOne) {
+				this.guestData.wine_type_plus_one = value;
+			} else {
+				this.guestData.wine_type = value;
+			}
+			this.isDirty = true;
+		});
+	};
+
+	// 4) Custom alcohol text
+	setCustomAlcoholInStore = (value, isPlusOne = false) => {
+		if (!this.guestData) return;
+		runInAction(() => {
+			if (isPlusOne) {
+				this.guestData.custom_alcohol_plus_one = value;
+			} else {
+				this.guestData.custom_alcohol = value;
+			}
+			this.isDirty = true;
+		});
+	};
+	syncRSVPDataToServer = async () => {
 		if (!this.guestData) return;
 
-		// Build payload with unique_path and the specific status field.
+		// Helper function: returns null if status is "declined" or "pending", else returns the provided value.
+		const getValueOrNull = (status, value) =>
+			status === "declined" || status === "pending" ? null : value;
+
+		// Helper function for custom fields:
+		// Returns null if status is "declined" or "pending", or if the alcohol choice is not "custom".
+		const getCustomValueOrNull = (status, alcoholChoice, customValue) =>
+			status === "declined" ||
+			status === "pending" ||
+			alcoholChoice !== "custom"
+				? null
+				: customValue;
+
 		const payload = {
 			unique_path: this.guestData.unique_path,
+			rsvp_status: this.guestData.rsvp_status,
+			rsvp_status_plus_one: this.guestData.rsvp_status_plus_one,
+			alcohol_preferences: getValueOrNull(
+				this.guestData.rsvp_status,
+				this.guestData.alcohol_preferences
+			),
+			alcohol_preferences_plus_one: getValueOrNull(
+				this.guestData.rsvp_status_plus_one,
+				this.guestData.alcohol_preferences_plus_one
+			),
+			wine_type: getValueOrNull(
+				this.guestData.rsvp_status,
+				this.guestData.wine_type
+			),
+			wine_type_plus_one: getValueOrNull(
+				this.guestData.rsvp_status_plus_one,
+				this.guestData.wine_type_plus_one
+			),
+			custom_alcohol: getCustomValueOrNull(
+				this.guestData.rsvp_status,
+				this.guestData.alcohol_preferences,
+				this.guestData.custom_alcohol
+			),
+			custom_alcohol_plus_one: getCustomValueOrNull(
+				this.guestData.rsvp_status_plus_one,
+				this.guestData.alcohol_preferences_plus_one,
+				this.guestData.custom_alcohol_plus_one
+			),
 		};
-
-		if (isPlusOne) {
-			payload.rsvp_status_plus_one = status;
-		} else {
-			payload.rsvp_status = status;
-		}
 
 		try {
 			const response = await axios.post(
-				`${this.apiUrl}/api/guest/updateGuestSingleColumn`,
+				`${this.apiUrl}/api/guest/updateGuestDataByUser`,
 				payload,
 				{
 					headers: { "Content-Type": "application/json" },
 					withCredentials: true,
 				}
 			);
-			console.log(response);
-
+			console.log("syncRSVPDataToServer response", response.data);
 			runInAction(() => {
-				// Update state after a successful API request.
-				if (isPlusOne) {
-					this.guestData.rsvp_status_plus_one = status;
-				} else {
-					this.guestData.rsvp_status = status;
-				}
+				this.isDirty = false;
 			});
 		} catch (err) {
-			console.log("Error:", err);
+			console.log("Error syncing RSVP data:", err);
 			runInAction(() => {
 				this.error = err;
 			});

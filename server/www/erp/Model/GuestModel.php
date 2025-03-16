@@ -120,16 +120,25 @@ class GuestModel
         }
     }
 
-    public function updateGuestSingleColumn(int $guestId, array $data): array
+    public function updateGuestDataByUser(int $guestId, array $data): array
     {
-        // Define allowed fields for update.
-        $allowedFields = ['rsvp_status', 'rsvp_status_plus_one', 'alcohol_preferences'];
+        // Allowed database columns for update.
+        $allowedColumns = [
+            'rsvp_status',
+            'rsvp_status_plus_one',
+            'alcohol_preferences',
+            'alcohol_preferences_plus_one',
+            'wine_type',
+            'wine_type_plus_one',
+            'custom_alcohol',
+            'custom_alcohol_plus_one'
+        ];
         $updateData = [];
 
-        // Collect only allowed fields from the input data.
-        foreach ($allowedFields as $field) {
-            if (array_key_exists($field, $data)) {
-                $updateData[$field] = $data[$field];
+        // Filter data to include only allowed columns.
+        foreach ($allowedColumns as $column) {
+            if (array_key_exists($column, $data)) {
+                $updateData[$column] = $data[$column];
             }
         }
 
@@ -153,7 +162,7 @@ class GuestModel
 
         $stmt = $this->conn->prepare($query);
         if (!$stmt->execute($params)) {
-            throw new Exception("Failed to update guest RSVP record.");
+            throw new Exception("Failed to update guest record.");
         }
 
         // Return the updated guest record.
