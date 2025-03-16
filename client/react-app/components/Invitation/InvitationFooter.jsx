@@ -1,4 +1,5 @@
 // components/Invitation/InvitationFooter.jsx
+
 export const InvitationFooter = () => {
 	return (
 		<footer
@@ -10,7 +11,11 @@ export const InvitationFooter = () => {
 			<p>
 				З любов’ю,
 				<br />
-				<strong>Імена наречених</strong>
+				<strong>Марія і Дмитро</strong>
+			</p>
+			{/* New paragraph for who created the invitations */}
+			<p className="creator">
+				© {new Date().getFullYear()} Запрошення створені Нареченими
 			</p>
 		</footer>
 	);

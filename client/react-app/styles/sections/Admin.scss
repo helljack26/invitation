@@ -1,0 +1,50 @@
+.admin_container {
+	@media only screen and (min-width: 993px) {
+		width: 90%;
+	}
+
+	h1 {
+		font-size: 3em;
+		font-family: $fRegular !important;
+	}
+	h2 {
+		font-size: 2em;
+	}
+
+	a {
+		text-decoration: underline;
+		color: blue;
+		transition: all 0.3s ease-in-out;
+		&:hover {
+			text-decoration: none;
+			color: rgb(0, 0, 77);
+		}
+	}
+
+	.admin_container_form {
+		background-color: $bg-color-pink;
+		border-radius: 10px;
+		padding: 30px;
+		margin: 16px 0;
+		h2 {
+			margin-bottom: 10px;
+			text-align: center;
+		}
+		input {
+			&::placeholder {
+				color: black;
+			}
+		}
+		label {
+			color: black;
+			span {
+				color: black;
+			}
+		}
+	}
+	.responsive-table {
+		td {
+			padding: 15px;
+		}
+	}
+}
