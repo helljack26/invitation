@@ -223,10 +223,10 @@ class GuestController
     }
 
     /**
-     * Update guest RSVP or alcohol preferences using unique_path.
+     * Update guest RSVP and alcohol preferences using unique_path.
      * Only the columns provided in the request will be updated.
      */
-    public function updateGuestSingleColumn(): void
+    public function updateGuestDataByUser(): void
     {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
@@ -244,21 +244,32 @@ class GuestController
             }
             $guestId = intval($guest['guest_id']);
 
-            // Define allowed fields for update
-            $allowedFields = ['rsvp_status', 'rsvp_status_plus_one', 'alcohol_preferences'];
+            // Define mapping: input key => database column
+            $fieldMapping = [
+                'rsvp_status'           => 'rsvp_status',
+                'rsvp_status_plus_one'  => 'rsvp_status_plus_one',
+                'alcohol_preferences'          => 'alcohol_preferences',
+                'alcohol_preferences_plus_one' => 'alcohol_preferences_plus_one',
+                'wine_type'             => 'wine_type',
+                'wine_type_plus_one'    => 'wine_type_plus_one',
+                'custom_alcohol'        => 'custom_alcohol',
+                'custom_alcohol_plus_one' => 'custom_alcohol_plus_one'
+            ];
+
+            // Allowed values for RSVP status
             $allowedStatusValues = ['pending', 'accepted', 'declined'];
             $updateData = [];
 
-            // Iterate only over allowed fields and validate if necessary
-            foreach ($allowedFields as $field) {
-                if (array_key_exists($field, $data)) {
-                    // If updating RSVP status, validate its value.
-                    if (in_array($field, ['rsvp_status', 'rsvp_status_plus_one'])) {
-                        if (!in_array($data[$field], $allowedStatusValues)) {
-                            throw new \InvalidArgumentException("Invalid value for $field.");
+            // Iterate over allowed fields and map them to DB columns.
+            foreach ($fieldMapping as $inputKey => $dbColumn) {
+                if (array_key_exists($inputKey, $data)) {
+                    // Validate RSVP status values.
+                    if (in_array($inputKey, ['rsvp_status', 'rsvp_status_plus_one'])) {
+                        if (!in_array($data[$inputKey], $allowedStatusValues)) {
+                            throw new \InvalidArgumentException("Invalid value for $inputKey.");
                         }
                     }
-                    $updateData[$field] = $data[$field];
+                    $updateData[$dbColumn] = $data[$inputKey];
                 }
             }
 
@@ -266,12 +277,12 @@ class GuestController
                 throw new \InvalidArgumentException("No valid fields provided for update.");
             }
 
-            // Use the abstracted model method to update only provided fields.
-            $result = $this->guestModel->updateGuestSingleColumn($guestId, $updateData);
+            // Use the model method to update only the provided fields.
+            $result = $this->guestModel->updateGuestDataByUser($guestId, $updateData);
 
             http_response_code(200);
             echo json_encode([
-                "message" => "Guest RSVP updated successfully",
+                "message" => "Guest RSVP and preferences updated successfully",
                 "guest"   => $result
             ]);
         } catch (\InvalidArgumentException $e) {
@@ -280,7 +291,7 @@ class GuestController
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
-                "error"   => "Failed to update guest RSVP",
+                "error"   => "Failed to update guest RSVP and preferences",
                 "details" => $e->getMessage()
             ]);
         }
