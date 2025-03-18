@@ -1,38 +1,53 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import GuestStore from "../../stores/GuestStore";
-import { transliterate } from "../../components/helpers/transliterate";
-// import { Link } from "react-router-dom";
 import Head from "next/head";
 import Link from "next/link";
 import AlcoholSummary from "../../components/admin/AlcoholSummary";
 
 const AdminPage = observer(() => {
-	const [showModal, setShowModal] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [guestToDelete, setGuestToDelete] = useState(null);
 
-	// Тимчасові стани для створення нового гостя
+	// ----------------------------------------------------------------
+	// STATES FOR CREATING NEW GUEST
+	// ----------------------------------------------------------------
 	const [newGuestFirstName, setNewGuestFirstName] = useState("");
 	const [plusOne, setPlusOne] = useState(false);
 	const [plusOneName, setPlusOneName] = useState("");
-	// Стейт для вибору статі гостя (якщо окремий гість)
 	const [guestGender, setGuestGender] = useState("");
 
+	// ----------------------------------------------------------------
+	// STATES FOR EDITING EXISTING GUEST
+	// ----------------------------------------------------------------
+	const [showEditModal, setShowEditModal] = useState(false);
+	const [editingGuestId, setEditingGuestId] = useState(null);
+
+	// These mirror the creation fields
+	const [editGuestFirstName, setEditGuestFirstName] = useState("");
+	const [editPlusOne, setEditPlusOne] = useState(false);
+	const [editPlusOneName, setEditPlusOneName] = useState("");
+	const [editGuestGender, setEditGuestGender] = useState("");
+
 	useEffect(() => {
-		// При завантаженні сторінки отримуємо список гостей
+		// On page load, get the list of guests
 		GuestStore.listGuests();
 	}, []);
 
+	// ----------------------------------------------------------------
+	// CREATE A NEW GUEST
+	// ----------------------------------------------------------------
 	const handleAddGuest = async () => {
 		if (!newGuestFirstName) {
 			alert("Будь ласка, заповніть ім'я!");
 			return;
 		}
-		// Якщо гість без plus one, потрібно обрати стать
+		// If guest doesn't have plus one, we need gender
 		if (!plusOne && !guestGender) {
 			alert("Будь ласка, оберіть стать гостя!");
 			return;
 		}
+
 		const guestPayload = {
 			first_name: newGuestFirstName,
 			first_name_plus_1: plusOne ? plusOneName : "",
@@ -41,34 +56,82 @@ const AdminPage = observer(() => {
 
 		await GuestStore.createGuest(guestPayload);
 
-		// Очистити поля введення
+		// Clear the fields
 		setNewGuestFirstName("");
 		setPlusOne(false);
 		setPlusOneName("");
 		setGuestGender("");
 
-		// Оновити список гостей
+		// Refresh the list
 		GuestStore.listGuests();
 	};
 
+	// ----------------------------------------------------------------
+	// DELETE GUEST LOGIC
+	// ----------------------------------------------------------------
 	const confirmDelete = (guest) => {
 		setGuestToDelete(guest);
-		setShowModal(true);
+		setShowDeleteModal(true);
 	};
 
 	const handleDelete = async () => {
 		if (guestToDelete) {
 			await GuestStore.deleteGuest(guestToDelete.guest_id);
 			setGuestToDelete(null);
-			setShowModal(false);
+			setShowDeleteModal(false);
 		}
 	};
 
 	const handleCancelDelete = () => {
 		setGuestToDelete(null);
-		setShowModal(false);
+		setShowDeleteModal(false);
 	};
 
+	// ----------------------------------------------------------------
+	// EDIT GUEST LOGIC
+	// ----------------------------------------------------------------
+	const handleEditClick = (guest) => {
+		// Store guest ID so we know who we're updating
+		setEditingGuestId(guest.guest_id);
+
+		// Populate fields with existing guest data
+		setEditGuestFirstName(guest.first_name || "");
+		setEditPlusOne(!!guest.first_name_plus_1);
+		setEditPlusOneName(guest.first_name_plus_1 || "");
+		setEditGuestGender(guest.gender || "");
+
+		setShowEditModal(true);
+	};
+
+	const handleUpdateGuest = async () => {
+		if (!editGuestFirstName) {
+			alert("Будь ласка, заповніть ім'я!");
+			return;
+		}
+		if (!editPlusOne && !editGuestGender) {
+			alert("Будь ласка, оберіть стать гостя!");
+			return;
+		}
+
+		const payload = {
+			first_name: editGuestFirstName,
+			first_name_plus_1: editPlusOne ? editPlusOneName : "",
+			// If there's no plus one, include the gender;
+			// otherwise, omit it so as not to overwrite incorrectly.
+			...(!editPlusOne && { gender: editGuestGender }),
+		};
+
+		await GuestStore.updateGuest(editingGuestId, payload);
+
+		// After success, close modal and refresh list
+		setShowEditModal(false);
+		setEditingGuestId(null);
+		GuestStore.listGuests();
+	};
+
+	// ----------------------------------------------------------------
+	// STYLING & HELPER
+	// ----------------------------------------------------------------
 	const getRsvpStyle = (status) => {
 		if (status === "accepted") return { color: "green" };
 		if (status === "declined") return { color: "red" };
@@ -82,6 +145,7 @@ const AdminPage = observer(() => {
 	return (
 		<>
 			<Head>
+				<title>Гості - Адміністрація</title>
 				<link
 					rel="stylesheet"
 					href="/styles/materialize.min.css"
@@ -93,6 +157,8 @@ const AdminPage = observer(() => {
 				style={{ paddingTop: "20px" }}
 			>
 				<h1 className="center-align">Гості</h1>
+
+				{/* CREATE GUEST FORM */}
 				<div className="admin_container_form">
 					<h2>Додати нового гостя</h2>
 					<div
@@ -106,10 +172,18 @@ const AdminPage = observer(() => {
 								value={newGuestFirstName}
 								onChange={(e) => setNewGuestFirstName(e.target.value)}
 							/>
-							<label htmlFor="first_name">Ім'я</label>
+							<label
+								htmlFor="first_name"
+								className={newGuestFirstName ? "active" : ""}
+							>
+								Ім'я
+							</label>
 						</div>
 
-						<div className="input-field col s12 m4">
+						<div
+							className="input-field col s12 m4"
+							style={{ marginTop: "2rem" }}
+						>
 							<label>
 								<input
 									type="checkbox"
@@ -128,7 +202,10 @@ const AdminPage = observer(() => {
 									value={plusOneName}
 									onChange={(e) => setPlusOneName(e.target.value)}
 								/>
-								<label htmlFor="plus_one_name">
+								<label
+									htmlFor="plus_one_name"
+									className={plusOneName ? "active" : ""}
+								>
 									Ім'я додаткового гостя
 								</label>
 							</div>
@@ -158,6 +235,7 @@ const AdminPage = observer(() => {
 					</div>
 				</div>
 
+				{/* GUESTS TABLE */}
 				<h2 className="center-align">Всі гості</h2>
 				<table className="striped responsive-table">
 					<thead>
@@ -170,7 +248,7 @@ const AdminPage = observer(() => {
 							<th>Статус</th>
 							<th>Алкогольні вподобання</th>
 							<th>Додатковий гість</th>
-							<th>Статус додаткового гостя</th>
+							<th>Статус (дод. гість)</th>
 							<th>Алкоголь (дод. гість)</th>
 							<th>Дії</th>
 						</tr>
@@ -196,7 +274,6 @@ const AdminPage = observer(() => {
 											: "Жінка"
 										: "-"}
 								</td>
-								{/* Render the RSVP status with Ukrainian translations and styles */}
 								<td style={getRsvpStyle(guest.rsvp_status)}>
 									{guest.rsvp_status === "pending"
 										? "Очікує"
@@ -228,7 +305,7 @@ const AdminPage = observer(() => {
 									)}
 								</td>
 								<td>
-									{guest?.first_name_plus_1
+									{guest.first_name_plus_1
 										? guest.first_name_plus_1
 										: "-"}
 								</td>
@@ -270,16 +347,20 @@ const AdminPage = observer(() => {
 									)}
 								</td>
 
-								<td>
+								<td className="table_button_row">
+									<button
+										className="btn edit lighten-1"
+										style={{ marginLeft: "0.5rem" }}
+										onClick={() => handleEditClick(guest)}
+									>
+										Редагувати
+									</button>
 									<button
 										className="btn red lighten-1"
 										onClick={() => confirmDelete(guest)}
 									>
-										Видалити
+										X
 									</button>
-									{/*
-                  Можна також додати кнопку "Редагувати" для оновлення гостя через GuestStore.updateGuest().
-                */}
 								</td>
 							</tr>
 						))}
@@ -288,43 +369,124 @@ const AdminPage = observer(() => {
 
 				{/* Підсумок по алкоголю */}
 				<AlcoholSummary />
-				{/* Модальне вікно підтвердження видалення */}
-				{showModal && (
-					<div
-						className="modal"
-						style={{
-							display: "block",
-							position: "fixed",
-							top: 0,
-							left: 0,
-							width: "100vw",
-							height: "100vh",
-							background: "rgba(0,0,0,0.3)",
-						}}
-					>
-						<div
-							className="modal-content"
-							style={{ padding: "2rem" }}
-						>
+
+				{/* DELETE CONFIRMATION MODAL */}
+				{showDeleteModal && (
+					<div className="modal">
+						<div className="modal-content">
 							<h4>Підтвердження</h4>
 							<p>Ви впевнені, що хочете видалити гостя?</p>
+							<div
+								className="modal-footer"
+								style={{ padding: "1rem" }}
+							>
+								<button
+									className="btn red lighten-1"
+									onClick={handleDelete}
+								>
+									Так
+								</button>
+								<button
+									className="btn-flat"
+									onClick={handleCancelDelete}
+								>
+									Ні
+								</button>
+							</div>
 						</div>
-						<div
-							className="modal-footer"
-							style={{ padding: "1rem" }}
-						>
-							<button
-								className="btn red lighten-1"
-								onClick={handleDelete}
+					</div>
+				)}
+
+				{/* EDIT GUEST MODAL */}
+				{showEditModal && (
+					<div className="modal modal_edit">
+						<div className="modal-content">
+							<h4>Редагувати гостя</h4>
+							<div
+								className="row"
+								style={{ marginBottom: "1rem" }}
 							>
-								Так
-							</button>
-							<button
-								className="btn-flat"
-								onClick={handleCancelDelete}
+								<div className="input-field col s12 m4">
+									<input
+										id="edit_first_name"
+										type="text"
+										value={editGuestFirstName}
+										onChange={(e) =>
+											setEditGuestFirstName(e.target.value)
+										}
+									/>
+									<label
+										htmlFor="edit_first_name"
+										className={editGuestFirstName ? "active" : ""}
+									>
+										Ім'я
+									</label>
+								</div>
+
+								<div
+									className="input-field col s12 m4"
+									style={{ marginTop: "2rem" }}
+								>
+									<label>
+										<input
+											type="checkbox"
+											checked={editPlusOne}
+											onChange={() => setEditPlusOne(!editPlusOne)}
+										/>
+										<span>Додатковий гість?</span>
+									</label>
+								</div>
+
+								{editPlusOne ? (
+									<div className="input-field col s12 m4">
+										<input
+											id="edit_plus_one_name"
+											type="text"
+											value={editPlusOneName}
+											onChange={(e) =>
+												setEditPlusOneName(e.target.value)
+											}
+										/>
+										<label
+											htmlFor="edit_plus_one_name"
+											className={editPlusOneName ? "active" : ""}
+										>
+											Ім'я додаткового гостя
+										</label>
+									</div>
+								) : (
+									<div className="input-field col s12 m4">
+										<select
+											value={editGuestGender}
+											onChange={(e) =>
+												setEditGuestGender(e.target.value)
+											}
+											className="browser-default"
+										>
+											<option value="">Оберіть стать гостя</option>
+											<option value="male">Чоловік</option>
+											<option value="female">Жінка</option>
+										</select>
+									</div>
+								)}
+							</div>
+							<div
+								className="modal-footer"
+								style={{ padding: "1rem" }}
 							>
-								Ні
-							</button>
+								<button
+									className="btn"
+									onClick={handleUpdateGuest}
+								>
+									Зберегти
+								</button>
+								<button
+									className="btn-flat"
+									onClick={() => setShowEditModal(false)}
+								>
+									Скасувати
+								</button>
+							</div>
 						</div>
 					</div>
 				)}

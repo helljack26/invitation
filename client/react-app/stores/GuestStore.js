@@ -48,26 +48,23 @@ class GuestStore {
 	 */
 	updateGuest = async (guestId, guest) => {
 		runInAction(() => {
-			this.loading = true;
 			this.error = null;
 		});
 		try {
 			// Combining guestId and guest properties into one object
 			const payload = { guest_id: guestId, ...guest };
-			const response = await axios.put(
+			const response = await axios.post(
 				`${this.apiUrl}/api/guest/updateGuest`,
 				payload
 			);
+			console.log(response);
+
 			// Assuming the controller returns { guest: { ... } }
 			this.guestData = response.data.guest;
 		} catch (err) {
 			console.log("🚀 ~ GuestStore ~ updateGuest= ~ err:", err);
 			runInAction(() => {
 				this.error = err;
-			});
-		} finally {
-			runInAction(() => {
-				this.loading = false;
 			});
 		}
 	};
