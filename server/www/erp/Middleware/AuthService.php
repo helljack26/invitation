@@ -1,4 +1,5 @@
 <?php
+
 namespace Middleware;
 
 use Firebase\JWT\JWT;
@@ -42,6 +43,7 @@ class AuthService
     {
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
         if ($authHeader) {
+
             list($type, $token) = explode(" ", $authHeader, 2);
             if (strcasecmp($type, "Bearer") == 0) {
                 return $token;
