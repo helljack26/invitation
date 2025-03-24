@@ -49,14 +49,12 @@ class AuthController
                 return;
             }
 
-            $query = "INSERT INTO Users (username, email, password, first_name, second_name, last_name) VALUES (:username, :email, :password, :first_name, :second_name, :last_name)";
+            $query = "INSERT INTO Users (username, email, password, first_name) VALUES (:username, :email, :password, :first_name)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password);
             $stmt->bindParam(':first_name', $first_name);
-            $stmt->bindParam(':second_name', $second_name);
-            $stmt->bindParam(':last_name', $last_name);
 
             if ($stmt->execute()) {
                 http_response_code(201); // Created
@@ -90,6 +88,8 @@ class AuthController
                 if ($user && password_verify($password, $user['password'])) {
                     // User exists, log them in
                     $jwt = $this->generateJWT($user['id']);
+                    echo basename(__FILE__) . ' (Line ' . __LINE__ . ') - $jwt: ';
+                    var_dump($jwt);
                     $this->setCookie($jwt);
 
                     http_response_code(200); // OK
@@ -97,45 +97,6 @@ class AuthController
                         "message" => "Successful login.",
                         "jwt" => $jwt
                     ]);
-                    return;
-                }
-            }
-
-            // If email/password login fails, check for Google login
-            if (!empty($postData->googleAccessToken)) {
-
-                $googleUserInfo = $postData;
-                if ($googleUserInfo->email) {
-                    $email = $googleUserInfo->email;
-
-                    $user = $this->getUserIdByEmail($email);
-
-                    if ($user) {
-                        // User exists, log them in
-                        $jwt = $this->generateJWT($user['id']);
-                        $this->setCookie($jwt);
-
-                        http_response_code(200); // OK
-                        echo json_encode([
-                            "message" => "Successful login.",
-                            "jwt" => $jwt
-                        ]);
-                        return;
-                    } else {
-                        $userId = $this->createUserWithGoogle($postData);
-                        $jwt = $this->generateJWT($userId);
-                        $this->setCookie($jwt);
-
-                        http_response_code(200); // OK
-                        echo json_encode([
-                            "message" => "Successful login.",
-                            "jwt" => $jwt
-                        ]);
-                        return;
-                    }
-                } else {
-                    http_response_code(400); // Bad Request
-                    echo json_encode(["message" => "Email or password not provided!"]);
                     return;
                 }
             }
@@ -149,45 +110,13 @@ class AuthController
         }
     }
 
-    // Verify Google access token with Google API
-    public function verifyGoogleAccessToken($accessToken)
-    {
-        $googleApiUrl = 'https://www.googleapis.com/oauth2/v1/userinfo';
-        $googleApiParams = ['access_token' => $accessToken];
-        $googleApiUrl .= '?' . http_build_query($googleApiParams);
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $googleApiUrl);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        // Check if curl_init() was successful
-        if ($curl === false) {
-            echo 'cURL initialization failed.';
-            return null;
-        }
-
-        $response = curl_exec($curl);
-
-        // Check for cURL errors
-        if (curl_errno($curl)) {
-            echo 'cURL error: ' . curl_error($curl);
-            return null;
-        }
-
-        curl_close($curl);
-
-        if ($response !== false) {
-            return json_decode($response);
-        }
-
-        return null;
-    }
-
     // Placeholder for your existing JWT generation logic
     private function generateJWT($userId)
     {
         $key = getenv('API_SECRET');
         $FRONT_URL = getenv('FRONT_URL');
+        echo basename(__FILE__) . ' (Line ' . __LINE__ . ') - $FRONT_URL: ';
+        var_dump($FRONT_URL);
         $payload = [
             "iss" => "http://$FRONT_URL",
             "aud" => "http://$FRONT_URL",
@@ -207,59 +136,6 @@ class AuthController
         $FRONT_URL = getenv('FRONT_URL');
         setcookie("token", $jwt, 0, "/", $FRONT_URL, false, true);
     }
-    // Placeholder for your existing cookie-setting logic
-    private function getUserIdByEmail($email)
-    {
-        $query = "SELECT * FROM Users WHERE email = :email";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $user;
-    }
-
-    public function createUserWithGoogle($googleUserInfo)
-    {
-        $email = $googleUserInfo->email;
-        $firstName = $googleUserInfo->given_name;
-        $lastName = $googleUserInfo->family_name;
-        $avatarUrl = $googleUserInfo->picture;
-
-        // Split email to get the username
-        list($username) = explode('@', $email);
-
-        // Check if the user already exists
-        $query = "SELECT * FROM Users WHERE email = :email";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $existingUser = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($existingUser) {
-            // User already exists
-            return $existingUser['id'];
-        }
-
-        // User does not exist, create a new user
-        $query = "INSERT INTO Users (username, email, first_name, last_name, avatar_url) 
-                    VALUES (:username, :email, :first_name, :last_name, :avatar_url)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':first_name', $firstName);
-        $stmt->bindParam(':last_name', $lastName);
-        $stmt->bindParam(':avatar_url', $avatarUrl);
-
-        if ($stmt->execute()) {
-            // Return the user ID of the created user
-            return $this->conn->lastInsertId();
-        } else {
-            // Return null if the user creation fails
-            return null;
-        }
-    }
-
-
 
     public function logout()
     {
@@ -285,6 +161,12 @@ class AuthController
     {
         $authCheck = new AuthMiddleware();
         $authResult = $authCheck->authenticate();
+
+        if (!is_array($authResult) || !isset($authResult['userId'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Unauthorized']);
+            return;
+        }
 
         $userId = $authResult['userId'];
         $user = (object) [

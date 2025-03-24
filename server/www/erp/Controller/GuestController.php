@@ -3,16 +3,34 @@
 namespace Controller;
 
 use Model\GuestModel;
+use Model\UserModel;
 use Exception;
 
 class GuestController
 {
     private GuestModel $guestModel;
+    private UserModel $userModel;
 
-    public function __construct(GuestModel $guestModel)
+    public function __construct(GuestModel $guestModel, UserModel $userModel)
     {
         $this->guestModel = $guestModel;
+        $this->userModel = $userModel;
     }
+
+    /**
+     * Аутентификация и получение company_id.
+     */
+    private function authenticateByUserId(): ?array
+    {
+        $userId = $this->userModel->getUserIdFromToken();
+        if (!$userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Ви не залогінені!"]);
+            return null;
+        }
+        return ['userId' => $userId];
+    }
+
 
     /**
      * Create a new guest record.
@@ -20,6 +38,12 @@ class GuestController
     public function createGuest(): void
     {
         try {
+            // Check authentication:
+            $auth = $this->authenticateByUserId();
+            if ($auth === null) {
+                return; // User not authenticated, response already sent in authenticateByUserId()
+            }
+
             $data = json_decode(file_get_contents('php://input'), true);
 
             // Validate the mandatory fields:
@@ -68,6 +92,12 @@ class GuestController
     public function updateGuest(): void
     {
         try {
+            // Check authentication:
+            $auth = $this->authenticateByUserId();
+            if ($auth === null) {
+                return; // User not authenticated, response already sent in authenticateByUserId()
+            }
+
             $data = json_decode(file_get_contents('php://input'), true);
 
             // 1) Ensure we have guest_id
@@ -79,7 +109,7 @@ class GuestController
             // 2) Fetch the existing guest from the DB
             $oldGuest = $this->guestModel->getGuestById($guestId);
             if (!$oldGuest) {
-                throw new \Exception("Guest not found.");
+                throw new Exception("Guest not found.");
             }
 
             // 3) Figure out if user has added (or removed) a plus-one name
@@ -151,6 +181,12 @@ class GuestController
     public function listGuests(): void
     {
         try {
+            // Check authentication:
+            $auth = $this->authenticateByUserId();
+            if ($auth === null) {
+                return; // User not authenticated, response already sent in authenticateByUserId()
+            }
+
             $guests = $this->guestModel->listGuests();
 
             http_response_code(200);
@@ -231,6 +267,12 @@ class GuestController
     public function deleteGuest(): void
     {
         try {
+            // Check authentication:
+            $auth = $this->authenticateByUserId();
+            if ($auth === null) {
+                return; // User not authenticated, response already sent in authenticateByUserId()
+            }
+
             $data = json_decode(file_get_contents('php://input'), true);
 
             if (!isset($data['guest_id'])) {
@@ -262,18 +304,6 @@ class GuestController
         if (empty($data['first_name'])) {
             throw new \InvalidArgumentException("First name is required.");
         }
-    }
-
-    /**
-     * Validate data for guest update.
-     */
-    private function validateGuestUpdateData(array $data): void
-    {
-        if (empty($data['guest_id'])) {
-            throw new \InvalidArgumentException("Guest ID is required.");
-        }
-        // Reuse creation validation for the rest of the fields.
-        $this->validateGuestData($data);
     }
 
     /**

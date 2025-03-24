@@ -1,11 +1,31 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
+// Store
 import GuestStore from "../../stores/GuestStore";
+import { useAuthStore } from "../../stores/authStore"; // adjust the path if needed
+import { useRouter } from "next/router";
+// Component
 import Head from "next/head";
 import Link from "next/link";
 import AlcoholSummary from "../../components/admin/AlcoholSummary";
 
 const AdminPage = observer(() => {
+	// Import auth store and Next.js router
+	const authStore = useAuthStore();
+	const router = useRouter();
+
+	// Check login status on mount
+	useEffect(() => {
+		console.log("%cINFO:", "color: blue;");
+		authStore.checkLoginStatus();
+	}, [authStore]);
+
+	// Redirect if user is not authenticated
+	useEffect(() => {
+		if (!authStore.isAuthenticated) {
+			router.push("/login");
+		}
+	}, [authStore.isAuthenticated, router]);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [guestToDelete, setGuestToDelete] = useState(null);
 

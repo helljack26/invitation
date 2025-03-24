@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
+import { authAxiosConfig } from "./authAxiosConfig";
 
 class GuestStore {
 	apiUrl = "http://127.0.0.1";
@@ -7,6 +8,7 @@ class GuestStore {
 	guestsList = []; // For list of guests
 	loading = true;
 	error = null;
+	axiosConfig = authAxiosConfig;
 
 	constructor() {
 		makeAutoObservable(this);
@@ -80,10 +82,7 @@ class GuestStore {
 		try {
 			const response = await axios.post(
 				`${this.apiUrl}/api/guest/listGuests`,
-				{
-					headers: { "Content-Type": "application/json" },
-					withCredentials: true,
-				}
+				authAxiosConfig
 			);
 			console.log("🚀 ~ GuestStore ~ listGuests= ~ response:", response);
 			// Assuming the controller returns { guests: [ ... ] }
@@ -91,7 +90,7 @@ class GuestStore {
 				this.guestsList = response.data.guests;
 			});
 		} catch (err) {
-			console.log("🚀 ~ GuestStore ~ createGuest= ~ err:", err);
+			console.log("🚀 ~ GuestStore ~ listGuests= ~ err:", err);
 			runInAction(() => {
 				this.error = err;
 			});
@@ -122,7 +121,7 @@ class GuestStore {
 				);
 			});
 		} catch (err) {
-			console.log("🚀 ~ GuestStore ~ createGuest= ~ err:", err);
+			console.log("🚀 ~ GuestStore ~ deleteGuest= ~ err:", err);
 			runInAction(() => {
 				this.error = err;
 			});

@@ -11,13 +11,13 @@ use Middleware\AuthMiddleware;
 use Middleware\AuthService;
 use Controller\AuthController;
 use Controller\GuestController;
+use Controller\UserController;
 
 // Создаём экземпляр Database, который автоматически инициализирует соединения с MySQL и Redis
 $database = new Database();
 
 // Получаем PDO соединение и сервис кеширования из экземпляра Database
 $conn = $database->getConnection();
-$cacheService = $database->getCacheService();
 $imageService = $database->getImageService();
 
 $fileServerManager  = new \Service\FileService\FileServerManager($conn);
@@ -28,12 +28,14 @@ $authService = new AuthService();
 
 
 // Создаём экземпляры моделей, передавая необходимые зависимости
+$userModel = new \Model\UserModel($conn,  $authService);
 $guestModel = new \Model\GuestModel($conn);
+
 
 // Создаём экземпляры контроллеров, передавая необходимые зависимости
 $authController = new AuthController();
+$guestController = new GuestController($guestModel, $userModel);
 
-$guestController = new GuestController($guestModel);
 // Определение маршрутов
 $routes = [
     // Аутентификация
@@ -43,12 +45,11 @@ $routes = [
     '/api/auth/authenticate' => [$authController, 'authenticate'],
 
     // Guest routes
-    '/api/guest/createGuest'   => [$guestController, 'createGuest', 'auth' => false],
-    '/api/guest/updateGuest'   => [$guestController, 'updateGuest', 'auth' => false],
-    '/api/guest/listGuests'    => [$guestController, 'listGuests', 'auth' => false],
-    '/api/guest/getGuestById'  => [$guestController, 'getGuestById', 'auth' => false],
+    '/api/guest/createGuest'   => [$guestController, 'createGuest', 'auth' => true],
+    '/api/guest/updateGuest'   => [$guestController, 'updateGuest', 'auth' => true],
+    '/api/guest/deleteGuest'   => [$guestController, 'deleteGuest', 'auth' => true],
+    '/api/guest/listGuests'    => [$guestController, 'listGuests', 'auth' => true],
     '/api/guest/getGuestByUniquePath'  => [$guestController, 'getGuestByUniquePath', 'auth' => false],
-    '/api/guest/deleteGuest'   => [$guestController, 'deleteGuest', 'auth' => false],
     '/api/guest/updateGuestDataByUser'   => [$guestController, 'updateGuestDataByUser', 'auth' => false],
 ];
 
@@ -81,7 +82,7 @@ function handleRequest($routes, $authMiddleware)
             $authResult = $authMiddleware->authenticate();
             if (!is_array($authResult) || !isset($authResult['userId'])) {
                 header("HTTP/1.1 401 Unauthorized");
-                echo json_encode(["error" => "Unauthorized"]);
+                echo json_encode(["error" => "1Unauthorized"]);
                 exit();
             }
             $userId = $authResult['userId'];  // Получаем ID пользователя из декодированного JWT

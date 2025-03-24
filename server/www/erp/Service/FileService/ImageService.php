@@ -11,16 +11,14 @@ class ImageService
 {
     protected PDO $conn;
     protected FileServerManager $fileServerManager;
-    protected CacheService $cacheService;
 
-    public function __construct(PDO $conn, FileServerManager $fileServerManager, CacheService $cacheService)
+    public function __construct(PDO $conn, FileServerManager $fileServerManager)
     {
         if (!$conn) {
             throw new Exception("PDO instance is required for ImageService.");
         }
         $this->conn = $conn;
         $this->fileServerManager = $fileServerManager;
-        $this->cacheService = $cacheService;
     }
 
     /**
@@ -179,24 +177,6 @@ class ImageService
             // Assuming you know the nomenclatureId related to this image
             $nomenclatureId = $result['nomenclature_id']; // Adjust this based on your schema
 
-            // Remove the image data from Redis
-            $cacheKey = "nomenclature:id:{$nomenclatureId}";
-            $cachedData = $this->cacheService->jsonGet($cacheKey);
-
-            // Check if the cached data is in the expected format (array)
-            if ($cachedData && is_array($cachedData['images'])) {
-                // Remove image from the cached array
-                $updatedImages = array_filter($cachedData['images'], function ($image) use ($imageId) {
-                    return $image['image_id'] != $imageId;
-                });
-                $updatedImages = array_values($updatedImages); // Reindex the array
-
-                // Update Redis with the new list of images
-                $this->cacheService->jsonSet($cacheKey, '.images', $updatedImages);
-            } else {
-                // Handle error if the cached data is not in the expected format
-                throw new Exception("Ошибка: данные о изображениях в кеше Redis имеют неверный формат.");
-            }
         }
     }
 
@@ -272,9 +252,6 @@ class ImageService
         // Обновляем кеш (если нужно)
         $cacheKey = "nomenclature_image:id:{$imageId}";
         $image = $this->getImagesByNomenclatureId($imageId);
-        if ($image) {
-            $this->cacheService->jsonSet($cacheKey, '.', $image);
-        }
     }
 
     /**

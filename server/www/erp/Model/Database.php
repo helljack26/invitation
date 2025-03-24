@@ -18,12 +18,10 @@ class Database
     private $username;
     private $password;
     public $conn;
-    protected $cacheService;
-    protected $consistentHashingRedis;
     protected $fileServerManager;
     protected $imageService;
     protected $EncryptionService;
-    
+
     public function __construct()
     {
         // Подключение к MySQL
@@ -33,24 +31,11 @@ class Database
         $this->password = getenv('DB_PASSWORD');
         $this->getConnection();
 
-        // Настройки для Redis-нод
-        $redisServers = [
-            ['host' => getenv('REDIS_NODE1_HOST') ?: 'redis-node1', 'port' => 6379],
-            ['host' => getenv('REDIS_NODE2_HOST') ?: 'redis-node2', 'port' => 6379],
-            ['host' => getenv('REDIS_NODE3_HOST') ?: 'redis-node3', 'port' => 6379],
-        ];
-
-        // Инициализируем ConsistentHashingRedis
-        $this->consistentHashingRedis = new ConsistentHashingRedis($redisServers);
-
-        // Инициализируем CacheService
-        $this->cacheService = new CacheService($this->consistentHashingRedis);
-
         // Инициализируем FileServerManager
-        $this->fileServerManager = new FileServerManager($this->conn, $this->EncryptionService);
+        $this->fileServerManager = new FileServerManager($this->conn);
 
         // Инициализируем ImageService с FileServerManager
-        $this->imageService = new ImageService($this->conn, $this->fileServerManager, $this->cacheService);
+        $this->imageService = new ImageService($this->conn, $this->fileServerManager);
 
         if (!$this->imageService) {
             throw new Exception("ImageService could not be initialized.");
@@ -76,16 +61,6 @@ class Database
             throw new Exception("Не удалось подключиться к базе данных.");
         }
         return $this->conn;
-    }
-
-    /**
-     * Получение экземпляра CacheService.
-     *
-     * @return CacheService
-     */
-    public function getCacheService(): CacheService
-    {
-        return $this->cacheService;
     }
 
     /**
