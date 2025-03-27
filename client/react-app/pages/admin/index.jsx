@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 // Store
-import GuestStore from "../../stores/GuestStore";
 import { useAuthStore } from "../../stores/authStore"; // adjust the path if needed
+import { useGuestStore } from "../../stores/GuestStore";
 import { useRouter } from "next/router";
 // Component
 import Head from "next/head";
@@ -11,21 +11,38 @@ import AlcoholSummary from "../../components/admin/AlcoholSummary";
 
 const AdminPage = observer(() => {
 	// Import auth store and Next.js router
-	const authStore = useAuthStore();
+	const { isAuthenticated, checkLoginStatus } = useAuthStore();
+	// G
+	const {
+		guestsList,
+		createGuest,
+		listGuests,
+		deleteGuest,
+		updateGuest,
+		loading,
+		error,
+	} = useGuestStore();
 	const router = useRouter();
+	const [checkingAuth, setCheckingAuth] = useState(true);
 
 	// Check login status on mount
 	useEffect(() => {
-		console.log("%cINFO:", "color: blue;");
-		authStore.checkLoginStatus();
-	}, [authStore]);
+		// Wrap your checkLoginStatus in an async function
+		const doCheck = async () => {
+			await checkLoginStatus();
+			// Once the store has updated isAuthenticated, we set checkingAuth to false
+			setCheckingAuth(false);
+		};
+		doCheck();
+	}, [checkLoginStatus]);
 
-	// Redirect if user is not authenticated
 	useEffect(() => {
-		if (!authStore.isAuthenticated) {
+		// Only redirect if we're done checking AND user is not authenticated
+		if (!checkingAuth && !isAuthenticated) {
 			router.push("/login");
 		}
-	}, [authStore.isAuthenticated, router]);
+	}, [checkingAuth, isAuthenticated, router]);
+
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [guestToDelete, setGuestToDelete] = useState(null);
 
@@ -51,7 +68,7 @@ const AdminPage = observer(() => {
 
 	useEffect(() => {
 		// On page load, get the list of guests
-		GuestStore.listGuests();
+		listGuests();
 	}, []);
 
 	// ----------------------------------------------------------------
@@ -74,7 +91,7 @@ const AdminPage = observer(() => {
 			...(!plusOne && { gender: guestGender }),
 		};
 
-		await GuestStore.createGuest(guestPayload);
+		await createGuest(guestPayload);
 
 		// Clear the fields
 		setNewGuestFirstName("");
@@ -83,7 +100,7 @@ const AdminPage = observer(() => {
 		setGuestGender("");
 
 		// Refresh the list
-		GuestStore.listGuests();
+		listGuests();
 	};
 
 	// ----------------------------------------------------------------
@@ -96,7 +113,7 @@ const AdminPage = observer(() => {
 
 	const handleDelete = async () => {
 		if (guestToDelete) {
-			await GuestStore.deleteGuest(guestToDelete.guest_id);
+			await deleteGuest(guestToDelete.guest_id);
 			setGuestToDelete(null);
 			setShowDeleteModal(false);
 		}
@@ -141,12 +158,12 @@ const AdminPage = observer(() => {
 			...(!editPlusOne && { gender: editGuestGender }),
 		};
 
-		await GuestStore.updateGuest(editingGuestId, payload);
+		await updateGuest(editingGuestId, payload);
 
 		// After success, close modal and refresh list
 		setShowEditModal(false);
 		setEditingGuestId(null);
-		GuestStore.listGuests();
+		listGuests();
 	};
 
 	// ----------------------------------------------------------------
@@ -158,9 +175,12 @@ const AdminPage = observer(() => {
 		if (status === "pending") return { color: "orange" };
 		return {};
 	};
-
-	if (GuestStore.loading) return <p>Завантаження...</p>;
-	if (GuestStore.error) return <p>Помилка: {GuestStore.error.message}</p>;
+	if (checkingAuth) {
+		// Show some loading indicator
+		return null;
+	}
+	if (loading) return <p>Завантаження...</p>;
+	if (error) return <p>Помилка: {error.message}</p>;
 
 	return (
 		<>
@@ -274,7 +294,7 @@ const AdminPage = observer(() => {
 						</tr>
 					</thead>
 					<tbody>
-						{GuestStore.guestsList.map((guest) => (
+						{guestsList.map((guest) => (
 							<tr key={guest.guest_id}>
 								<td>{guest.guest_id}</td>
 								<td>{guest.unique_path}</td>

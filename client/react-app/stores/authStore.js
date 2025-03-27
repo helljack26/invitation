@@ -30,7 +30,7 @@ class Auth {
 		try {
 			const loginUrl = `${this.apiUrl}/api/auth/login`;
 			// Send a request to your server to check authentication status
-			const response = await axios.post(loginUrl, data);
+			const response = await axios.post(loginUrl, data, authAxiosConfig);
 			console.log("🚀 ~ Auth ~ loginUser= ~ response:", response);
 			if (response) {
 				// Handle the response data here

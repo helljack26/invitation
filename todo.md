@@ -18,3 +18,7 @@ https://chatgpt.com/c/67bb5372-ef64-800f-b2cd-56ae501a6dff?model=gpt-4o
 <!-- По прибирати зі сторінки все лишнє -->
 
 lets create responsive scss inherited style with media query inside for hero section desktop first
+
+https://chatgpt.com/c/67e06280-177c-800f-a73b-9a38bb5ed7f4
+
+Проблема в тому що пхп має нерпаивльний час, спробувати

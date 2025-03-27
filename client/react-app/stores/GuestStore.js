@@ -1,8 +1,9 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import React from "react";
 import axios from "axios";
+import { makeAutoObservable, runInAction } from "mobx";
 import { authAxiosConfig } from "./authAxiosConfig";
 
-class GuestStore {
+class Guest {
 	apiUrl = "http://127.0.0.1";
 	guestData = null; // For single guest details
 	guestsList = []; // For list of guests
@@ -26,7 +27,8 @@ class GuestStore {
 		try {
 			const response = await axios.post(
 				`${this.apiUrl}/api/guest/createGuest`,
-				guest
+				guest,
+				authAxiosConfig
 			);
 			console.log("🚀 ~ GuestStore ~ createGuest= ~ response:", response);
 			if (response.status === 200) {
@@ -57,7 +59,8 @@ class GuestStore {
 			const payload = { guest_id: guestId, ...guest };
 			const response = await axios.post(
 				`${this.apiUrl}/api/guest/updateGuest`,
-				payload
+				payload,
+				authAxiosConfig
 			);
 			console.log(response);
 
@@ -82,6 +85,7 @@ class GuestStore {
 		try {
 			const response = await axios.post(
 				`${this.apiUrl}/api/guest/listGuests`,
+				{},
 				authAxiosConfig
 			);
 			console.log("🚀 ~ GuestStore ~ listGuests= ~ response:", response);
@@ -113,6 +117,7 @@ class GuestStore {
 			// When using axios.delete with data, it must be provided as the 'data' option.
 			await axios.delete(`${this.apiUrl}/api/guest/deleteGuest`, {
 				data: { guest_id: guestId },
+				authAxiosConfig,
 			});
 			runInAction(() => {
 				// Optionally, remove the guest from the list if it exists there.
@@ -133,4 +138,7 @@ class GuestStore {
 	};
 }
 
-export default new GuestStore();
+const GuestStore = new Guest();
+
+export const GuestStoreContext = React.createContext(GuestStore);
+export const useGuestStore = () => React.useContext(GuestStoreContext);

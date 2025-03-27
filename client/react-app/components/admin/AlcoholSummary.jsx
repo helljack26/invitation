@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
-import GuestStore from "../../stores/GuestStore";
+
+import { useGuestStore } from "../../stores/GuestStore";
 
 const AlcoholSummary = observer(() => {
 	// State to store the hovered beverage detail
 	const [hoveredDetail, setHoveredDetail] = useState(null);
-
+	const { guestsList } = useGuestStore();
 	// Compute summary data only when the guest list changes
 	const summary = useMemo(() => {
 		// Initialize counters and guest lists for default preferences.
@@ -59,7 +60,7 @@ const AlcoholSummary = observer(() => {
 		};
 
 		// Loop through each guest from the store.
-		GuestStore.guestsList.forEach((guest) => {
+		guestsList.forEach((guest) => {
 			// Process main guest's alcohol choice.
 			processAlcohol(
 				guest.first_name,
@@ -81,7 +82,7 @@ const AlcoholSummary = observer(() => {
 		});
 
 		return { defaultCounts, customList };
-	}, [GuestStore.guestsList]);
+	}, [guestsList]);
 
 	// Helper to handle hover events
 	const handleMouseEnter = (beverage, subtype = null) => {

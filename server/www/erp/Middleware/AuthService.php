@@ -43,7 +43,6 @@ class AuthService
     {
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
         if ($authHeader) {
-
             list($type, $token) = explode(" ", $authHeader, 2);
             if (strcasecmp($type, "Bearer") == 0) {
                 return $token;
@@ -61,8 +60,6 @@ class AuthService
     {
         $jwt = $this->getTokenFromHeader();
         $jwt = $this->getTokenFromHeader() ?? $this->getTokenFromCookie();
-
-
         if ($jwt) {
             try {
                 $decoded = JWT::decode($jwt, new Key($this->key, 'HS256'));
