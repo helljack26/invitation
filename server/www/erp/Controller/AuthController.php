@@ -8,6 +8,8 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Middleware\AuthMiddleware;
 
+date_default_timezone_set('Europe/Kiev');
+
 class AuthController
 {
     private $conn;
@@ -88,8 +90,6 @@ class AuthController
                 if ($user && password_verify($password, $user['password'])) {
                     // User exists, log them in
                     $jwt = $this->generateJWT($user['id']);
-                    echo basename(__FILE__) . ' (Line ' . __LINE__ . ') - $jwt: ';
-                    var_dump($jwt);
                     $this->setCookie($jwt);
 
                     http_response_code(200); // OK
@@ -114,14 +114,13 @@ class AuthController
     private function generateJWT($userId)
     {
         $key = getenv('API_SECRET');
-        $FRONT_URL = getenv('FRONT_URL');
-        echo basename(__FILE__) . ' (Line ' . __LINE__ . ') - $FRONT_URL: ';
-        var_dump($FRONT_URL);
+        $FRONT_URL = getenv('FRONT_URL') ?: ($_SERVER['HTTP_HOST'] ?? '127.0.0.1');
+
         $payload = [
             "iss" => "http://$FRONT_URL",
             "aud" => "http://$FRONT_URL",
             "iat" => time(),
-            "exp" => time() + (60 * 60),
+            "exp" => time() + 11800,
             "data" => [
                 "userId" => $userId,
             ]
@@ -133,8 +132,7 @@ class AuthController
     // Placeholder for your existing cookie-setting logic
     private function setCookie($jwt)
     {
-        $FRONT_URL = getenv('FRONT_URL');
-        setcookie("token", $jwt, 0, "/", $FRONT_URL, false, true);
+        setcookie("token", $jwt, 0, "/", '127.0.0.1', false, true);
     }
 
     public function logout()
@@ -161,7 +159,6 @@ class AuthController
     {
         $authCheck = new AuthMiddleware();
         $authResult = $authCheck->authenticate();
-
         if (!is_array($authResult) || !isset($authResult['userId'])) {
             http_response_code(401);
             echo json_encode(['error' => 'Unauthorized']);
