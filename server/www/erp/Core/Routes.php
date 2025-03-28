@@ -30,11 +30,12 @@ $authService = new AuthService();
 // Создаём экземпляры моделей, передавая необходимые зависимости
 $userModel = new \Model\UserModel($conn,  $authService);
 $guestModel = new \Model\GuestModel($conn);
+$telegramNotifier = new \Model\TelegramNotifierModel($conn);
 
 
 // Создаём экземпляры контроллеров, передавая необходимые зависимости
 $authController = new AuthController();
-$guestController = new GuestController($guestModel, $userModel);
+$guestController = new GuestController($guestModel, $userModel, $telegramNotifier);
 
 // Определение маршрутов
 $routes = [

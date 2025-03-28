@@ -4,17 +4,20 @@ namespace Controller;
 
 use Model\GuestModel;
 use Model\UserModel;
+use Model\TelegramNotifierModel;
 use Exception;
 
 class GuestController
 {
     private GuestModel $guestModel;
     private UserModel $userModel;
+    private TelegramNotifierModel $telegramNotifierModel;
 
-    public function __construct(GuestModel $guestModel, UserModel $userModel)
+    public function __construct(GuestModel $guestModel, UserModel $userModel, TelegramNotifierModel $telegramNotifierModel)
     {
         $this->guestModel = $guestModel;
         $this->userModel = $userModel;
+        $this->telegramNotifierModel = $telegramNotifierModel;
     }
 
     /**
@@ -64,8 +67,8 @@ class GuestController
                 'first_name_plus_1'    => $plusOneName,
                 'unique_path'          => $uniquePath,
                 'gender'               => $gender,
-                'rsvp_status'          => $data['rsvp_status']          ?? 'pending',
-                'rsvp_status_plus_one' => $data['rsvp_status_plus_one'] ?? 'pending'
+                'rsvp_status'          => $data['rsvp_status']           ?? 'pending',
+                'rsvp_status_plus_one' => !empty($plusOneName) ? 'pending' : null
             ];
 
             // Create in DB
@@ -120,12 +123,12 @@ class GuestController
             $oldPlusOneName = $oldGuest['first_name_plus_1'] ?? null;
             $oldRsvpStatusPlusOne = $oldGuest['rsvp_status_plus_one'] ?? null;
 
-            if (!empty($newPlusOneName) && empty($oldPlusOneName)) {
-                // Did old rsvp_status_plus_one exist? If it's empty, set to 'pending'.
-                if (empty($oldRsvpStatusPlusOne)) {
-                    // We manually set rsvp_status_plus_one for the update
-                    $data['rsvp_status_plus_one'] = 'pending';
-                }
+            // If plus-one name is removed, set rsvp_status_plus_one to null.
+            // If a new plus-one name is added (i.e., previously empty), set it to 'pending'.
+            if (empty($newPlusOneName)) {
+                $data['rsvp_status_plus_one'] = null;
+            } elseif (!empty($newPlusOneName) && empty($oldPlusOneName)) {
+                $data['rsvp_status_plus_one'] = 'pending';
             }
 
             // If user removed the plus-one name, you can decide if you want to reset
@@ -337,7 +340,8 @@ class GuestController
                 'wine_type'             => 'wine_type',
                 'wine_type_plus_one'    => 'wine_type_plus_one',
                 'custom_alcohol'        => 'custom_alcohol',
-                'custom_alcohol_plus_one' => 'custom_alcohol_plus_one'
+                'custom_alcohol_plus_one' => 'custom_alcohol_plus_one',
+                'time_spent_formatted' => 'time_spent_formatted'
             ];
 
             // Allowed values for RSVP status
@@ -347,12 +351,14 @@ class GuestController
             // Iterate over allowed fields and map them to DB columns.
             foreach ($fieldMapping as $inputKey => $dbColumn) {
                 if (array_key_exists($inputKey, $data)) {
-                    // Validate RSVP status values.
+
+                    // Validate RSVP status values
                     if (in_array($inputKey, ['rsvp_status', 'rsvp_status_plus_one'])) {
-                        if (!in_array($data[$inputKey], $allowedStatusValues)) {
+                        if (!is_null($data[$inputKey]) && !in_array($data[$inputKey], $allowedStatusValues, true)) {
                             throw new \InvalidArgumentException("Invalid value for $inputKey.");
                         }
                     }
+
                     $updateData[$dbColumn] = $data[$inputKey];
                 }
             }
@@ -364,10 +370,14 @@ class GuestController
             // Use the model method to update only the provided fields.
             $result = $this->guestModel->updateGuestDataByUser($guestId, $updateData);
 
+            // Call Telegram notifier
+            $resultNotification = $this->telegramNotifierModel->sendMessage($guest, $updateData);
+
             http_response_code(200);
             echo json_encode([
                 "message" => "Guest RSVP and preferences updated successfully",
-                "guest"   => $result
+                "guest"   => $result,
+                "result_notify"   => $resultNotification
             ]);
         } catch (\InvalidArgumentException $e) {
             http_response_code(400);
@@ -397,19 +407,18 @@ class GuestController
         ?string $plusOneName = null,
         ?int $excludeGuestId = null
     ): string {
-        // 1) Build the base (transliterate + underscores)
-        $base = $this->transliterate($firstName);
+        // 1) Build the base (transliterate and replace spaces with underscores)
+        $base = str_replace(' ', '_', $this->transliterate($firstName));
         if ($plusOneName) {
-            $base .= '_' . $this->transliterate($plusOneName);
+            $base .= '_' . str_replace(' ', '_', $this->transliterate($plusOneName));
         }
-        // 2) Lowercase and remove any non-(a-z0-9-)
+        // 2) Lowercase and remove any non-(a-z0-9-_)
         $base = strtolower($base);
         $base = preg_replace('/[^a-z0-9_\-]/', '', $base);
 
-
         // 3) Check uniqueness; if found, append suffix
         $uniquePath = $base;
-        $suffix     = 'a';  // or anything you like, e.g. 'guest', etc.
+        $suffix     = 'a';
 
         // Keep adjusting until we find something not taken
         while ($this->guestModel->getByUniquePathExcludingId($uniquePath, $excludeGuestId)) {
@@ -420,6 +429,7 @@ class GuestController
 
         return $uniquePath;
     }
+
 
     /**
      * Helper: Transliterate Ukrainian characters to their Latin equivalent.
