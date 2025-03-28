@@ -110,14 +110,14 @@ export const GuestRSVP = observer(() => {
 							</motion.div>
 						)}
 					</AnimatePresence>
-					<button
-						type="button"
-						onClick={() => syncRSVPDataToServer()}
-					>
-						Сінк
-					</button>
 				</>
 			)}
+			<button
+				type="button"
+				onClick={() => syncRSVPDataToServer()}
+			>
+				Сінк
+			</button>
 		</section>
 	);
 });

@@ -9,6 +9,7 @@ class UserGuestStore {
 	loading = true;
 	error = null;
 	isDirty = false; // flag to track unsynced changes
+	pageTimerStart = null;
 
 	constructor() {
 		makeAutoObservable(this);
@@ -18,6 +19,8 @@ class UserGuestStore {
 	 * Fetch a guest by its unique_path.
 	 */
 	getGuestByUniquePath = async (uniquePath) => {
+		// Start the timer
+		this.pageTimerStart = Date.now();
 		this.error = null;
 		try {
 			const response = await axios.post(
@@ -103,12 +106,38 @@ class UserGuestStore {
 			this.isDirty = true;
 		});
 	};
+
+	/**
+	 * Helper function to format time in hh:mm:ss.
+	 */
+	formatTime = (milliseconds) => {
+		const totalSeconds = Math.floor(milliseconds / 1000);
+		const hours = Math.floor(totalSeconds / 3600);
+		const minutes = Math.floor((totalSeconds % 3600) / 60);
+		const seconds = totalSeconds % 60;
+		return (
+			hours.toString().padStart(2, "0") +
+			":" +
+			minutes.toString().padStart(2, "0") +
+			":" +
+			seconds.toString().padStart(2, "0")
+		);
+	};
+
 	syncRSVPDataToServer = async () => {
 		if (!this.guestData) return;
 
 		// Helper function: returns null if status is "declined" or "pending", else returns the provided value.
 		const getValueOrNull = (status, value) =>
 			status === "declined" || status === "pending" ? null : value;
+
+		// Calculate time spent on the page in milliseconds
+		// Calculate time spent on the page in milliseconds
+		const timeSpentMs = this.pageTimerStart
+			? Date.now() - this.pageTimerStart
+			: 0;
+		// Format the time into hh:mm:ss
+		const formattedTimeSpent = this.formatTime(timeSpentMs);
 
 		// Helper function for custom fields:
 		// Returns null if status is "declined" or "pending", or if the alcohol choice is not "custom".
@@ -149,6 +178,7 @@ class UserGuestStore {
 				this.guestData.alcohol_preferences_plus_one,
 				this.guestData.custom_alcohol_plus_one
 			),
+			time_spent_formatted: formattedTimeSpent,
 		};
 
 		try {
