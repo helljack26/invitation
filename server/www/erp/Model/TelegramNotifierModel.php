@@ -49,11 +49,7 @@ class TelegramNotifierModel
         $guestName = htmlspecialchars($guest['first_name'] ?? 'Гість');
         $statusGuest = $statusTranslations[$updateData['rsvp_status']] ?? 'не вказано';
 
-        // Getting user location and phone model from $_SERVER variables
-        $userIP = $_SERVER['REMOTE_ADDR'] ?? 'не вказано';
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'не вказано';
-
-
+        // Basic guest information
         $message = "🎉 <b>Оновлення інформації про гостя:</b>\n\n"
             . "👤 <b>{$guestName}</b>\n"
             . "📌 <b>Статус відповіді:</b> {$statusGuest}\n"
@@ -67,7 +63,7 @@ class TelegramNotifierModel
             $message .= "🥃 <b>Свій варіант алкоголю:</b> {$updateData['custom_alcohol']}\n";
         }
 
-        // Перевірка та додавання інформації про додаткового гостя, якщо він є
+        // If a plus-one exists, add plus-one information
         if (!empty($guest['first_name_plus_1'])) {
             $plusOneName = htmlspecialchars($guest['first_name_plus_1']);
             $statusPlusOne = $statusTranslations[$updateData['rsvp_status_plus_one']] ?? 'не вказано';
@@ -85,16 +81,48 @@ class TelegramNotifierModel
             }
         }
 
-        // Додаємо інформацію про користувача
-        $message .= "🌐 <b>Провів часу на сторінці:</b> {$updateData['time_spent_formatted']}\n"
+        // Additional user info
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'не вказано';
+        $message .= "\n🌐 <b>Провів часу на сторінці:</b> {$updateData['time_spent_formatted']}\n"
             . "📱 <b>Пристрій користувача:</b> {$userAgent}\n";
 
-        // Посилання на сторінку адміністратора
+        // --- Added section for detailed statistics ---
+        // Query to get detailed guest counts from the database (assumes table "guests" exists)
+        $query = "SELECT 
+                    COUNT(*) as guest_count,
+                    SUM(CASE WHEN rsvp_status = 'accepted' THEN 1 ELSE 0 END) as accepted_count,
+                    SUM(CASE WHEN rsvp_status = 'pending' THEN 1 ELSE 0 END) as pending_count,
+                    SUM(CASE WHEN rsvp_status = 'declined' THEN 1 ELSE 0 END) as declined_count,
+                    SUM(CASE WHEN (first_name_plus_1 IS NOT NULL AND first_name_plus_1 != '') THEN 1 ELSE 0 END) as plus_one_count,
+                    SUM(CASE WHEN rsvp_status_plus_one = 'accepted' THEN 1 ELSE 0 END) as accepted_plus_one_count,
+                    SUM(CASE WHEN rsvp_status_plus_one = 'pending' THEN 1 ELSE 0 END) as pending_plus_one_count,
+                    SUM(CASE WHEN rsvp_status_plus_one = 'declined' THEN 1 ELSE 0 END) as declined_plus_one_count
+                  FROM guests";
+        $stmt = $this->conn->query($query);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Calculate totals:
+        // Total guests count (each plus-one counts as an extra person)
+        $totalGuests = $data['guest_count'] + $data['plus_one_count'];
+        // Total accepted RSVPs (main guest + plus-one)
+        $totalAccepted = $data['accepted_count'] + $data['accepted_plus_one_count'];
+        // Total pending RSVPs (main guest + plus-one)
+        $totalPending = $data['pending_count'] + $data['pending_plus_one_count'];
+        // Total declined RSVPs (main guest + plus-one)
+        $totalDeclined = $data['declined_count'] + $data['declined_plus_one_count'];
+
+        $message .= "\n📊 <b>Статистика:</b>\n"
+            . "✅ Прийнято: {$totalAccepted}\n"
+            . "⌛ Очікують: {$totalPending}\n"
+            . "❌ Відхилено: {$totalDeclined}\n"
+            . "👥 Загалом: {$totalGuests}\n";
+        // --- End of added section ---
+
+        // Append link to admin panel
         $message .= "\n🔗 <a href=\"http://127.0.0.1:3000/admin\">Перейти до адмін панелі</a>";
 
         return $message;
     }
-
 
 
     /**

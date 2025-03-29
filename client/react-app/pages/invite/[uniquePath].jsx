@@ -84,14 +84,14 @@ const InvitationPage = observer(() => {
 			}
 
 			// Otherwise, sync data
-			syncRSVPDataToServer();
+			syncRSVPDataToServer(true);
 		};
 
 		window.addEventListener("beforeunload", handleBeforeUnload);
 
 		return () => {
 			window.removeEventListener("beforeunload", handleBeforeUnload);
-			syncRSVPDataToServer();
+			syncRSVPDataToServer(true);
 		};
 	}, [guestData, syncRSVPDataToServer]);
 
@@ -103,7 +103,7 @@ const InvitationPage = observer(() => {
 	// 		if (isDirty) {
 	// 			stableSyncRSVPDataToServer();
 	// 		}
-	// 	}, 10000);
+	// 	}, 60000);
 
 	// 	return () => clearInterval(intervalId);
 	// }, [isDirty, stableSyncRSVPDataToServer]);

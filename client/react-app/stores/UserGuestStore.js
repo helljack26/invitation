@@ -124,7 +124,7 @@ class UserGuestStore {
 		);
 	};
 
-	syncRSVPDataToServer = async () => {
+	syncRSVPDataToServer = async (finalUpdate) => {
 		if (!this.guestData) return;
 
 		// Helper function: returns null if status is "declined" or "pending", else returns the provided value.
@@ -179,6 +179,7 @@ class UserGuestStore {
 				this.guestData.custom_alcohol_plus_one
 			),
 			time_spent_formatted: formattedTimeSpent,
+			isFinalUpdate: finalUpdate, // true if this is the final update
 		};
 
 		try {
