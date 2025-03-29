@@ -115,26 +115,24 @@ class GuestController
                 throw new Exception("Guest not found.");
             }
 
-            // 3) Figure out if user has added (or removed) a plus-one name
+            // 3) Determine if plus-one is being added or removed.
             $newPlusOneName = $data['first_name_plus_1'] ?? null;
-
-            // If the user *added* a plus-one name (i.e., old was empty, new is not empty),
-            // and there was no existing rsvp_status_plus_one, set it to 'pending'.
             $oldPlusOneName = $oldGuest['first_name_plus_1'] ?? null;
-            $oldRsvpStatusPlusOne = $oldGuest['rsvp_status_plus_one'] ?? null;
 
-            // If plus-one name is removed, set rsvp_status_plus_one to null.
-            // If a new plus-one name is added (i.e., previously empty), set it to 'pending'.
-            if (empty($newPlusOneName)) {
-                $data['rsvp_status_plus_one'] = null;
+            // When updating from admin we typically do not modify alcohol preferences.
+            // However, if the guest previously had a plus-one and now the plus-one is removed,
+            // then reset all plus-one–related columns.
+            if (empty($newPlusOneName) && !empty($oldPlusOneName)) {
+                $data['rsvp_status_plus_one']         = null;
+                $data['alcohol_preferences_plus_one']   = null;
+                $data['wine_type_plus_one']             = null;
+                $data['custom_alcohol_plus_one']        = null;
             } elseif (!empty($newPlusOneName) && empty($oldPlusOneName)) {
+                // If a new plus-one name is added, set its RSVP status to 'pending'.
                 $data['rsvp_status_plus_one'] = 'pending';
             }
 
-            // If user removed the plus-one name, you can decide if you want to reset
-            // $data['rsvp_status_plus_one'] to null. For now we do nothing.
-
-            // 4) Possibly regenerate unique_path if `first_name` has changed
+            // 4) Possibly regenerate unique_path if `first_name` has changed.
             if (isset($data['first_name'])) {
                 $data['unique_path'] = $this->generateUniquePath(
                     $data['first_name'],
@@ -143,18 +141,27 @@ class GuestController
                 );
             }
 
-            // 5) Build final data for the model
-            //    (Admin can only edit names & gender, not RSVP statuses directly)
+            // 5) Build final data for the model update.
+            // Admin can update only names & gender for the main guest.
             $guestData = [
-                'first_name'         => $data['first_name'],
-                'first_name_plus_1'  => $newPlusOneName,
-                'unique_path'        => $data['unique_path']         ?? null,
-                'gender'             => $data['gender']              ?? null
+                'first_name'        => $data['first_name'],
+                'first_name_plus_1' => $newPlusOneName,
+                'unique_path'       => $data['unique_path'] ?? null,
+                'gender'            => $data['gender'] ?? null
             ];
 
-            // If we decided to set rsvp_status_plus_one above, include it in the update
+            // Include plus-one related columns only if they were set by the condition above.
             if (array_key_exists('rsvp_status_plus_one', $data)) {
                 $guestData['rsvp_status_plus_one'] = $data['rsvp_status_plus_one'];
+            }
+            if (array_key_exists('alcohol_preferences_plus_one', $data)) {
+                $guestData['alcohol_preferences_plus_one'] = $data['alcohol_preferences_plus_one'];
+            }
+            if (array_key_exists('wine_type_plus_one', $data)) {
+                $guestData['wine_type_plus_one'] = $data['wine_type_plus_one'];
+            }
+            if (array_key_exists('custom_alcohol_plus_one', $data)) {
+                $guestData['custom_alcohol_plus_one'] = $data['custom_alcohol_plus_one'];
             }
 
             // 6) Perform update via model
@@ -176,6 +183,7 @@ class GuestController
             ]);
         }
     }
+
 
 
     /**
@@ -370,8 +378,10 @@ class GuestController
             // Use the model method to update only the provided fields.
             $result = $this->guestModel->updateGuestDataByUser($guestId, $updateData);
 
-            // Call Telegram notifier
-            $resultNotification = $this->telegramNotifierModel->sendMessage($guest, $updateData);
+            // Check if this is the final update and only then send notification
+            if (isset($data['isFinalUpdate']) && $data['isFinalUpdate'] === true) {
+                $resultNotification = $this->telegramNotifierModel->sendMessage($guest, $updateData);
+            }
 
             http_response_code(200);
             echo json_encode([

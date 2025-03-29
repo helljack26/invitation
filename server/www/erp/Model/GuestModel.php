@@ -57,39 +57,53 @@ class GuestModel
      */
     public function updateGuest(int $guestId, array $data): array
     {
-        // Build the base update query with all columns you might update
-        // (matching the columns you insert in createGuest).
-        // Note: This includes rsvp_status_plus_one in case the controller wants to set it.
-        $query = "UPDATE guests
-                  SET
-                    first_name = :first_name,
-                    first_name_plus_1 = :first_name_plus_1,
-                    unique_path = :unique_path,
-                    gender = :gender,
-                    rsvp_status_plus_one = :rsvp_status_plus_one,
-                    updated_at = CURRENT_TIMESTAMP
-                  WHERE guest_id = :guest_id";
+        // Base fields that are always updated.
+        $fields = [
+            'first_name'           => $data['first_name'],
+            'first_name_plus_1'    => $data['first_name_plus_1'],
+            'unique_path'          => $data['unique_path'],
+            'gender'               => $data['gender'],
+            'rsvp_status_plus_one' => $data['rsvp_status_plus_one']
+        ];
 
-        // Prepare the statement
+        // Optionally update plus-one related fields if they are provided.
+        if (array_key_exists('alcohol_preferences_plus_one', $data)) {
+            $fields['alcohol_preferences_plus_one'] = $data['alcohol_preferences_plus_one'];
+        }
+        if (array_key_exists('wine_type_plus_one', $data)) {
+            $fields['wine_type_plus_one'] = $data['wine_type_plus_one'];
+        }
+        if (array_key_exists('custom_alcohol_plus_one', $data)) {
+            $fields['custom_alcohol_plus_one'] = $data['custom_alcohol_plus_one'];
+        }
+
+        // Build the query dynamically.
+        $setClauses = [];
+        foreach ($fields as $column => $value) {
+            $setClauses[] = "$column = :$column";
+        }
+        // Always update the updated_at timestamp.
+        $setClauses[] = "updated_at = CURRENT_TIMESTAMP";
+        $setClause = implode(', ', $setClauses);
+
+        $query = "UPDATE guests SET $setClause WHERE guest_id = :guest_id";
+
         $stmt = $this->conn->prepare($query);
 
-        // Bind each parameter explicitly, just like in createGuest().
-        // The controller decides whether or not to provide rsvp_status_plus_one.
-        $stmt->bindParam(':first_name',           $data['first_name']);
-        $stmt->bindParam(':first_name_plus_1',    $data['first_name_plus_1']);
-        $stmt->bindParam(':unique_path',          $data['unique_path']);
-        $stmt->bindParam(':gender',               $data['gender']);
-        $stmt->bindParam(':rsvp_status_plus_one', $data['rsvp_status_plus_one']);
-        $stmt->bindParam(':guest_id',             $guestId, PDO::PARAM_INT);
+        // Bind all field values.
+        foreach ($fields as $column => $value) {
+            $stmt->bindValue(":$column", $value);
+        }
+        $stmt->bindValue(':guest_id', $guestId, PDO::PARAM_INT);
 
-        // Execute the update
         if (!$stmt->execute()) {
             throw new Exception("Failed to update guest record.");
         }
 
-        // Return the updated record
+        // Return the updated record.
         return $this->getGuestById($guestId);
     }
+
 
 
 
