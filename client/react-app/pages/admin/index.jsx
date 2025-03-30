@@ -11,7 +11,7 @@ import AlcoholSummary from "../../components/admin/AlcoholSummary";
 
 const AdminPage = observer(() => {
 	// Import auth store and Next.js router
-	const { isAuthenticated, checkLoginStatus } = useAuthStore();
+	const { isAuthenticated, checkLoginStatus, logoutUser } = useAuthStore();
 	// G
 	const {
 		guestsList,
@@ -68,8 +68,10 @@ const AdminPage = observer(() => {
 
 	useEffect(() => {
 		// On page load, get the list of guests
-		listGuests();
-	}, []);
+		if (isAuthenticated) {
+			listGuests();
+		}
+	}, [isAuthenticated]);
 
 	// ----------------------------------------------------------------
 	// CREATE A NEW GUEST
@@ -197,6 +199,20 @@ const AdminPage = observer(() => {
 				style={{ paddingTop: "20px" }}
 			>
 				<h1 className="center-align">Гості</h1>
+				<button
+					style={{
+						position: "absolute",
+						top: "20px",
+						right: "20px",
+						zIndex: 1000,
+					}}
+					onClick={async () => {
+						await logoutUser();
+						router.push("/login");
+					}}
+				>
+					Вийти
+				</button>
 
 				{/* CREATE GUEST FORM */}
 				<div className="admin_container_form">
@@ -216,14 +232,11 @@ const AdminPage = observer(() => {
 								htmlFor="first_name"
 								className={newGuestFirstName ? "active" : ""}
 							>
-								Ім'я
+								Ім'я гостя*
 							</label>
 						</div>
 
-						<div
-							className="input-field col s12 m4"
-							style={{ marginTop: "2rem" }}
-						>
+						<div className="center_checkbox_container input-field col s12 m4">
 							<label>
 								<input
 									type="checkbox"
@@ -235,7 +248,7 @@ const AdminPage = observer(() => {
 						</div>
 
 						{plusOne ? (
-							<div className="input-field col s12 m4">
+							<div className="right_select_container input-field col s12 m4">
 								<input
 									id="plus_one_name"
 									type="text"
@@ -250,7 +263,7 @@ const AdminPage = observer(() => {
 								</label>
 							</div>
 						) : (
-							<div className="input-field col s12 m4">
+							<div className="right_select_container input-field col s12 m4">
 								<select
 									value={guestGender}
 									onChange={(e) => setGuestGender(e.target.value)}
@@ -274,9 +287,8 @@ const AdminPage = observer(() => {
 						</div>
 					</div>
 				</div>
-
 				{/* GUESTS TABLE */}
-				<h2 className="center-align">Всі гості</h2>
+				<h2 className="center-align m4">Всі гості</h2>
 				<table className="striped responsive-table">
 					<thead>
 						<tr>
@@ -329,14 +341,17 @@ const AdminPage = observer(() => {
 											{guest.wine_type ? (
 												<>
 													<div>{guest.alcohol_preferences}</div>
-													<div>Тип вина: {guest.wine_type}</div>
+													<div>
+														<i>Тип вина:</i> {guest.wine_type}
+													</div>
 												</>
 											) : (
 												<div>{guest.alcohol_preferences}</div>
 											)}
 											{guest.custom_alcohol && (
 												<div>
-													Свій варіант: {guest.custom_alcohol}
+													<i>Свій варіант:</i>{" "}
+													{guest.custom_alcohol}
 												</div>
 											)}
 										</>
@@ -367,7 +382,8 @@ const AdminPage = observer(() => {
 														{guest.alcohol_preferences_plus_one}
 													</div>
 													<div>
-														Тип вина: {guest.wine_type_plus_one}
+														<i>Тип вина:</i>{" "}
+														{guest.wine_type_plus_one}
 													</div>
 												</>
 											) : (
@@ -377,7 +393,7 @@ const AdminPage = observer(() => {
 											)}
 											{guest.custom_alcohol_plus_one && (
 												<div>
-													Свій варіант:{" "}
+													<i>Свій варіант:</i>
 													{guest.custom_alcohol_plus_one}
 												</div>
 											)}
@@ -406,10 +422,8 @@ const AdminPage = observer(() => {
 						))}
 					</tbody>
 				</table>
-
 				{/* Підсумок по алкоголю */}
 				<AlcoholSummary />
-
 				{/* DELETE CONFIRMATION MODAL */}
 				{showDeleteModal && (
 					<div className="modal">
@@ -436,7 +450,6 @@ const AdminPage = observer(() => {
 						</div>
 					</div>
 				)}
-
 				{/* EDIT GUEST MODAL */}
 				{showEditModal && (
 					<div className="modal modal_edit">
@@ -478,7 +491,7 @@ const AdminPage = observer(() => {
 								</div>
 
 								{editPlusOne ? (
-									<div className="input-field col s12 m4">
+									<div className="right_select_container input-field col s12 m4">
 										<input
 											id="edit_plus_one_name"
 											type="text"
@@ -495,7 +508,7 @@ const AdminPage = observer(() => {
 										</label>
 									</div>
 								) : (
-									<div className="input-field col s12 m4">
+									<div className="right_select_container input-field col s12 m4">
 										<select
 											value={editGuestGender}
 											onChange={(e) =>

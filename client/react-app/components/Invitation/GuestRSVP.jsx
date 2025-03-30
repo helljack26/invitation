@@ -114,9 +114,9 @@ export const GuestRSVP = observer(() => {
 			)}
 			<button
 				type="button"
-				onClick={() => syncRSVPDataToServer()}
+				onClick={() => syncRSVPDataToServer(true)}
 			>
-				Сінк
+				Відправити відповідь
 			</button>
 		</section>
 	);

@@ -24,26 +24,6 @@
 			font-weight: bold;
 			color: $plain-text-color;
 		}
-
-		button {
-			background-color: #f3ebe6;
-			border: 1px solid $border-color;
-			padding: 10px 15px;
-			cursor: pointer;
-			font-size: 16px;
-			border-radius: 8px;
-			transition: $mainTransition;
-
-			&:hover {
-				background-color: $secondary-color;
-				color: $cWhite;
-			}
-
-			&.selected {
-				background-color: $primary-color;
-				color: $cWhite;
-			}
-		}
 	}
 
 	.alcoholPreferences {

@@ -126,6 +126,7 @@ class UserGuestStore {
 
 	syncRSVPDataToServer = async (finalUpdate) => {
 		if (!this.guestData) return;
+		if (!this.isDirty) return;
 
 		// Helper function: returns null if status is "declined" or "pending", else returns the provided value.
 		const getValueOrNull = (status, value) =>
