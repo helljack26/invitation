@@ -54,6 +54,7 @@ class Auth {
 				this.setAuthenticated(false);
 			}
 		} catch (error) {
+			console.log("🚀 ~ Auth ~ logoutUser= ~ error:", error);
 			// Handle any errors here
 		}
 	};

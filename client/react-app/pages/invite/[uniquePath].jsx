@@ -90,8 +90,8 @@ const InvitationPage = observer(() => {
 		window.addEventListener("beforeunload", handleBeforeUnload);
 
 		return () => {
-			window.removeEventListener("beforeunload", handleBeforeUnload);
 			syncRSVPDataToServer(true);
+			window.removeEventListener("beforeunload", handleBeforeUnload);
 		};
 	}, [guestData, syncRSVPDataToServer]);
 
