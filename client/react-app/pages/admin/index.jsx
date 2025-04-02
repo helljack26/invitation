@@ -194,18 +194,12 @@ const AdminPage = observer(() => {
 				/>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 			</Head>
-			<div
-				className="container admin_container"
-				style={{ paddingTop: "20px" }}
-			>
+			<div className="container admin_container">
 				<h1 className="center-align">Гості</h1>
+
+				{/* LOGOUT BUTTON */}
 				<button
-					style={{
-						position: "absolute",
-						top: "20px",
-						right: "20px",
-						zIndex: 1000,
-					}}
+					className="logout_btn"
 					onClick={async () => {
 						await logoutUser();
 						router.push("/login");
@@ -217,10 +211,7 @@ const AdminPage = observer(() => {
 				{/* CREATE GUEST FORM */}
 				<div className="admin_container_form">
 					<h2>Додати нового гостя</h2>
-					<div
-						className="row"
-						style={{ marginBottom: "1rem" }}
-					>
+					<div className="row">
 						<div className="input-field col s12 m4">
 							<input
 								id="first_name"
@@ -236,7 +227,7 @@ const AdminPage = observer(() => {
 							</label>
 						</div>
 
-						<div className="center_checkbox_container input-field col s12 m4">
+						<div className="center_checkbox_container plus_one_checkbox input-field col s12 m4">
 							<label>
 								<input
 									type="checkbox"
@@ -276,7 +267,10 @@ const AdminPage = observer(() => {
 							</div>
 						)}
 					</div>
-					<div className="row">
+					<div
+						className="row"
+						style={{ marginBottom: "0" }}
+					>
 						<div className="col s12 center-align">
 							<button
 								className="btn"
@@ -288,20 +282,28 @@ const AdminPage = observer(() => {
 					</div>
 				</div>
 				{/* GUESTS TABLE */}
-				<h2 className="center-align m4">Всі гості</h2>
+				<h2 className="center-align">Всі гості</h2>
 				<table className="striped responsive-table">
 					<thead>
 						<tr>
 							<th>ID</th>
-							<th>Унікальний шлях</th>
+							<th>Url</th>
 							<th>Посилання</th>
 							<th>Повне ім'я</th>
 							<th>Стать</th>
 							<th>Статус</th>
-							<th>Алкогольні вподобання</th>
-							<th>Додатковий гість</th>
-							<th>Статус (дод. гість)</th>
-							<th>Алкоголь (дод. гість)</th>
+							<th>Алкогольні</th>
+							<th>Дод. гість</th>
+							<th>
+								Статус
+								<br />
+								(дод. гість)
+							</th>
+							<th>
+								Алкоголь
+								<br />
+								(дод. гість)
+							</th>
 							<th>Дії</th>
 						</tr>
 					</thead>
@@ -422,8 +424,10 @@ const AdminPage = observer(() => {
 						))}
 					</tbody>
 				</table>
+
 				{/* Підсумок по алкоголю */}
 				<AlcoholSummary />
+
 				{/* DELETE CONFIRMATION MODAL */}
 				{showDeleteModal && (
 					<div className="modal">
@@ -450,6 +454,7 @@ const AdminPage = observer(() => {
 						</div>
 					</div>
 				)}
+
 				{/* EDIT GUEST MODAL */}
 				{showEditModal && (
 					<div className="modal modal_edit">
@@ -476,10 +481,7 @@ const AdminPage = observer(() => {
 									</label>
 								</div>
 
-								<div
-									className="input-field col s12 m4"
-									style={{ marginTop: "2rem" }}
-								>
+								<div className="input-field col s12 m4 plus_one_checkbox">
 									<label>
 										<input
 											type="checkbox"

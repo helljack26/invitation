@@ -9,32 +9,56 @@ class TelegramNotifierModel
 {
     protected PDO $conn;
     protected string $token;
-    protected string $chatId;
+    protected array $chatIds;
 
     public function __construct(PDO $conn)
     {
         $this->conn = $conn;
 
-        $config = $this->loadConfig();
+        // Load Telegram bot token from telegram_config table.
+        $this->token = $this->loadToken();
 
-        if (!$config) {
-            throw new Exception("Telegram configuration not found.");
+        // Load chat IDs from telegram_chat_ids table.
+        $this->chatIds = $this->loadChatIds();
+
+        if (empty($this->token) || empty($this->chatIds)) {
+            throw new Exception("Telegram token or chat IDs not found.");
         }
-
-        $this->token = $config['token'];
-        $this->chatId = $config['chat_id'];
     }
 
     /**
-     * Load Telegram bot credentials from the database.
+     * Load the Telegram bot token from the telegram_config table.
      */
-    protected function loadConfig(): ?array
+    protected function loadToken(): string
     {
-        $query = "SELECT token, chat_id FROM telegram_config LIMIT 1";
+        $query = "SELECT token FROM telegram_config LIMIT 1";
         $stmt = $this->conn->query($query);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        if (!$result || !isset($result['token'])) {
+            throw new Exception("Telegram token not found in telegram_config table.");
+        }
+
+        return $result['token'];
     }
+
+    /**
+     * Load all chat IDs from the telegram_chat_ids table.
+     */
+    protected function loadChatIds(): array
+    {
+        $query = "SELECT chat_id FROM telegram_chat_ids";
+        $stmt = $this->conn->query($query);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!$rows) {
+            throw new Exception("No chat IDs found in telegram_chat_ids table.");
+        }
+
+        // Extract the chat_id values into an array
+        return array_column($rows, 'chat_id');
+    }
+
     /**
      * Generate a notification message for Telegram.
      */
@@ -87,7 +111,6 @@ class TelegramNotifierModel
             . "📱 <b>Пристрій користувача:</b> {$userAgent}\n";
 
         // --- Added section for detailed statistics ---
-        // Query to get detailed guest counts from the database (assumes table "guests" exists)
         $query = "SELECT 
                     COUNT(*) as guest_count,
                     SUM(CASE WHEN rsvp_status = 'accepted' THEN 1 ELSE 0 END) as accepted_count,
@@ -102,13 +125,9 @@ class TelegramNotifierModel
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Calculate totals:
-        // Total guests count (each plus-one counts as an extra person)
         $totalGuests = $data['guest_count'] + $data['plus_one_count'];
-        // Total accepted RSVPs (main guest + plus-one)
         $totalAccepted = $data['accepted_count'] + $data['accepted_plus_one_count'];
-        // Total pending RSVPs (main guest + plus-one)
         $totalPending = $data['pending_count'] + $data['pending_plus_one_count'];
-        // Total declined RSVPs (main guest + plus-one)
         $totalDeclined = $data['declined_count'] + $data['declined_plus_one_count'];
 
         $message .= "\n📊 <b>Статистика:</b>\n"
@@ -124,13 +143,13 @@ class TelegramNotifierModel
         return $message;
     }
 
-
     /**
-     * Send a message via Telegram bot.
-     */ public function sendMessage(array $guest, array $updateData, string $parseMode = 'HTML'): bool
+     * Send a message via Telegram bot to all chat IDs.
+     */
+    public function sendMessage(array $guest, array $updateData, string $parseMode = 'HTML'): bool
     {
-        if (empty($this->token) || empty($this->chatId)) {
-            throw new Exception('Telegram bot token or chat ID is not set.');
+        if (empty($this->token) || empty($this->chatIds)) {
+            throw new Exception('Telegram bot token or chat IDs are not set.');
         }
         if (empty($guest) || empty($updateData)) {
             throw new Exception('Guest data or update data cannot be empty.');
@@ -138,41 +157,45 @@ class TelegramNotifierModel
         if (!is_array($guest) || !is_array($updateData)) {
             throw new Exception('Guest data and update data must be arrays.');
         }
+
         $message = $this->generateTelegramNotification($guest, $updateData);
 
         if (empty($message)) {
             throw new Exception('Message cannot be empty.');
         }
-        $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
 
-        $payload = [
-            'chat_id' => $this->chatId,
-            'text' => $message,
-            'parse_mode' => $parseMode,
-        ];
+        // Loop over all chat IDs and send the notification
+        foreach ($this->chatIds as $chatId) {
+            $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            $payload = [
+                'chat_id'    => $chatId,
+                'text'       => $message,
+                'parse_mode' => $parseMode,
+            ];
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
 
-        $response = curl_exec($ch);
+            $response = curl_exec($ch);
 
-        if (curl_errno($ch)) {
-            $errorMsg = curl_error($ch);
+            if (curl_errno($ch)) {
+                $errorMsg = curl_error($ch);
+                curl_close($ch);
+                throw new Exception('Telegram API Error: ' . $errorMsg);
+            }
+
             curl_close($ch);
-            throw new Exception('Telegram API Error: ' . $errorMsg);
-        }
 
-        curl_close($ch);
+            $responseData = json_decode($response, true);
 
-        $responseData = json_decode($response, true);
-
-        if (!$responseData || !isset($responseData['ok']) || $responseData['ok'] !== true) {
-            throw new Exception('Telegram API Error: Invalid response - ' . $response);
+            if (!$responseData || !isset($responseData['ok']) || $responseData['ok'] !== true) {
+                throw new Exception('Telegram API Error: Invalid response - ' . $response);
+            }
         }
 
         return true;

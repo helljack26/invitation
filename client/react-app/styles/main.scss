@@ -2,9 +2,12 @@
 @import "./mixins";
 @import "./variables";
 
+html {
+	font-size: 16px;
+}
 body {
 	font-family: $fRegular;
-	font-size: 1em;
+	font-size: 1.5em;
 }
 section {
 	min-height: 100vh;
@@ -16,6 +19,7 @@ h4,
 h5,
 h6 {
 	font-family: $fRegular;
+	line-height: 100%;
 }
 
 button {
@@ -28,13 +32,25 @@ button {
 	transition: $mainTransition;
 
 	&:hover {
-		background-color: $secondary-color;
+		background-color: $pink-color;
 		color: $cWhite;
 	}
 
 	&.selected {
 		background-color: $primary-color;
 		color: $cWhite;
+	}
+}
+
+.desktop {
+	@media screen and (max-width: 992px) {
+		display: none;
+	}
+}
+.mobile {
+	display: none;
+	@media screen and (max-width: 992px) {
+		display: inline-block;
 	}
 }
 @import "./common/header.scss";

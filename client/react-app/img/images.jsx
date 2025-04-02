@@ -9,6 +9,9 @@ import dresscode_olive from "./dresscode_olive.jpg";
 import dresscode_pink from "./dresscode_pink.jpg";
 
 import couple from "./couple.png";
+
+import paper_texture from "./paper-texture.jpg";
+
 const I = {
 	// Intro
 	bride_groom_child,
@@ -20,6 +23,7 @@ const I = {
 	dresscode_olive,
 	dresscode_pink,
 	couple,
+	paper_texture,
 };
 
 export default I;

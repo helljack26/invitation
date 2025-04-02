@@ -1,6 +1,6 @@
 export const menuData = [
 	{
-		linkHash: "#heroSection",
+		linkHash: "#hero_section",
 		linkName: "Головна",
 	},
 	{

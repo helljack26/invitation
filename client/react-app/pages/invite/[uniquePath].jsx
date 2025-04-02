@@ -13,7 +13,7 @@ import { SmoothScrollProvider } from "../../stores/scroll";
 // Components
 import { Navbar } from "../../components/navbar";
 import { SideMenu } from "../../components/sideMenu";
-import { LeafsFalling } from "../../components/leafsFalling";
+import { HeartsFalling } from "../../components/HeartsFalling";
 
 // -- Wedding Blocks --
 import { HeroSection } from "../../components/Invitation/HeroSection";
@@ -48,52 +48,52 @@ const InvitationPage = observer(() => {
 	const guest = guestData;
 
 	// On page unload or unmount, sync the data
-	useEffect(() => {
-		// Only attach the event once the guest data is loaded
-		if (!guestData) return;
+	// useEffect(() => {
+	// 	// Only attach the event once the guest data is loaded
+	// 	if (!guestData) return;
 
-		const handleBeforeUnload = (e) => {
-			let alertMessage = "";
+	// 	const handleBeforeUnload = (e) => {
+	// 		let alertMessage = "";
 
-			// Check main guest
-			if (
-				guestData.rsvp_status === "accepted" &&
-				guestData.alcohol_preferences === "custom" &&
-				(!guestData.custom_alcohol ||
-					guestData.custom_alcohol.trim() === "")
-			) {
-				alertMessage = `Будь ласка, введіть ваш варіант напою для ${guestData.first_name}!`;
-			}
+	// 		// Check main guest
+	// 		if (
+	// 			guestData.rsvp_status === "accepted" &&
+	// 			guestData.alcohol_preferences === "custom" &&
+	// 			(!guestData.custom_alcohol ||
+	// 				guestData.custom_alcohol.trim() === "")
+	// 		) {
+	// 			alertMessage = `Будь ласка, введіть ваш варіант напою для ${guestData.first_name}!`;
+	// 		}
 
-			// Check plus one
-			if (
-				guestData.rsvp_status_plus_one === "accepted" &&
-				guestData.alcohol_preferences_plus_one === "custom" &&
-				(!guestData.custom_alcohol_plus_one ||
-					guestData.custom_alcohol_plus_one.trim() === "")
-			) {
-				alertMessage = `Будь ласка, введіть ваш варіант напою для ${guestData.first_name_plus_1}.`;
-			}
+	// 		// Check plus one
+	// 		if (
+	// 			guestData.rsvp_status_plus_one === "accepted" &&
+	// 			guestData.alcohol_preferences_plus_one === "custom" &&
+	// 			(!guestData.custom_alcohol_plus_one ||
+	// 				guestData.custom_alcohol_plus_one.trim() === "")
+	// 		) {
+	// 			alertMessage = `Будь ласка, введіть ваш варіант напою для ${guestData.first_name_plus_1}.`;
+	// 		}
 
-			if (alertMessage) {
-				e.preventDefault();
-				e.returnValue = alertMessage;
+	// 		if (alertMessage) {
+	// 			e.preventDefault();
+	// 			e.returnValue = alertMessage;
 
-				// Browsers show a generic message
-				return alertMessage;
-			}
+	// 			// Browsers show a generic message
+	// 			return alertMessage;
+	// 		}
 
-			// Otherwise, sync data
-			syncRSVPDataToServer(true);
-		};
+	// 		// Otherwise, sync data
+	// 		syncRSVPDataToServer(true);
+	// 	};
 
-		window.addEventListener("beforeunload", handleBeforeUnload);
+	// 	window.addEventListener("beforeunload", handleBeforeUnload);
 
-		return () => {
-			syncRSVPDataToServer(true);
-			window.removeEventListener("beforeunload", handleBeforeUnload);
-		};
-	}, [guestData, syncRSVPDataToServer]);
+	// 	return () => {
+	// 		syncRSVPDataToServer(true);
+	// 		window.removeEventListener("beforeunload", handleBeforeUnload);
+	// 	};
+	// }, [guestData, syncRSVPDataToServer]);
 
 	// Every minute, check if there are unsynced changes and sync them.
 	// const stableSyncRSVPDataToServer = useCallback(syncRSVPDataToServer, []);
@@ -111,7 +111,7 @@ const InvitationPage = observer(() => {
 	// GSAP Animations for initial load
 	// useEffect(() => {
 	// 	gsap.fromTo(
-	// 		".heroSection",
+	// 		".hero_section",
 	// 		{ opacity: 0, y: -15 },
 	// 		{
 	// 			duration: 2,
@@ -125,6 +125,7 @@ const InvitationPage = observer(() => {
 	useEffect(() => {
 		if (typeof window === "undefined") return;
 	}, []);
+
 	// Loading / Error states
 	if (loading) return <p></p>;
 	if (error) return <p>Error: {error.message}</p>;
@@ -140,9 +141,6 @@ const InvitationPage = observer(() => {
 				/>
 				<meta charSet="utf-8" />
 			</Head>
-
-			{/* Optional falling leaves or confetti effect */}
-			<LeafsFalling />
 
 			{/* Locomotive Scroll or any smooth scroll wrapper */}
 			{/* <SmoothScrollProvider> */}
