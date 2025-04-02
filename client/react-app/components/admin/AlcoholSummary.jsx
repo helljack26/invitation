@@ -106,10 +106,7 @@ const AlcoholSummary = observer(() => {
 	};
 
 	return (
-		<div
-			className="container"
-			style={{ marginTop: "20px", position: "relative" }}
-		>
+		<div className="container alcohol_summary">
 			<div className="card">
 				<div className="card-content">
 					<span className="card-title">

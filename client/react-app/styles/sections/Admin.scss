@@ -1,8 +1,10 @@
 .admin_container {
 	width: 90%;
-
+	padding-top: 30px;
+	padding-bottom: 60px;
+	font-size: 0.6em;
 	@media screen and (max-width: 1200px) {
-		width: 96%;
+		width: 94%;
 	}
 
 	h1 {
@@ -13,7 +15,12 @@
 		font-size: 2em;
 		margin-bottom: 5px;
 	}
-
+	.logout_btn {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		z-index: 10;
+	}
 	a {
 		text-decoration: underline;
 		color: blue;
@@ -54,6 +61,11 @@
 		border-radius: 10px;
 		padding: 30px;
 		margin: 16px 0;
+
+		@media screen and (max-width: 450px) {
+			margin: 24px 0;
+			padding: 20px 10px;
+		}
 		h2 {
 			margin-bottom: 10px;
 			text-align: center;
@@ -73,6 +85,9 @@
 			margin-top: 2rem;
 			label {
 				padding-left: 5.5vw;
+				@media screen and (max-width: 600px) {
+					padding-left: 0;
+				}
 			}
 		}
 		.right_select_container {
@@ -81,12 +96,19 @@
 		}
 	}
 	.responsive-table {
+		overflow: hidden;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
 		th,
 		td {
 			text-align: center;
 			@media screen and (max-width: 576px) {
 				font-size: 0.8em;
 			}
+		}
+
+		thead {
+			background-color: $bg-color-pink;
 		}
 		th {
 			@media screen and (max-width: 576px) {
@@ -151,6 +173,20 @@
 		}
 	}
 
+	.alcohol_summary {
+		margin-top: 20px;
+		position: relative;
+		@media screen and (max-width: 768px) {
+			width: 100%;
+		}
+		@media screen and (max-width: 576px) {
+			font-size: 1.3em;
+		}
+		.card {
+			background-color: $bg-color-pink;
+		}
+	}
+
 	.modal {
 		position: fixed;
 		top: 0;
@@ -173,11 +209,20 @@
 			flex-direction: column;
 			align-items: center;
 			border-radius: 10px;
+
+			@media screen and (max-width: 992px) {
+				width: 60vw;
+			}
+			@media screen and (max-width: 768px) {
+				width: 90vw;
+			}
+
 			h4 {
 				margin-bottom: 10px;
 			}
 			p {
 				font-size: 1.2em;
+				text-align: center;
 			}
 			.modal-footer {
 				background-color: transparent;
@@ -195,10 +240,28 @@
 	.modal_edit {
 		.modal-content {
 			width: 50vw;
+			@media screen and (max-width: 992px) {
+				width: 90vw;
+			}
+			@media screen and (max-width: 450px) {
+				padding: 20px;
+			}
+
 			.row {
 				margin-left: 0;
 				margin-right: 0;
 				width: 100%;
+			}
+		}
+	}
+	.plus_one_checkbox {
+		margin-top: 2rem;
+		@media screen and (max-width: 600px) {
+			margin-top: 14px;
+		}
+		label {
+			@media screen and (max-width: 600px) {
+				position: relative;
 			}
 		}
 	}

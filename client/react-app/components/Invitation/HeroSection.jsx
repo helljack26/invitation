@@ -5,6 +5,7 @@ import { useUserGuestStore } from "../../stores/UserGuestStore";
 // Images
 import Image from "next/image";
 import I from "../../img/images";
+import { HeartsFalling } from "../HeartsFalling";
 
 export const HeroSection = observer(() => {
 	const userGuestStore = useUserGuestStore();
@@ -29,39 +30,45 @@ export const HeroSection = observer(() => {
 
 	return (
 		<section
-			id="heroSection"
-			className="heroSection"
+			id="hero_section"
+			className="hero_section"
 			data-scroll-section
 		>
 			{/* Falling hearts container */}
-			<div className="fallingHearts">
-				<div className="heart"></div>
-				<div className="heart"></div>
-				<div className="heart"></div>
-				<div className="heart"></div>
-				<div className="heart"></div>
-				{/* ... add more hearts if desired */}
+			<HeartsFalling />
+
+			<div className="paper_texture">
+				{/* Фото наречених. Замініть на свої */}
+				<Image
+					alt="bg paper texture"
+					src={I.paper_texture}
+					fill
+					priority
+				/>
 			</div>
 
-			<div className="heroContent">
-				<span className="heroContent_dear">{greetingPrefix}</span>
-				<h1>{displayName}</h1>
-				<h2>
-					Щиро запрошуємо {guestData.first_name_plus_1 ? "Вас" : "Тебе"} на
-					наше весілля <br />
-					<span>1.03.2025</span>
-				</h2>
+			<div className="hero_content">
+				<div className="hero_content_text">
+					<span className="hero_content_dear">{greetingPrefix}</span>
+					<h1>{displayName}</h1>
+					<h2>
+						Щиро запрошуємо {guestData.first_name_plus_1 ? "Вас" : "Тебе"}{" "}
+						на наше весілля <br />
+						<span>21.06.2025</span>
+					</h2>
+					<span className="city desktop">Київ</span>
+				</div>
 
-				<div className="imagesWrapper">
+				<div className="images_wrapper">
 					<Image
 						className="childPhoto"
 						alt="bride groom child"
 						src={I.bride_groom_child}
-						height={400}
+						height={600}
 						priority
 					/>
 				</div>
-				<span className="city">Київ</span>
+				<span className="city mobile">Київ</span>
 			</div>
 		</section>
 	);
