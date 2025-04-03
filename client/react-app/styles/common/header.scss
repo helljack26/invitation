@@ -8,6 +8,8 @@
 	transition: all 0.8s ease;
 	font-size: 0.7em;
 	background-color: $bg-color-pink;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+		rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 
 	@media (max-width: 500px) {
 		width: 100vw;
@@ -36,7 +38,7 @@
 			justify-content: space-between;
 			align-items: center;
 			flex-direction: row;
-			column-gap: 6cap;
+			column-gap: 4vw;
 			@media (max-width: 880px) {
 				column-gap: 4vw;
 			}
@@ -44,30 +46,26 @@
 				display: none;
 			}
 			a {
-				@media (min-width: 1500px) {
-					font-size: 1em;
-				}
-				font-family: $fRegular;
-				font-size: 14px;
-				line-height: 24px;
-				padding: 10px 0;
+				line-height: 100%;
+				padding: 16px 10px;
 				transition: all 0.3s ease-in-out;
-				color: black;
+				color: $primary-color;
 				opacity: 0.8;
 				user-select: none;
+				border-bottom: 3px solid transparent;
 				@media screen and (max-width: 992px) {
 					font-size: 18px;
 				}
 				&:hover {
 					opacity: 1;
-					color: $cOrange;
+					color: $primary-color-hover;
+					border-bottom: 3px solid $primary-color-hover;
 				}
 				&:focus-visible {
 					outline: none;
 					transform: scale(1.1);
-					border-bottom: 1px solid $cOrange;
 					opacity: 1;
-					color: $cOrange;
+					color: $primary-color-hover;
 				}
 				&:active {
 					transition: all 0.1s ease-in-out;
@@ -75,7 +73,8 @@
 				}
 			}
 			.navlink_active {
-				-webkit-text-stroke: 1px black;
+				border-bottom: 3px solid $primary-color;
+				-webkit-text-stroke: 1px $primary-color;
 				transition: all 0.3s ease-in-out;
 				opacity: 1;
 			}
