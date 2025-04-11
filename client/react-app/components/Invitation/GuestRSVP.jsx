@@ -32,86 +32,101 @@ export const GuestRSVP = observer(() => {
 			<h3>Чи зможете ви приєднатись до святкування разом з нами?</h3>
 
 			{/* Main Guest */}
-			<div className="guestRow">
-				<span>{guest.first_name}</span>
-				<button
-					type="button"
-					className={guest.rsvp_status === "accepted" ? "selected" : ""}
-					onClick={() => handleRSVP("accepted")}
-				>
-					Так
-				</button>
-				<button
-					type="button"
-					className={guest.rsvp_status === "declined" ? "selected" : ""}
-					onClick={() => handleRSVP("declined")}
-				>
-					Ні
-				</button>
-			</div>
-
-			{/* Animate alcohol preferences for the main guest */}
-			<AnimatePresence>
-				{guest.rsvp_status === "accepted" && (
-					<motion.div
-						key="alcohol-main"
-						variants={slideVariants}
-						initial="hidden"
-						animate="visible"
-						exit="exit"
-						transition={{ duration: 0.3 }}
-					>
-						<AlcoholPreferences isPlusOne={false} />
-					</motion.div>
-				)}
-			</AnimatePresence>
-
-			{/* Conditional Rendering for Plus One */}
-			{guest.first_name_plus_1 && (
-				<>
+			<div className="guestContainer">
+				<div className="guestBlock">
 					<div className="guestRow">
-						<span>{guest.first_name_plus_1}</span>
-						<button
-							type="button"
-							className={
-								guest.rsvp_status_plus_one === "accepted"
-									? "selected"
-									: ""
-							}
-							onClick={() => handleRSVP("accepted", true)}
-						>
-							Так
-						</button>
-						<button
-							type="button"
-							className={
-								guest.rsvp_status_plus_one === "declined"
-									? "selected"
-									: ""
-							}
-							onClick={() => handleRSVP("declined", true)}
-						>
-							Ні
-						</button>
+						<span className="guestName">{guest.first_name}</span>
+						<div className="guestRowButtons">
+							<button
+								type="button"
+								className={
+									guest.rsvp_status === "accepted" ? "selected" : ""
+								}
+								onClick={() => handleRSVP("accepted")}
+							>
+								<span>Так</span>
+							</button>
+							<button
+								type="button"
+								className={
+									guest.rsvp_status === "declined" ? "selected" : ""
+								}
+								onClick={() => handleRSVP("declined")}
+							>
+								<span>Ні</span>
+							</button>
+						</div>
 					</div>
 
-					{/* Animate alcohol preferences for plus one */}
+					{/* Animate alcohol preferences for the main guest */}
 					<AnimatePresence>
-						{guest.rsvp_status_plus_one === "accepted" && (
+						{guest.rsvp_status === "accepted" && (
 							<motion.div
-								key="alcohol-plus-one"
+								key="alcohol-main"
 								variants={slideVariants}
 								initial="hidden"
 								animate="visible"
 								exit="exit"
 								transition={{ duration: 0.3 }}
 							>
-								<AlcoholPreferences isPlusOne={true} />
+								<AlcoholPreferences isPlusOne={false} />
 							</motion.div>
 						)}
 					</AnimatePresence>
-				</>
-			)}
+				</div>
+
+				{/* Conditional Rendering for Plus One */}
+				{guest.first_name_plus_1 && (
+					<div className="guestBlock">
+						<div className="guestRow">
+							<span className="guestName">
+								{guest.first_name_plus_1}
+							</span>
+							<div className="guestRowButtons">
+								<button
+									type="button"
+									className={
+										guest.rsvp_status_plus_one === "accepted"
+											? "selected"
+											: ""
+									}
+									onClick={() => handleRSVP("accepted", true)}
+								>
+									<span>Так</span>
+								</button>
+								<button
+									type="button"
+									className={
+										guest.rsvp_status_plus_one === "declined"
+											? "selected"
+											: ""
+									}
+									onClick={() => handleRSVP("declined", true)}
+								>
+									<span>Ні</span>
+								</button>
+							</div>
+						</div>
+
+						{/* Animate alcohol preferences for plus one */}
+						<AnimatePresence>
+							{guest.rsvp_status_plus_one === "accepted" && (
+								<motion.div
+									key="alcohol-plus-one"
+									variants={slideVariants}
+									initial="hidden"
+									animate="visible"
+									exit="exit"
+									transition={{ duration: 0.3 }}
+								>
+									<AlcoholPreferences isPlusOne={true} />
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</div>
+				)}
+			</div>
+
 			<button
 				type="button"
 				onClick={() => syncRSVPDataToServer(true)}

@@ -6,6 +6,7 @@
 	background: url("/static/img/hero_bg.jpg") center center / cover no-repeat;
 	overflow: hidden; /* Ensures falling hearts are clipped within hero section */
 	color: $primary-color;
+	z-index: 0;
 
 	.hero_content {
 		height: 100vh;
@@ -88,7 +89,6 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-
 		width: 100vw;
 		height: 100vh; /* or another fixed height */
 		overflow: hidden;

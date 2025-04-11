@@ -1,38 +1,90 @@
-.dateTimeSection {
+.date_time_section {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 	gap: 2rem;
 	width: 100%;
 	margin: 0 auto;
 	text-align: center;
-	background-color: $bg-color-pink;
-}
+	position: relative;
+	z-index: 1;
+	padding: 80px 20px;
 
-.dateTimeItem {
-	padding: 2rem;
-	border-radius: 8px;
-}
+	.date_time_section_bg {
+		position: absolute;
+		top: -90px;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		img {
+			transform: scale(1.1) scaleX(1.7) scaleY(0.9) rotate(6deg);
+			user-select: none;
+		}
+	}
 
-.dateTimeItem h2 {
-	font-size: 1.5rem;
-	margin-bottom: 0.5rem;
-}
+	.date_time_section_content {
+		z-index: 1;
 
-.dateTimeItem p {
-	margin: 0.25rem 0;
-}
+		h1 {
+			@include custom-svg-decorated-header($size: 110px, $offset: 12px);
+			font-size: 4.5rem;
+			line-height: 120%;
+			color: $primary-color;
+			width: fit-content;
+			margin: 0 auto;
+		}
 
-.mapLink {
-	display: inline-block;
-	margin-top: 1rem;
-	padding: 0.5rem 1rem;
-	background-color: #b33;
-	color: #fff;
-	text-decoration: none;
-	border-radius: 4px;
-}
-.mapLink:hover {
-	background-color: #d44;
+		.scheduleContainer {
+			/* Gives a background to the entire schedule section, if desired */
+			padding: 3rem 2rem;
+			color: #fff; /* Ensure text contrasts with orange background */
+
+			.dateTimeItem {
+				display: flex; /* Time on the left, details on the right */
+				align-items: center; /* Align the top edges */
+				margin-bottom: 3rem; /* Spacing between each item */
+				border-radius: 8px;
+				.timeBlock {
+					font-size: 3em;
+					font-weight: bold;
+				}
+				.line {
+					width: 30px;
+					height: 7px;
+					background-color: $primary-color; // You can change this to your desired color
+					margin: 0 2vw;
+					content: "";
+					border-radius: 3.5px;
+				}
+
+				.eventDetails {
+					text-align: left;
+					h2 {
+						font-size: 2.2em;
+						text-transform: uppercase; /* If you want the event name in all caps */
+					}
+
+					p {
+						padding-top: 6px;
+						padding-bottom: 16px;
+						font-size: 1.7em;
+					}
+
+					.mapLink {
+						@include button-custom(1);
+
+						text-decoration: none;
+						font-size: 1em;
+					}
+				}
+				&:last-of-type {
+					.eventDetails {
+						.mapLink {
+							@include button-custom(3);
+						}
+					}
+				}
+			}
+		}
+	}
 }

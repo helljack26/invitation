@@ -1,6 +1,6 @@
 /* main.scss */
-@import "./mixins";
 @import "./variables";
+@import "./mixins";
 
 html {
 	font-size: 16px;
@@ -23,22 +23,17 @@ h6 {
 }
 
 button {
-	background-color: #f3ebe6;
-	border: 1px solid $border-color;
-	padding: 10px 15px;
-	cursor: pointer;
-	font-size: 16px;
-	border-radius: 8px;
-	transition: $mainTransition;
-
-	&:hover {
-		background-color: $pink-color;
-		color: $cWhite;
-	}
+	@include button-custom(1);
 
 	&.selected {
-		background-color: $primary-color;
-		color: $cWhite;
+		filter: invert(1);
+		color: white;
+		span {
+			filter: invert(1);
+		}
+		&:hover {
+			filter: invert(1) brightness(0.8);
+		}
 	}
 }
 

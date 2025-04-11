@@ -4,7 +4,7 @@ export const menuData = [
 		linkName: "Головна",
 	},
 	{
-		linkHash: "#weddingDateAndTime",
+		linkHash: "#wedding_date_and_time",
 		linkName: "Дата та час",
 	},
 	{
