@@ -128,7 +128,10 @@ const Heart = ({ heart, containerRef }) => {
 				fill={heart.randomHeart.color}
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<path d={heart.randomHeart.path} />
+				<path
+					d={heart.randomHeart.path}
+					transform={heart.transform}
+				/>
 			</svg>
 		</div>
 	);

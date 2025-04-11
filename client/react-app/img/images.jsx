@@ -11,6 +11,8 @@ import dresscode_pink from "./dresscode_pink.jpg";
 import couple from "./couple.png";
 
 import paper_texture from "./paper-texture.jpg";
+import bg_heart_1 from "./bg_heart_1.svg";
+import bg_heart_2 from "./bg_heart_2.svg";
 
 const I = {
 	// Intro
@@ -24,6 +26,8 @@ const I = {
 	dresscode_pink,
 	couple,
 	paper_texture,
+	bg_heart_1,
+	bg_heart_2,
 };
 
 export default I;

@@ -35,7 +35,7 @@ export const HeroSection = observer(() => {
 			data-scroll-section
 		>
 			{/* Falling hearts container */}
-			<HeartsFalling />
+			{/* <HeartsFalling /> */}
 
 			<div className="paper_texture">
 				{/* Фото наречених. Замініть на свої */}
