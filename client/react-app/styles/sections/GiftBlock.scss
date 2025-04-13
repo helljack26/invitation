@@ -1,32 +1,47 @@
-.giftBlock {
+.gift_block {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	position: relative;
 	width: 100%;
-	padding: 4rem 2rem;
-	text-align: center;
-	background-color: #fdebd0; /* Soft background color example */
+	padding: 100px 2rem;
 
 	h2 {
-		font-size: 2rem;
-		margin-bottom: 1.5rem;
+		@include headerWithRay($size: 90px, $offset: 20px);
+		font-size: 5rem;
 		color: $header-text-color; /* accent color */
+		margin-bottom: 60px;
 	}
 
-	p {
-		font-size: 1.2rem;
-		max-width: 600px;
-		margin: 0 auto;
-		line-height: 1.4;
-	}
+	.gift_container {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		flex-direction: row;
+		column-gap: 4vw;
 
-	@media (max-width: 767px) {
-		padding: 2rem 1rem;
+		.gift_container_item {
+			.gift_images_wrapper {
+				display: inline-flex;
 
-		h2 {
-			font-size: 1.6rem;
-		}
-		p {
-			font-size: 1rem;
-			line-height: 1.3;
+				.gift_img {
+					position: relative;
+					height: 350px;
+					width: auto;
+					z-index: 1;
+					@media screen and (max-width: 768px) {
+						height: 400px;
+					}
+				}
+			}
+			p {
+				font-size: 3rem;
+				text-align: center;
+				color: $primary-color;
+				@media screen and (max-width: 768px) {
+					padding: 20px 0;
+				}
+			}
 		}
 	}
 }

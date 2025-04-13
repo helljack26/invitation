@@ -49,7 +49,7 @@ export const AlcoholPreferences = observer(({ isPlusOne }) => {
 
 	return (
 		<div className="alcoholPreferences">
-			<p>Виберіть ваш улюблений напій:</p>
+			<p>Виберіть улюблений напій:</p>
 
 			{/* Radio buttons for main alcohol choice */}
 			<label>

@@ -4,12 +4,12 @@ export const InvitationFooter = () => {
 	return (
 		<footer
 			id="invitationFooter"
-			className="invitationFooter"
+			className="invitation_footer"
 			data-scroll-section
 		>
 			<p>Дякуємо, що розділите з нами радість цього незабутнього дня!</p>
 			<p>
-				З любов’ю,
+				З любов’ю
 				<br />
 				<strong>Марія і Дмитро</strong>
 			</p>

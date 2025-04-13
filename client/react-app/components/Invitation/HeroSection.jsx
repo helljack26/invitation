@@ -61,14 +61,14 @@ export const HeroSection = observer(() => {
 
 				<div className="images_wrapper">
 					<Image
-						className="childPhoto"
+						className="child_photo"
 						alt="bride groom child"
 						src={I.bride_groom_child}
 						height={700}
 						priority
 					/>
 					<Image
-						className="childPhotoBlurred"
+						className="child_photo_blurred"
 						alt="bride groom child"
 						src={I.bride_groom_child}
 						height={700}

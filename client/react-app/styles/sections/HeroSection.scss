@@ -56,13 +56,13 @@
 				flex-direction: column;
 			}
 
-			.childPhoto {
+			.child_photo {
 				position: relative;
 				height: 700px;
 				width: auto;
 				z-index: 1;
 			}
-			.childPhotoBlurred {
+			.child_photo_blurred {
 				position: absolute;
 				transform: scale(0.7);
 				z-index: 0;

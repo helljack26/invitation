@@ -1,1 +1,23 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1931.97 1359.52"><defs><style>.cls-1{fill:#ff74ff;}</style></defs><path class="cls-1" d="M-318.5,184.61C-959.8,141-607.78-492.66-36.64-477.2,369-491.38,653.38-266.79,1066.22-295c411.5-7.91,113.07,2-132.41,493C353.33,1329.28-1105.39,863.61-318.5,184.61Z" transform="translate(661.76 477.84)"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="511.16824mm"
+   height="359.7056mm"
+   viewBox="0 0 511.16824 359.7056"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="translate(40.216672,39.952083)">
+    <path
+       class="cls-1"
+       d="M 50.604539,135.32249 C -119.07275,123.78401 -25.934126,-43.871862 125.18,-39.781404 232.50558,-43.533196 307.74779,15.889574 416.97837,8.4256786 525.85441,6.3328245 446.89481,8.9548453 381.94489,138.86526 228.35956,438.18309 -157.59344,314.97457 50.604539,135.32249 Z"
+       id="path1"
+       style="fill:#3a865b;fill-opacity:1;stroke-width:0.264583" />
+  </g>
+</svg>

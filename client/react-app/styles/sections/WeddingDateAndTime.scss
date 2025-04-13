@@ -16,6 +16,7 @@
 		left: 0;
 		width: 100vw;
 		height: 100vh;
+		max-height: 950px;
 		img {
 			transform: scale(1.1) scaleX(1.7) scaleY(0.9) rotate(6deg);
 			user-select: none;
@@ -26,25 +27,26 @@
 		z-index: 1;
 
 		h1 {
-			@include custom-svg-decorated-header($size: 110px, $offset: 12px);
-			font-size: 4.5rem;
-			line-height: 120%;
+			@include headerWithRay($size: 110px, $offset: 12px);
 			color: $primary-color;
-			width: fit-content;
-			margin: 0 auto;
+
+			&::before,
+			&::after {
+				filter: invert(1) brightness(10);
+			}
 		}
 
-		.scheduleContainer {
+		.schedule_container {
 			/* Gives a background to the entire schedule section, if desired */
 			padding: 3rem 2rem;
 			color: #fff; /* Ensure text contrasts with orange background */
 
-			.dateTimeItem {
+			.date_time_item {
 				display: flex; /* Time on the left, details on the right */
 				align-items: center; /* Align the top edges */
 				margin-bottom: 3rem; /* Spacing between each item */
 				border-radius: 8px;
-				.timeBlock {
+				.time_block {
 					font-size: 3em;
 					font-weight: bold;
 				}
@@ -57,7 +59,7 @@
 					border-radius: 3.5px;
 				}
 
-				.eventDetails {
+				.event_details {
 					text-align: left;
 					h2 {
 						font-size: 2.2em;
@@ -70,7 +72,7 @@
 						font-size: 1.7em;
 					}
 
-					.mapLink {
+					.map_link {
 						@include button-custom(1);
 
 						text-decoration: none;
@@ -78,8 +80,8 @@
 					}
 				}
 				&:last-of-type {
-					.eventDetails {
-						.mapLink {
+					.event_details {
+						.map_link {
 							@include button-custom(3);
 						}
 					}

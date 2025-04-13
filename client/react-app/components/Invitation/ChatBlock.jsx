@@ -3,7 +3,7 @@ export const ChatBlock = () => {
 	return (
 		<section
 			id="chatBlock"
-			className="chatBlock"
+			className="chat_block"
 			data-scroll-section
 		>
 			<h2>Чат для гостей</h2>
