@@ -85,11 +85,11 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 				<button
 					onClick={showSideMenu}
 					type="button"
-					className="header_burgerBtn"
+					className="header_burger_btn"
 				>
-					<span className={isSideMenuOpen ? "burgerBtn_open" : ""}></span>
-					<span className={isSideMenuOpen ? "burgerBtn_open" : ""}></span>
-					<span className={isSideMenuOpen ? "burgerBtn_open" : ""}></span>
+					<span className={isSideMenuOpen ? "burger_btn_open" : ""}></span>
+					<span className={isSideMenuOpen ? "burger_btn_open" : ""}></span>
+					<span className={isSideMenuOpen ? "burger_btn_open" : ""}></span>
 				</button>
 			</div>
 		</header>

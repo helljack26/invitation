@@ -1,6 +1,10 @@
 .rsvpBlock {
 	padding: 20px;
-	text-align: center;
+	padding-bottom: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 
 	@media screen and (max-width: 768px) {
 		max-width: 90%;
@@ -9,13 +13,13 @@
 
 	h3 {
 		font-size: 2em;
-		margin-bottom: 20px;
 		color: $primary-color;
 	}
 
 	.guestContainer {
-		max-width: 600px;
-		margin: 40px auto;
+		max-width: 700px;
+		width: 100%;
+		margin: 20px auto;
 		display: flex;
 		justify-content: space-between;
 		flex-direction: row;
@@ -39,18 +43,25 @@
 					font-weight: bold;
 					color: $plain-text-color;
 					font-size: 1.7em;
+					color: $pink-color;
 				}
 
 				.guestRowButtons {
-					margin-top: 10px;
 					display: flex;
 					justify-content: center;
 					align-items: center;
 					flex-direction: row;
 					gap: 16px;
+
 					button {
 						font-size: 1.3em;
 						padding: 2rem 3rem;
+						&:first-of-type {
+							@include button-custom(4);
+						}
+						&:last-of-type {
+							@include button-custom(5);
+						}
 					}
 				}
 			}
@@ -66,19 +77,21 @@
 					text-align: center;
 				}
 
-				// Optional: a heading or text above the radios
+				// Heading or text above the radios
 				p {
-					margin-bottom: 10px;
 					color: $plain-text-color;
 					font-family: $fRegular;
+					font-size: 1.3em;
+					margin-bottom: 24px;
 				}
 
-				// Each label holds the hidden radio input, the custom box, and the text
+				// Each label wraps the hidden radio, the custom heart icon, and the label text
 				label {
 					display: flex;
 					align-items: center;
+					gap: 16px;
 					cursor: pointer;
-					margin-bottom: 12px;
+					margin-bottom: 10px;
 					font-family: $fRegular;
 					color: $plain-text-color;
 
@@ -87,49 +100,47 @@
 						margin-bottom: 10px;
 					}
 
-					// Hide the default radio button
+					// Hide the native radio input
 					input[type="radio"] {
 						display: none;
 					}
 
-					// Our custom box that replaces the default radio
+					// Set up variables with the relative paths to your SVG files.
+					// These variables must point to your external heart files.
+
+					// The container that will display the heart icon via a pseudo-element.
 					.customRadio {
-						width: 24px;
-						height: 24px;
-						border: 1px solid $border-color; // or a custom color from your palette
-						background-color: #fff;
 						position: relative;
-						margin-right: 8px;
-						border-radius: 2px; // squared corners; use 50% for circles
-						transition: $mainTransition;
+						width: 40px;
+						height: 40px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
 
 						@media screen and (max-width: 768px) {
-							width: 20px;
-							height: 20px;
+							width: 28px;
+							height: 28px;
 						}
 
-						// The checkmark is an ::after pseudo-element, hidden by default
-						&::after {
-							content: "✔";
-							position: absolute;
-							font-size: 16px;
-							color: $plain-text-color; // or $primary-color if you prefer
-							top: 50%;
-							left: 50%;
-							transform: translate(-50%, -50%);
-							opacity: 0; // hidden by default
+						// Use ::before to render the SVG inline.
+						&::before {
+							content: url("../../img/radio_small_outline_heart.svg");
+							display: block;
+							/* The pseudo-element will adopt the intrinsic dimensions 
+						 from the SVG file. If you need it to scale, adjust the container’s size. */
+							transform: scale(0.7);
 						}
 					}
 
-					// When the radio is checked, reveal the checkmark
-					input[type="radio"]:checked + .customRadio::after {
-						opacity: 1;
+					// When the radio is checked, update the pseudo-element to show the filled heart.
+					input[type="radio"]:checked + .customRadio::before {
+						content: url("../../img/radio_small_filled_heart.svg");
 					}
 
-					// The text after the custom box
+					// Label text styling
 					span {
 						&:last-child {
-							font-size: 16px;
+							font-size: 1.1em;
 						}
 
 						@media screen and (max-width: 768px) {
@@ -137,16 +148,15 @@
 								font-size: 14px;
 							}
 						}
-
-						// any additional styling
 					}
 				}
 
 				// Wine type block or custom block can inherit the same styling
 				.wineTypeBlock,
 				.customAlcoholBlock {
-					margin-top: 15px;
-
+					margin-left: 24px;
+					margin-bottom: 10px;
+					background-color: white;
 					p {
 						margin-bottom: 5px;
 						font-family: $fRegular;
@@ -160,6 +170,21 @@
 						font-family: $fRegular;
 					}
 				}
+			}
+		}
+	}
+	.sendRvsp {
+		font-size: 1em;
+		color: white;
+		
+		span {
+			color: white;
+
+		}
+		&:hover {
+			filter: $pinkFilter !important;
+			span{
+				filter: invert(1) !important;
 			}
 		}
 	}

@@ -1,34 +1,29 @@
-.invitationFooter {
+.invitation_footer {
 	position: relative;
 	width: 100%;
 	padding: 3rem 2rem;
 	text-align: center;
-	background-color: #f7f7f7;
 
 	p {
-		font-size: 1.2rem;
+		font-size: 3rem;
 		line-height: 1.4;
 		margin-bottom: 1rem;
 		color: #2c3e50;
 
 		strong {
-			color: #c0392b;
+			@include headerWithRay($size: 80px, $offset: 30px);
+			color: $primary-color;
+
+			&::before,
+			&::after {
+				filter: $pinkFilter;
+			}
 		}
 	}
 
 	.creator {
-		margin-top: 2rem;
-		font-size: 0.9rem;
-		color: #7f8c8d;
-	}
-
-	@media (max-width: 767px) {
-		p {
-			font-size: 1rem;
-		}
-
-		.creator {
-			font-size: 0.8rem;
-		}
+		margin-top: 80px;
+		font-size: 1.7rem;
+		color: $primary-color;
 	}
 }

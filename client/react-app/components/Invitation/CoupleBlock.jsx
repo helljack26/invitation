@@ -40,13 +40,13 @@ export const CoupleBlock = () => {
 	return (
 		<section
 			id="coupleBlock"
-			className="coupleBlock"
+			className="couple_block"
 			data-scroll-section
 		>
-			<div className="coupleImages">
+			<div className="couple_images">
 				{/* Фото наречених. Замініть на свої */}
 				<Image
-					className="couplePhoto"
+					className="couple_photo"
 					alt="bride groom child"
 					src={I.couple}
 					priority
@@ -55,19 +55,19 @@ export const CoupleBlock = () => {
 
 			{/* Countdown Timer */}
 			<div className="timer">
-				<div className="timerItem">
+				<div className="timer_item">
 					<span>{timeLeft.days}</span>
 					<span>Днів</span>
 				</div>
-				<div className="timerItem">
+				<div className="timer_item">
 					<span>{timeLeft.hours}</span>
 					<span>Годин</span>
 				</div>
-				<div className="timerItem">
+				<div className="timer_item">
 					<span>{timeLeft.minutes}</span>
 					<span>Хвилин</span>
 				</div>
-				<div className="timerItem">
+				<div className="timer_item">
 					<span>{timeLeft.seconds}</span>
 					<span>Секунд</span>
 				</div>

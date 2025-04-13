@@ -27,39 +27,39 @@ export const WeddingDateAndTime = () => {
 				<h1>
 					День <br /> весіллє
 				</h1>
-				<div className="scheduleContainer">
-					<div className="dateTimeItem">
-						<div className="timeBlock">12:00</div>
+				<div className="schedule_container">
+					<div className="date_time_item">
+						<div className="time_block">12:00</div>
 
 						<span className="line"></span>
 
-						<div className="eventDetails">
+						<div className="event_details">
 							<h2>Розпис</h2>
 							<p>Подільський РАЦС</p>
 							<a
 								href="https://maps.app.goo.gl/kNo7nHinMg2YSkdo9"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="mapLink"
+								className="map_link"
 							>
 								Дивитись на мапі
 							</a>
 						</div>
 					</div>
 
-					<div className="dateTimeItem">
-						<div className="timeBlock">14:00</div>
+					<div className="date_time_item">
+						<div className="time_block">14:00</div>
 
 						<span className="line"></span>
 
-						<div className="eventDetails">
+						<div className="event_details">
 							<h2>БАНКЕТ</h2>
 							<p>Колиба House</p>
 							<a
 								href="https://maps.app.goo.gl/z1gENMq7yweU4EdUA"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="mapLink"
+								className="map_link"
 							>
 								Дивитись на мапі
 							</a>

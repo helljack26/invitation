@@ -7,12 +7,16 @@ import dresscode_green from "./dresscode_green.jpg";
 import dresscode_ivory from "./dresscode_ivory.jpg";
 import dresscode_olive from "./dresscode_olive.jpg";
 import dresscode_pink from "./dresscode_pink.jpg";
+import dresscode_black from "./dresscode_black.jpg";
+import dresscode_white from "./dresscode_white.jpg";
 
 import couple from "./couple.png";
 
 import paper_texture from "./paper-texture.jpg";
 import bg_heart_1 from "./bg_heart_1.svg";
 import bg_heart_2 from "./bg_heart_2.svg";
+
+import gift_block_img from "./gift_block_img.svg";
 
 const I = {
 	// Intro
@@ -24,10 +28,14 @@ const I = {
 	dresscode_ivory,
 	dresscode_olive,
 	dresscode_pink,
+	dresscode_black,
+	dresscode_white,
+	//
 	couple,
 	paper_texture,
 	bg_heart_1,
 	bg_heart_2,
+	gift_block_img,
 };
 
 export default I;

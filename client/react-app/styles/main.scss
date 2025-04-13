@@ -5,13 +5,16 @@
 html {
 	font-size: 16px;
 }
+
 body {
 	font-family: $fRegular;
 	font-size: 1.5em;
 }
+
 section {
 	min-height: 100vh;
 }
+
 h1,
 h2,
 h3,
@@ -26,15 +29,25 @@ button {
 	@include button-custom(1);
 
 	&.selected {
-		filter: invert(1);
+		filter: $pinkFilter;
 		color: white;
+
 		span {
 			filter: invert(1);
 		}
+
 		&:hover {
-			filter: invert(1) brightness(0.8);
+			filter: $pinkFilter !important;
 		}
 	}
+}
+
+.pink_text {
+	color: $pink-color;
+}
+
+.green_text {
+	color: $primary-color;
 }
 
 .desktop {
@@ -42,12 +55,15 @@ button {
 		display: none;
 	}
 }
+
 .mobile {
 	display: none;
+
 	@media screen and (max-width: 992px) {
 		display: inline-block;
 	}
 }
+
 @import "./common/header.scss";
 /* Each block’s SCSS */
 @import "./sections/HeroSection.scss";

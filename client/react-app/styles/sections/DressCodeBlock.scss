@@ -1,4 +1,4 @@
-.dressCodeBlock {
+.dress_code_block {
 	position: relative;
 	width: 100%;
 	padding: 4rem 2rem;
@@ -8,37 +8,148 @@
 	align-items: center;
 	flex-direction: column;
 
-	background: url("/images/dresscode_bg.jpg") center center / cover no-repeat;
-	/* or remove this if you don't need a background image */
-
-	h2 {
-		font-size: 2rem;
-		margin-bottom: 1.2rem;
+	@mixin dress_code_block_bg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		height: 800px;
 	}
 
-	p {
-		font-size: 1.2rem;
-		line-height: 1.4;
-		max-width: 700px;
-		margin: 0 auto;
-	}
+	.dress_code_block_women_bg {
+		@include dress_code_block_bg;
+		z-index: 1;
 
-	@media (max-width: 767px) {
-		padding: 2rem 1rem;
-
-		h2 {
-			font-size: 1.6rem;
-		}
-		p {
-			font-size: 1rem;
+		img {
+			transform: scale(1.1) scaleX(1.7) scaleY(1.1) rotate(0deg);
+			user-select: none;
 		}
 	}
 
-	.dressCodeBlock_colors {
+	.dress_code_block_men_bg {
+		@include dress_code_block_bg;
+		top: 720px;
+		height: 850px;
+
+		img {
+			transform: scale(1.1) scaleX(-1.7) scaleY(1.3) rotate(6deg);
+			filter: $pinkFilter;
+			user-select: none;
+		}
+	}
+
+	.dress_code_content {
+		z-index: 1;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		align-items: center;
-		flex-direction: row;
-		gap: 16px;
+		padding-top: 0px;
+		h2 {
+			@include headerWithRay($size: 80px, $offset: 20px);
+			font-size: 4rem;
+			color: white;
+
+			&::before,
+			&::after {
+				filter: $pinkFilter;
+			}
+		}
+
+		p {
+			font-size: 2rem;
+			max-width: 700px;
+			color: white;
+			margin-top: 40px;
+			margin-bottom: 20px;
+			b {
+				font-size: 2.7rem;
+				padding: 0 5px;
+			}
+		}
+
+		@media (max-width: 767px) {
+			padding: 2rem 1rem;
+
+			h2 {
+				font-size: 1.6rem;
+			}
+
+			p {
+				font-size: 1rem;
+			}
+		}
+
+		.dress_code_block_colors {
+			position: relative;
+			width: 800px;
+			height: 400px;
+			&:first-of-type {
+				margin-bottom: 250px;
+			}
+			&:last-of-type {
+				margin-bottom: 160px;
+			}
+			// We won’t use a simple horizontal row layout now because we want a scattered effect
+			.color_item {
+				position: absolute;
+				width: 200px;
+				height: 200px;
+
+				.colorImage {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+
+			// Each nth-child gets a different heart mask + position
+			.color_item:nth-child(3n + 1) .colorImage {
+				-webkit-mask: url("../../img/dresscode_heart_mask.svg") no-repeat
+					center / contain;
+				mask: url("../../img/dresscode_heart_mask.svg") no-repeat center /
+					contain;
+			}
+
+			.color_item:nth-child(3n + 2) .colorImage {
+				-webkit-mask: url("../../img/dresscode_heart_mask_1.svg") no-repeat
+					center / contain;
+				mask: url("../../img/dresscode_heart_mask_1.svg") no-repeat center /
+					contain;
+			}
+
+			.color_item:nth-child(3n) .colorImage {
+				-webkit-mask: url("../../img/dresscode_heart_mask_2.svg") no-repeat
+					center / contain;
+				mask: url("../../img/dresscode_heart_mask_2.svg") no-repeat center /
+					contain;
+			}
+
+			// Now apply different random-ish top/left for each item
+			.color_item:nth-child(1) {
+				top: 10px;
+				left: 0;
+			}
+
+			.color_item:nth-child(2) {
+				top: 40px;
+				left: 300px;
+			}
+
+			.color_item:nth-child(3) {
+				top: 20px;
+				right: 0;
+			}
+
+			.color_item:nth-child(4) {
+				top: 220px;
+				left: 150px;
+			}
+
+			.color_item:nth-child(5) {
+				top: 200px;
+				right: 135px;
+			}
+		}
 	}
 }

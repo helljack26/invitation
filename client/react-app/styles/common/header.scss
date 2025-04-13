@@ -106,7 +106,7 @@
 				box-shadow: 0 2px 25px #f2736c70;
 			}
 		}
-		.header_burgerBtn {
+		.header_burger_btn {
 			display: none;
 			@media screen and (max-width: 768px) {
 				display: flex;
@@ -131,7 +131,7 @@
 					width: 100%;
 				}
 			}
-			.burgerBtn_open {
+			.burger_btn_open {
 				transform: scaleX(0);
 				&:first-of-type {
 					transform: scaleX(1) rotate(-45deg) translate(-5px, 5px);
