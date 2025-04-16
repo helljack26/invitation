@@ -1,8 +1,9 @@
 .invitation_footer {
 	position: relative;
 	width: 100%;
-	padding: 3rem 2rem;
+	padding: 140px 2rem;
 	text-align: center;
+	background-color: white;
 
 	p {
 		font-size: 3rem;
@@ -22,8 +23,11 @@
 	}
 
 	.creator {
-		margin-top: 80px;
 		font-size: 1.7rem;
 		color: $primary-color;
+		position: absolute;
+		left: 0;
+		bottom: 10px;
+		right: 0;
 	}
 }

@@ -74,7 +74,7 @@ export const CoupleBlock = () => {
 			</div>
 
 			{/* You can add additional text or styles to mimic the design in the image */}
-			<p>… і ми будемо дружені!</p>
+			<p>… і ми будемо одружені!</p>
 		</section>
 	);
 };

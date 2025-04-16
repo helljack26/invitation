@@ -1,6 +1,5 @@
 // import NextNprogress from 'nextjs-progressbar'
 import React from "react";
-import "../styles/styles.css";
 import "@csstools/normalize.css";
 import "../styles/main.scss";
 
