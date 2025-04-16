@@ -15,9 +15,11 @@ import couple from "./couple.png";
 import paper_texture from "./paper-texture.jpg";
 import bg_heart_1 from "./bg_heart_1.svg";
 import bg_heart_2 from "./bg_heart_2.svg";
+import bg_heart_3 from "./bg_heart_3.svg";
 
 import gift_block_img from "./gift_block_img.svg";
 
+import swirl_arrow_icon from "./swirl-arrow-bottom-right-icon.svg";
 const I = {
 	// Intro
 	bride_groom_child,
@@ -35,7 +37,9 @@ const I = {
 	paper_texture,
 	bg_heart_1,
 	bg_heart_2,
+	bg_heart_3,
 	gift_block_img,
+	swirl_arrow_icon,
 };
 
 export default I;

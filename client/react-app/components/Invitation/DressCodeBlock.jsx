@@ -28,7 +28,6 @@ export const DressCodeBlock = () => {
 					alt="bg paper texture"
 					src={I.bg_heart_1}
 					fill
-					priority
 				/>
 			</div>
 			<div className="dress_code_block_men_bg">
@@ -37,7 +36,6 @@ export const DressCodeBlock = () => {
 					alt="bg paper texture"
 					src={I.bg_heart_1}
 					fill
-					priority
 				/>
 			</div>
 

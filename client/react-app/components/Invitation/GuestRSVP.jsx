@@ -3,6 +3,8 @@ import { useUserGuestStore } from "../../stores/UserGuestStore";
 import { AlcoholPreferences } from "./AlcoholPreferences";
 import { AnimatePresence, motion } from "framer-motion";
 
+import ConfettiButton from "../common/ConfettiButton";
+
 export const GuestRSVP = observer(() => {
 	const userGuestStore = useUserGuestStore();
 	const { guestData, setRSVPStatusInStore, syncRSVPDataToServer } =
@@ -37,15 +39,13 @@ export const GuestRSVP = observer(() => {
 					<div className="guestRow">
 						<span className="guestName">{guest.first_name}</span>
 						<div className="guestRowButtons">
-							<button
-								type="button"
-								className={
-									guest.rsvp_status === "accepted" ? "selected" : ""
-								}
+							<ConfettiButton
+								soundSrc="/sounds/applause-cheer.mp3" // Change to your MP3 file URL
 								onClick={() => handleRSVP("accepted")}
-							>
-								<span>Так</span>
-							</button>
+								selected={guest.rsvp_status === "accepted"}
+								buttonText="Так"
+							/>
+
 							<button
 								type="button"
 								className={
@@ -83,17 +83,13 @@ export const GuestRSVP = observer(() => {
 								{guest.first_name_plus_1}
 							</span>
 							<div className="guestRowButtons">
-								<button
-									type="button"
-									className={
-										guest.rsvp_status_plus_one === "accepted"
-											? "selected"
-											: ""
-									}
+								<ConfettiButton
+									soundSrc="/sounds/applause-cheer.mp3" // Change to your MP3 file URL
 									onClick={() => handleRSVP("accepted", true)}
-								>
-									<span>Так</span>
-								</button>
+									selected={guest.rsvp_status_plus_one === "accepted"}
+									buttonText="Так"
+								/>
+
 								<button
 									type="button"
 									className={
@@ -132,9 +128,7 @@ export const GuestRSVP = observer(() => {
 				className="sendRvsp"
 				onClick={() => syncRSVPDataToServer(true)}
 			>
-				<span>
-				Відправити відповідь
-				</span>
+				<span>Відправити відповідь</span>
 			</button>
 		</section>
 	);
