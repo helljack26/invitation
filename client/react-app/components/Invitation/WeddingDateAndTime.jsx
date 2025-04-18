@@ -9,7 +9,7 @@ import I from "../../img/images";
 export const WeddingDateAndTime = () => {
 	return (
 		<section
-			id="wedding_date_and_time"
+			id="weddingDateAndTime"
 			className="date_time_section"
 			data-scroll-section
 		>

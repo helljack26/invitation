@@ -67,13 +67,6 @@ export const HeroSection = observer(() => {
 						height={700}
 						priority
 					/>
-					<Image
-						className="child_photo_blurred"
-						alt="bride groom child"
-						src={I.bride_groom_child}
-						height={700}
-						priority
-					/>
 				</div>
 				<span className="city mobile">Київ</span>
 			</div>

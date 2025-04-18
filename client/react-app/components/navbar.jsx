@@ -1,15 +1,16 @@
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-
-import { isOnTop } from "./helpers/isOnTop";
-import { detectActiveLink } from "./helpers/detectActiveLink";
-import { menuData } from "../res/menuLinks";
-
-import I from "../img/images";
-import GlobalState from "../stores/GlobalState";
+import { gsap, Power3 } from "gsap";
+// Store
 import { observer } from "mobx-react";
 import { runInAction } from "mobx";
-import { gsap, Power3 } from "gsap";
+import GlobalState from "../stores/GlobalState";
+
+import { menuData } from "../res/menuLinks";
+// Helpers
+import { isOnTop } from "./helpers/isOnTop";
+import { detectActiveLink } from "./helpers/detectActiveLink";
+// Component
+import MusicPlayer from "./common/MusicPlayer";
 
 export const Navbar = observer(({ isSideMenuOpen }) => {
 	const headerBlockRef = useRef(null);
@@ -25,27 +26,21 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 		}
 	}, []);
 
-	//
-	useEffect(() => {
-		if (headerBlockRef.current) {
-			gsap.fromTo(
-				headerBlockRef.current,
-				{ opacity: 0, y: -15 },
-				{
-					duration: 2,
-					y: 0,
-					opacity: 1,
-					ease: Power3.easeInOut,
-					delay: 0.6,
-				}
-			);
-		}
-	}, []);
-	const showLeafFalling = () => {
-		runInAction(() => {
-			GlobalState.isShowLeafFalling = !GlobalState.isShowLeafFalling;
-		});
-	};
+	// useEffect(() => {
+	// 	if (headerBlockRef.current) {
+	// 		gsap.fromTo(
+	// 			headerBlockRef.current,
+	// 			{ opacity: 0, y: -15 },
+	// 			{
+	// 				duration: 2,
+	// 				y: 0,
+	// 				opacity: 1,
+	// 				ease: Power3.easeInOut,
+	// 				delay: 0.6,
+	// 			}
+	// 		);
+	// 	}
+	// }, []);
 
 	const showSideMenu = () => {
 		runInAction(() => {
@@ -57,23 +52,19 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 		<header
 			className={`header ${onTop ? "defaultHeader" : "expandedHeader"}`}
 			data-scroll-sticky
+			ref={headerBlockRef}
 		>
-			<div
-				className="header_block"
-				ref={headerBlockRef}
-			>
+			<div className="header_block">
 				<div></div>
 				<nav className="nav">
 					{isShowMenu &&
 						menuData.map((link, id) => {
 							const { linkHash, linkName } = link;
-							let hash = document.querySelector(`${linkHash}`);
+							const hash = document.querySelector(linkHash);
 							return (
 								<a
 									key={id}
-									onClick={() => {
-										scroll.scrollTo(hash);
-									}}
+									onClick={() => scroll.scrollTo(hash)}
 									className={activeLink === id ? "navlink_active" : ""}
 								>
 									{linkName}
@@ -82,14 +73,17 @@ export const Navbar = observer(({ isSideMenuOpen }) => {
 						})}
 				</nav>
 
+				{/* ▶️ Music Player */}
+				{/* <MusicPlayer src="/sounds/dana_glover_is_it_you.mp3" /> */}
+
 				<button
 					onClick={showSideMenu}
 					type="button"
 					className="header_burger_btn"
 				>
-					<span className={isSideMenuOpen ? "burger_btn_open" : ""}></span>
-					<span className={isSideMenuOpen ? "burger_btn_open" : ""}></span>
-					<span className={isSideMenuOpen ? "burger_btn_open" : ""}></span>
+					<span className={isSideMenuOpen ? "burger_btn_open" : ""} />
+					<span className={isSideMenuOpen ? "burger_btn_open" : ""} />
+					<span className={isSideMenuOpen ? "burger_btn_open" : ""} />
 				</button>
 			</div>
 		</header>

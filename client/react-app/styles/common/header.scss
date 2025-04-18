@@ -1,3 +1,5 @@
+// — define a placeholder for reuse elsewhere
+
 .header {
 	padding: 0px 2.8vw;
 	position: fixed;
@@ -24,7 +26,7 @@
 		align-items: center;
 		flex-direction: row;
 		height: 100%;
-		opacity: 0;
+		position: relative;
 		.logoButton {
 			transition: all 0.5s ease-in-out;
 			&:hover {
@@ -140,6 +142,92 @@
 				&:last-of-type {
 					transform: scaleX(1) rotate(45deg) translate(-5px, -5px);
 					width: 100%;
+				}
+			}
+		}
+
+		.audio-player {
+			position: absolute;
+			top: 50%;
+			right: 2.8vw;
+			transform: translateY(-50%);
+			display: flex;
+			align-items: center;
+			gap: 0.6em;
+			background: rgba(#fff, 0.85);
+			padding: 0.4em;
+			border-radius: 1.6em;
+			box-shadow: 0 2px 10px rgba(#000, 0.2);
+
+			// ─── Play/Pause button ───
+			&__toggle {
+				width: 2.2em;
+				height: 2.2em;
+				background: $primary-color;
+				border: none;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: transform 0.2s;
+
+				&:hover {
+					transform: scale(1.1);
+				}
+
+				.icon {
+					display: inline-block;
+					// we’ll size the CSS triangles by ems
+					font-size: 1em;
+				}
+
+				// ► Play triangle
+				.icon--play {
+					width: 0;
+					height: 0;
+					border-top: 0.5em solid transparent;
+					border-bottom: 0.5em solid transparent;
+					border-left: 0.8em solid #fff;
+				}
+
+				// ‖‖ Pause bars
+				.icon--pause {
+					width: 0.25em;
+					height: 1em;
+					background: #fff;
+					position: relative;
+
+					&::after {
+						content: "";
+						position: absolute;
+						left: 0.5em;
+						top: 0;
+						width: 0.25em;
+						height: 1em;
+						background: #fff;
+					}
+				}
+			}
+
+			// ─── Equalizer bars ───
+			.equalizer {
+				display: flex;
+				align-items: flex-end;
+				height: 2em;
+
+				.eq-bar {
+					width: 0.2em;
+					margin: 0 0.08em;
+					transform-origin: bottom center;
+					// start “flat”:
+					transform: scaleY(0);
+					background: linear-gradient(
+						to top,
+						darken($primary-color, 10%),
+						$primary-color
+					);
+					border-radius: 0.1em;
 				}
 			}
 		}
