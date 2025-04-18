@@ -60,6 +60,10 @@ h6 {
 
 section {
 	min-height: 100vh;
+
+	@media screen and (max-width: 1200px) {
+	min-height: fit-content;
+	}
 }
 
 button {
@@ -98,7 +102,7 @@ input {
 }
 
 .desktop {
-	@media screen and (max-width: 992px) {
+	@media screen and (max-width: 1200px) {
 		display: none;
 	}
 }
@@ -106,7 +110,7 @@ input {
 .mobile {
 	display: none;
 
-	@media screen and (max-width: 992px) {
+	@media screen and (max-width: 1200px) {
 		display: inline-block;
 	}
 }

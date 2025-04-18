@@ -2,13 +2,13 @@
 import bride_groom_child from "./bride_groom_child.png";
 
 // Dress Code Images
-import dresscode_brown from "./dresscode_brown.jpg";
-import dresscode_green from "./dresscode_green.jpg";
-import dresscode_ivory from "./dresscode_ivory.jpg";
-import dresscode_olive from "./dresscode_olive.jpg";
-import dresscode_pink from "./dresscode_pink.jpg";
-import dresscode_black from "./dresscode_black.jpg";
-import dresscode_white from "./dresscode_white.jpg";
+import dresscode_brown from "./dresscode/dresscode_brown.webp";
+import dresscode_green from "./dresscode/dresscode_green.webp";
+import dresscode_ivory from "./dresscode/dresscode_ivory.webp";
+import dresscode_olive from "./dresscode/dresscode_olive.webp";
+import dresscode_pink from "./dresscode/dresscode_pink.webp";
+import dresscode_black from "./dresscode/dresscode_black.webp";
+import dresscode_white from "./dresscode/dresscode_white.webp";
 
 import couple from "./couple.png";
 

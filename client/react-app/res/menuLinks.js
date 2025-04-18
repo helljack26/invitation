@@ -1,11 +1,15 @@
 export const menuData = [
 	{
 		linkHash: "#hero_section",
-		linkName: "Головна",
+		linkName: "Запрошення",
 	},
 	{
-		linkHash: "#wedding_date_and_time",
-		linkName: "Дата та час",
+		linkHash: "#weddingDateAndTime",
+		linkName: "День весіллє",
+	},
+	{
+		linkHash: "#rsvpBlock",
+		linkName: "Підтвердження",
 	},
 	{
 		linkHash: "#dressCodeBlock",
@@ -17,14 +21,10 @@ export const menuData = [
 	},
 	{
 		linkHash: "#chatBlock",
-		linkName: "Чат для гостей",
+		linkName: "Чат",
 	},
 	{
 		linkHash: "#coupleBlock",
 		linkName: "Наречені",
-	},
-	{
-		linkHash: "#invitationFooter",
-		linkName: "Подяка",
 	},
 ];
