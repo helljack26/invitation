@@ -6,7 +6,7 @@ import dresscode_brown from "./dresscode/dresscode_brown.webp";
 import dresscode_green from "./dresscode/dresscode_green.webp";
 import dresscode_ivory from "./dresscode/dresscode_ivory.webp";
 import dresscode_olive from "./dresscode/dresscode_olive.webp";
-import dresscode_pink from "./dresscode/dresscode_pink.webp";
+import dresscode_pink from "./dresscode/dresscode_pink.jpg";
 import dresscode_black from "./dresscode/dresscode_black.webp";
 import dresscode_white from "./dresscode/dresscode_white.webp";
 

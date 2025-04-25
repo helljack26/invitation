@@ -13,6 +13,9 @@
 		font-size: 5rem;
 		color: $header-text-color; /* accent color */
 		margin-bottom: 60px;
+		@media screen and (max-width: 1500px) {
+		margin-bottom: 40px;
+		}
 	}
 
 	.gift_container {
@@ -31,6 +34,9 @@
 					height: 350px;
 					width: auto;
 					z-index: 1;
+					@media screen and (max-width: 1500px) {
+					height: 300px;
+					}
 					@media screen and (max-width: 768px) {
 						height: 400px;
 					}
