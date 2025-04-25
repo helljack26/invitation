@@ -129,6 +129,12 @@ $custom-svg-button5: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20wi
 	}
 }
 
+@mixin button-custom_pink() {
+	background-color: $pink-color;
+	&:hover {
+		background-color: $pink-color-hover;
+	}
+}
 // Helper function: Converts a color to a URL‑encoded string.
 // If given a color, it interpolates to a string and removes the "#"
 // (replaced with "%23" for URL encoding).
@@ -201,4 +207,7 @@ $custom-svg: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='100
 	line-height: 120%;
 	width: fit-content;
 	margin: 0 auto;
+	@media screen and (max-width: 992px) {
+	font-size: 4.2rem;
+	}
 }

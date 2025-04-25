@@ -24,6 +24,7 @@ const AlcoholSummary = observer(() => {
 				напівсолодке: { count: 0, guests: [] },
 				unspecified: { count: 0, guests: [] },
 			},
+			"Безалкогольні напої": { count: 0, guests: [] }, // ← ось сюди
 		};
 
 		const customList = [];
@@ -215,9 +216,19 @@ const AlcoholSummary = observer(() => {
 								</li>
 							</ul>
 						</li>
+						<li
+							className="collection-item"
+							onMouseEnter={() =>
+								handleMouseEnter("Безалкогольні напої")
+							}
+							onMouseLeave={handleMouseLeave}
+						>
+							<strong>Безалкогольні напої:</strong>{" "}
+							{summary.defaultCounts["Безалкогольні напої"].count}
+						</li>
 					</ul>
 
-					<h5>Користувацькі варіанти</h5>
+					{/* <h5>Користувацькі варіанти</h5>
 					{summary.customList.length > 0 ? (
 						<table className="striped">
 							<thead>
@@ -239,7 +250,7 @@ const AlcoholSummary = observer(() => {
 						</table>
 					) : (
 						<p>Немає користувацьких вподобань</p>
-					)}
+					)} */}
 				</div>
 			</div>
 

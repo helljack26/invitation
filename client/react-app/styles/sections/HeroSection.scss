@@ -3,7 +3,6 @@
 .hero_section {
 	position: relative;
 	width: 100%;
-	background: url("/static/img/hero_bg.jpg") center center / cover no-repeat;
 	overflow: hidden; /* Ensures falling hearts are clipped within hero section */
 	color: $primary-color;
 	z-index: 0;
@@ -26,11 +25,11 @@
 			column-gap: 2vw;
 		}
 		@media screen and (max-width: 1300px) {
-			padding-top: 5rem;
+			padding: 6rem 0;
 		}
 		@media screen and (max-width: 1200px) {
-		flex-direction: column;
-		height: fit-content;
+			flex-direction: column;
+			height: fit-content;
 		}
 		@media (max-width: 768px) {
 			padding: 2rem 1rem;
@@ -41,7 +40,6 @@
 			gap: 16px;
 		}
 
-	
 		.hero_content_dear {
 			font-size: 1.4em;
 		}
@@ -51,7 +49,7 @@
 				font-size: 3.3em;
 			}
 			@media screen and (max-width: 1300px) {
-			font-size: 2.9em;
+				font-size: 2.9em;
 			}
 			@media screen and (max-width: 768px) {
 				font-size: 2em;
@@ -68,7 +66,7 @@
 				font-size: 1.5em;
 			}
 			@media screen and (max-width: 1300px) {
-			font-size: 1.3em;
+				font-size: 1.3em;
 			}
 		}
 
@@ -79,13 +77,24 @@
 			}
 
 			.child_photo {
+				@media screen and (min-width: 2000px) and (min-height: 800px) {
+					height: 70vh !important;
+				}
 				position: relative;
-				height: 700px;
+				height: 650px;
 				width: auto;
 				z-index: 1;
-				
+				@media screen and (min-width: 1400px) and (min-height: 800px) {
+					height: 650px;
+				}
 				@media screen and (max-height: 800px) {
 					height: 80vh;
+				}
+				@media screen and (max-width: 1400px) and (max-height: 800px) {
+					height: 75vh;
+				}
+				@media screen and (max-width: 1200px) {
+					height: 500px;
 				}
 			}
 		}
@@ -93,9 +102,11 @@
 			font-size: 2em;
 			@media screen and (max-width: 1300px) {
 				font-size: 1.5em;
-			
 			}
-
+			@media screen and (max-width: 1200px) {
+				margin-top: -30px;
+				font-size: 2em;
+			}
 		}
 
 		.city,

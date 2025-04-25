@@ -43,14 +43,17 @@ export const CoupleBlock = () => {
 			className="couple_block"
 			data-scroll-section
 		>
-			<div className="couple_images">
+			<div className="couple_image_wrapper">
+				<div className="couple_image">
+
 				{/* Фото наречених. Замініть на свої */}
-				<Image
+				{/* <Image
 					className="couple_photo"
 					alt="bride groom child"
 					src={I.couple}
-					priority
-				/>
+					fill
+					/> */}
+					</div>
 			</div>
 
 			{/* Countdown Timer */}
