@@ -31,13 +31,23 @@ overflow-x: clip;
 		@include dress_code_block_bg;
 		top: 720px;
 		height: 850px;
-
+@media screen and (max-width: 1200px) {
+top: 650px;
+}
 		img {
 			transform: scale(1.1) scaleX(-1.7) scaleY(1.2) rotate(6deg);
 			filter: $pinkFilter;
 			user-select: none;
 		}
 	}
+	.dress_code_block_women_bg,
+		.dress_code_block_men_bg {
+		img{
+			@media screen and (max-width: 1200px) {
+			width: auto !important;
+			}
+		}
+		}
 
 	.dress_code_content {
 		z-index: 1;
