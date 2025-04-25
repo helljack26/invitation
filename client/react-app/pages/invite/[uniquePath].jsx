@@ -169,7 +169,7 @@ const InvitationPage = observer(() => {
 			{/* Example “floating” navbar / side menu if you want to keep them */}
 
 			{/* Now your invitation blocks in logical order */}
-			<div data-scroll-container>
+			<main data-scroll-container>
 				<HeroSection />
 				<WeddingDateAndTime />
 				<GuestRSVP />
@@ -178,7 +178,7 @@ const InvitationPage = observer(() => {
 				<ChatBlock />
 				<CoupleBlock />
 				<InvitationFooter />
-			</div>
+			</main>
 			{/* </SmoothScrollProvider> */}
 		</>
 	);

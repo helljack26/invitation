@@ -51,6 +51,19 @@ export const AlcoholPreferences = observer(({ isPlusOne }) => {
 		<div className="alcoholPreferences">
 			<p>Виберіть улюблений напій:</p>
 
+			{/* Безалкогольні напої */}
+			<label>
+				<input
+					type="radio"
+					name={`alcohol-${isPlusOne ? "plusOne" : "main"}`}
+					value="Безалкогольні напої"
+					checked={currentAlcoholChoice === "Безалкогольні напої"}
+					onChange={handleAlcoholChange}
+				/>
+				<span className="customRadio"></span>
+				<span>Безалкогольні напої</span>
+			</label>
+
 			{/* Radio buttons for main alcohol choice */}
 			<label>
 				<input

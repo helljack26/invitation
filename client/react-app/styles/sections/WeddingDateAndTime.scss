@@ -9,18 +9,34 @@
 	position: relative;
 	z-index: 1;
 	padding: 80px 20px;
+	padding-top: 30px;
 	overflow-x: clip;
-
+	@media screen and (max-width: 1200px) {
+		font-size: 0.9em;
+		padding-top: 50px;
+	}
+	@media screen and (max-width: 1100px) {
+		padding-top: 30px;
+	
+	}
 	.date_time_section_bg {
 		position: absolute;
 		top: -90px;
 		left: 0;
 		width: 100vw;
-		height: 100vh;
+		height: 100%;
 		max-height: 950px;
+		@media screen and (max-width: 1200px) {
+			top: -9%;
+			max-height: 850px;
+		}
 		img {
 			transform: scale(1.1) scaleX(1.7) scaleY(0.9) rotate(6deg);
 			user-select: none;
+			
+			@media screen and (max-width: 1400px) {
+				width: auto !important;
+			}
 		}
 	}
 
@@ -41,7 +57,10 @@
 			/* Gives a background to the entire schedule section, if desired */
 			padding: 3rem 2rem;
 			color: #fff; /* Ensure text contrasts with orange background */
-
+			@media screen and (max-width: 992px) {
+				padding: 2rem 2rem;
+			
+			}
 			.date_time_item {
 				display: flex; /* Time on the left, details on the right */
 				align-items: center; /* Align the top edges */

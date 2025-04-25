@@ -105,11 +105,6 @@ class TelegramNotifierModel
             }
         }
 
-        // Additional user info
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'не вказано';
-        $message .= "\n🌐 <b>Провів часу на сторінці:</b> {$updateData['time_spent_formatted']}\n"
-            . "📱 <b>Пристрій користувача:</b> {$userAgent}\n";
-
         // --- Added section for detailed statistics ---
         $query = "SELECT 
                     COUNT(*) as guest_count,

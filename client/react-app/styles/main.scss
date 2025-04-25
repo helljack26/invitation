@@ -62,17 +62,18 @@ section {
 	min-height: 100vh;
 
 	@media screen and (max-width: 1200px) {
-	min-height: fit-content;
+		min-height: fit-content;
 	}
 }
+main {
+	button {
+		@include button-custom(1);
 
-button {
-	@include button-custom(1);
-
-	&.selected {
-		color: white;
-		user-select: none;
-		background-color: $pink-color !important;
+		&.selected {
+			color: white;
+			user-select: none;
+			background-color: $pink-color !important;
+		}
 	}
 }
 
@@ -216,6 +217,7 @@ html.has-scroll-dragging {
 }
 
 @import "./common/header.scss";
+@import "./common/scroll.scss";
 /* Each block’s SCSS */
 @import "./sections/HeroSection.scss";
 @import "./sections/WeddingDateAndTime.scss";

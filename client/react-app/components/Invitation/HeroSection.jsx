@@ -70,6 +70,8 @@ export const HeroSection = observer(() => {
 				</div>
 				<span className="city mobile">Київ</span>
 			</div>
+
+			<div className="scroll"></div>
 		</section>
 	);
 });

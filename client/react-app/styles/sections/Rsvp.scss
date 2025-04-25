@@ -1,11 +1,19 @@
 .rsvpBlock {
 	padding: 20px;
-	padding-bottom: 100px;
+	padding-bottom: 140px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-
+	min-height: 85vh;
+@media screen and (max-width: 1200px) {
+font-size: 0.9em;
+padding-bottom: 50px;
+padding-top: 0;
+}
+@media screen and (max-width: 992px) {
+font-size: 0.8em;
+}
 	@media screen and (max-width: 768px) {
 		max-width: 90%;
 		padding: 15px;
@@ -14,14 +22,16 @@
 	h3 {
 		font-size: 2em;
 		color: $primary-color;
+		text-align: center;
 	}
 
 	.guestContainer {
 		max-width: 700px;
 		width: 100%;
 		margin: 20px auto;
+		margin-bottom: 30px;
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		flex-direction: row;
 		gap: 3vw;
 
@@ -40,10 +50,10 @@
 				}
 
 				.guestName {
-					@include custom-svg-decorated-header($size: 40px, $offset: 10px);
+					@include custom-svg-decorated-header($size: 50px, $offset: 15px);
 					font-weight: bold;
 					color: $plain-text-color;
-					font-size: 1.7em;
+					font-size: 2.7em;
 					color: $pink-color;
 				}
 
@@ -197,7 +207,9 @@
 		}
 	}
 	.sendRvsp {
-		font-size: 1em;
-		padding: 20px 40px;
+		@include button-custom_pink;
+
+		font-size: 0.9em;
+		padding: 16px 36px;
 	}
 }
