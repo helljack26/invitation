@@ -5,50 +5,88 @@
 	justify-content: center;
 	position: relative;
 	width: 100%;
-	padding: 100px 2rem;
-	min-height: 80vh;
+	padding: 0 2rem;
+	padding-bottom: 60px;
+	min-height: fit-content;
+	height: 80vh;
+	max-height: 800px;
 	overflow-x: clip;
+	@media screen and (max-width: 992px) {
+		padding-top: 40px;
+	}
 	h2 {
 		@include headerWithRay($size: 90px, $offset: 20px);
 		font-size: 5rem;
 		color: $header-text-color; /* accent color */
 		margin-bottom: 60px;
 		@media screen and (max-width: 1500px) {
-		margin-bottom: 40px;
+			margin-bottom: 40px;
 		}
 	}
 
 	.gift_container {
-		display: flex;
+		display: grid;
 		justify-content: space-around;
 		align-items: center;
-		flex-direction: row;
 		column-gap: 4vw;
+		grid-template-columns: 1fr 1fr;
 
+		@media screen and (max-width: 1200px) {
+			grid-template-columns: 1fr;
+			column-gap: 2vw;
+		}
 		.gift_container_item {
-			.gift_images_wrapper {
-				display: inline-flex;
-
-				.gift_img {
-					position: relative;
-					height: 350px;
-					width: auto;
-					z-index: 1;
-					@media screen and (max-width: 1500px) {
-					height: 300px;
-					}
-					@media screen and (max-width: 768px) {
-						height: 400px;
-					}
-				}
-			}
 			p {
 				font-size: 3rem;
 				text-align: center;
 				color: $primary-color;
-				@media screen and (max-width: 768px) {
-					padding: 20px 0;
+
+				@media screen and (max-width: 1400px) {
+					font-size: 2.6rem;
 				}
+
+				@media screen and (max-width: 1200px) {
+					font-size: 2.4rem;
+				}
+			}
+			}
+		.gift_images_wrapper {
+			display: inline-flex;
+			@media screen and (max-width: 1200px) {
+				margin: 24px 0;
+			}
+
+			.gift_img {
+				position: relative;
+				width: auto;
+				z-index: 1;
+
+				@media screen and (max-width: 1500px) {
+					height: 100%;
+					}
+@media screen and (max-width: 1200px) {
+	height: 350px;
+}
+
+					@media screen and (max-width: 768px) {
+				height: auto;
+				width: 85vw;
+				}
+				}
+				}
+		.mobile {
+			display: none;
+
+			@media screen and (max-width: 1200px) {
+				display: flex;
+			}
+		}
+
+		.desktop {
+			display: inline-flex;
+
+			@media screen and (max-width: 1200px) {
+				display: none;
 			}
 		}
 	}

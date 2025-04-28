@@ -9,9 +9,17 @@
 	width: 100vw;
 	transition: all 0.8s ease;
 	font-size: 0.7em;
-	background-color: $bg-color-pink;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-		rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+	rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+	background-color: $bg-color-pink;
+
+	@media screen and (max-width: 768px) {
+
+		background-color: transparent;
+		box-shadow: none;
+
+	}
+
 
 	@media (max-width: 500px) {
 		width: 100vw;
@@ -27,6 +35,11 @@
 		flex-direction: row;
 		height: 100%;
 		position: relative;
+		@media screen and (max-width: 768px) {
+
+			justify-content: flex-end;
+		}
+
 		.logoButton {
 			transition: all 0.5s ease-in-out;
 			&:hover {
@@ -41,8 +54,8 @@
 			align-items: center;
 			flex-direction: row;
 			column-gap: 4vw;
-			@media (max-width: 880px) {
-				column-gap: 4vw;
+@media (max-width: 992px) {
+	column-gap: 2vw;
 			}
 			@media screen and (max-width: 768px) {
 				display: none;
@@ -146,88 +159,165 @@
 			}
 		}
 
-		.audio-player {
-			position: absolute;
-			top: 50%;
-			right: 2.8vw;
-			transform: translateY(-50%);
-			display: flex;
-			align-items: center;
-			gap: 0.6em;
-			background: rgba(#fff, 0.85);
-			padding: 0.4em;
-			border-radius: 1.6em;
-			box-shadow: 0 2px 10px rgba(#000, 0.2);
+		// Burger.scss
 
-			// ─── Play/Pause button ───
-			&__toggle {
-				width: 2.2em;
-				height: 2.2em;
-				background: $primary-color;
-				border: none;
-				border-radius: 50%;
+		$color: $primary-color; // dark color for the bars
+		$active: $pink-color; // color when open
+
+		.burgerWrapper {
+			/* e.g. align it */
+
+			display: none;
+
+			@media screen and (max-width: 768px) {
 				display: flex;
 				align-items: center;
-				justify-content: center;
-				cursor: pointer;
-				transition: transform 0.2s;
-
-				&:hover {
-					transform: scale(1.1);
+				padding: 15px;
+				background-color: rgba(255, 255, 255, 0.528);
+				border-radius: 50%;
+				margin-top: 16px;
+				box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+				rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+				}
 				}
 
-				.icon {
-					display: inline-block;
-					// we’ll size the CSS triangles by ems
-					font-size: 1em;
-				}
+				.toggle {
+					display: block;
+					cursor: pointer;
 
-				// ► Play triangle
-				.icon--play {
-					width: 0;
-					height: 0;
-					border-top: 0.5em solid transparent;
-					border-bottom: 0.5em solid transparent;
-					border-left: 0.8em solid #fff;
-				}
+			input {
+				display: none;
 
-				// ‖‖ Pause bars
-				.icon--pause {
-					width: 0.25em;
-					height: 1em;
-					background: #fff;
+				&+div {
+					width: 27px;
+					height: 27px;
 					position: relative;
 
-					&::after {
-						content: "";
+					div {
 						position: absolute;
-						left: 0.5em;
-						top: 0;
-						width: 0.25em;
-						height: 1em;
-						background: #fff;
-					}
-				}
-			}
+						inset: 0;
+						transition: transform 0.5s ease;
 
-			// ─── Equalizer bars ───
-			.equalizer {
-				display: flex;
-				align-items: flex-end;
-				height: 2em;
+						span {
+							display: block;
+							position: absolute;
+							left: -2px;
+							right: -3px;
 
-				.eq-bar {
-					width: 0.2em;
-					margin: 0 0.08em;
-					transform-origin: bottom center;
-					// start “flat”:
-					transform: scaleY(0);
-					background: linear-gradient(
-						to top,
-						darken($primary-color, 10%),
-						$primary-color
-					);
-					border-radius: 0.1em;
+							&:first-child {
+								top: 1px;
+
+								&:before,
+								&:after {
+									top: 0;
+								}
+							}
+
+							&:last-child {
+								bottom: 1px;
+
+								&:before,
+								&:after {
+									bottom: 0;
+								}
+							}
+
+							&:before,
+							&:after {
+								content: "";
+								display: block;
+								width: 49%;
+								height: 3px;
+								border-radius: 1.5px;
+								background: $color;
+								position: absolute;
+								transition: transform 0.5s ease,
+									background 0.4s ease;
+							}
+
+							&:before {
+								left: 0;
+								transform-origin: 0 50%;
+								transform: translate(1px, 0) scaleX(1.1);
+							}
+
+								&:after {
+									right: 0;
+									transform-origin: 100% 50%;
+									transform: translate(-1px, 0) scaleX(1.1);
+								}
+								}
+								}
+
+								svg {
+									display: block;
+									fill: none;
+									stroke: $color;
+									stroke-width: 2px;
+									width: 44px;
+									height: 44px;
+									stroke-linecap: round;
+						position: absolute;
+						left: 50%;
+						top: 50%;
+						margin: -22px 0 0 -22px;
+						stroke-dasharray: 0 82.801 8 82.801;
+						stroke-dashoffset: 82.801;
+						transform-origin: 50% 50%;
+						transition: stroke-dashoffset 0.5s ease,
+						stroke-dasharray 0.6s ease,
+						transform 0.5s ease,
+						stroke 0.4s ease;
+
+						&:nth-child(3) {
+							transform: rotate(180deg);
+						}
+						}
+						}
+
+						&:checked+div {
+							div {
+								transform: rotate(90deg);
+
+								span {
+
+									&:before,
+									&:after {
+										background: $active;
+									}
+
+									&:first-child {
+										&:before {
+											transform: rotate(45deg) translate(2.2px, -3px) scaleX(1.05);
+										}
+
+										&:after {
+											transform: rotate(-45deg) translate(-2.2px, -3px) scaleX(1.05);
+										}
+									}
+
+									&:last-child {
+										&:before {
+											transform: rotate(-45deg) translate(2.2px, 3px) scaleX(1.05);
+										}
+
+										&:after {
+											transform: rotate(45deg) translate(-2.2px, 3px) scaleX(1.05);
+										}
+									}
+								}
+							}
+
+					svg {
+						stroke-dashoffset: 62;
+						stroke-dasharray: 0 82.801 62 82.801;
+						transform: rotate(90deg);
+						stroke: $active;
+
+						&:nth-child(3) {
+							transform: rotate(270deg);
+						}
+						}
 				}
 			}
 		}
@@ -243,7 +333,6 @@
 		z-index: 999;
 		position: fixed;
 		top: 0px;
-		padding-top: 98px;
 		right: 0px;
 		bottom: 0px;
 		transform: translateX(100vw);
@@ -255,10 +344,9 @@
 		row-gap: 65px;
 		transition: all 0.8s ease;
 		background-color: #f7f3f4;
-		padding: 0px 20px;
 		transform: translateX(375px);
 		width: 375px;
-		padding-bottom: 72px;
+		padding: 100px 20px;
 
 		@media screen and (max-width: 450px) {
 			transform: translateX(100vw);
@@ -272,7 +360,6 @@
 			justify-content: space-between;
 			align-items: center;
 			flex-direction: column;
-			padding-top: 72px;
 			height: 100%;
 			a {
 				font-family: $fRegular;
@@ -280,6 +367,7 @@
 				line-height: 28px;
 				transition: all 0.3s ease-in-out;
 				opacity: 0.8;
+				color: $primary-color;
 				&:hover {
 					opacity: 1;
 					color: $cOrange;
@@ -297,7 +385,7 @@
 				}
 			}
 			.sideMenu_navlink_active {
-				-webkit-text-stroke: 1px black;
+				-webkit-text-stroke: 1px $primary-color;
 				transition: all 0.3s ease-in-out;
 				opacity: 1;
 			}
@@ -331,12 +419,6 @@
 
 .sideMenuOpen {
 	transform: translateX(0px);
-}
-
-.sideMenuDefault {
-	@media screen and (max-width: 768px) {
-		padding-top: 100px;
-	}
 }
 .sideMenuExpand {
 	@media screen and (max-width: 768px) {

@@ -6,46 +6,57 @@
 	justify-content: center;
 	align-items: center;
 	z-index: 10;
-	// min-height: 90vh;
 	overflow: clip;
+	height: 800px;
 	@media screen and (max-width: 1200px) {
 		min-height: 700px;
-	
 	}
 
 	.chat_block_bg {
 		position: absolute;
 		top: 0;
-		left: -5vw;
-		width: 110vw;
-		height: 800px;
+		left: 0;
+		width: 100%;
+		height: 720px;
 		z-index: 0;
 		img {
-			width: 100%;
+			width: auto;
+			position: absolute;
+			top: 80% !important;
+			transform: scale(2.6);
+			@media screen and (max-width: 1600px) {
+				transform: scale(2.5);
+				top: 75% !important;
+			}
+			@media screen and (max-width: 1500px) {
+				transform: scale(2.4);
+				top: 70% !important;
+			}
+			@media screen and (max-width: 1400px) {
+				transform: scale(2.3);
+				top: 65% !important;
+			}
+			@media screen and (max-width: 1300px) {
+				transform: scale(2);
+				top: 55% !important;
+			}
 		}
 	}
 
-	.chat_block_arrow {
-		position: absolute;
-		top: 46vh;
-		right: 6vw;
-		width: auto;
-		height: auto;
-		z-index: 1;
-		filter: invert(1);
-		transform: rotate(127deg) scale(1.4);
-	}
 	.chat_block_content {
 		z-index: 2;
 		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding-top: 240px;
+		padding-top: 90px;
+		@media screen and (max-width: 1200px) {
+			padding-top: 120px;
+		}
 
 		h2 {
 			@include headerWithRay($size: 80px, $offset: 30px);
-			font-size: 4rem;
+			font-size: 4.5rem;
 			color: white;
 
 			&::before,
@@ -55,18 +66,41 @@
 		}
 
 		p {
-			font-size: 2rem;
-			max-width: 700px;
+			font-size: 2.5rem;
+			max-width: 800px;
 			color: white;
 			margin-top: 50px;
 			margin-bottom: 30px;
 			text-align: center;
 		}
+		.chat_block_btn_wrapper {
+			position: relative;
+			a {
+				@include button-custom(5);
+				@include button-custom_pink;
+				padding: 20px 40px;
+			}
 
-		a {
-			@include button-custom(5);
-			@include button-custom_pink;
-			padding: 20px 40px;
+			.chat_block_arrow {
+				position: absolute;
+				top: -420%;
+				left: 220%;
+				width: auto;
+				height: auto;
+				z-index: 1;
+				filter: invert(1);
+				transform: rotate(127deg) scale(1.4);
+				@media screen and (max-width: 1400px) {
+					top: -400%;
+					left: 170%;
+					transform: rotate(127deg) scale(1.2);
+				}
+				@media screen and (max-width: 1200px) {
+					transform: rotate(127deg) scale(1);
+					left: 150%;
+				
+				}
+			}
 		}
 	}
 }

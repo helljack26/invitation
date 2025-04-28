@@ -1,7 +1,4 @@
-"use client"; // If you're using Next.js 13+ app router, you might need this at the top
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import I from "../../img/images";
 
 export const CoupleBlock = () => {
 	const [timeLeft, setTimeLeft] = useState({
@@ -45,14 +42,6 @@ export const CoupleBlock = () => {
 		>
 			<div className="couple_image_wrapper">
 				<div className="couple_image">
-
-				{/* Фото наречених. Замініть на свої */}
-				{/* <Image
-					className="couple_photo"
-					alt="bride groom child"
-					src={I.couple}
-					fill
-					/> */}
 					</div>
 			</div>
 

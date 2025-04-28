@@ -16,26 +16,32 @@
 	padding-left: 24px;
 	padding-right: 24px;
 	transition: $mainTransition;
+
 	&:focus-visible {
 		outline: none;
 	}
+
 	&:focus {
 		outline: none;
 		border: none;
 	}
+
 	&:active {
 		outline: none;
 		border: none;
 	}
+
 	&:hover {
 		outline: none;
 		border: none;
 	}
+
 	&::placeholder {
 		color: $cBlackSecond;
 		user-select: none;
 	}
 }
+
 @mixin mainInputIcon() {
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -78,6 +84,7 @@
 	mask-repeat: no-repeat;
 	mask-position: center;
 }
+
 // Define your SVG variants as data URIs.
 $custom-svg-button: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='62.955662'%20height='15.671738'%20viewBox='0%200%2062.955662%2015.671738'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g14'%20transform='matrix(2.9088361,-3.2389591,3.2389591,2.9088361,-325.2915,-4.2212396)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2054.57826,67.559114%20c%20-1.913377,-2.932743%20-7.04134,-7.12586%20-7.022649,-8.416316%200.04496,-3.104229%201.462816,-3.737719%209.616957,6.129591%202.337483,2.828583%20-1.051148,4.652013%20-2.594308,2.286725z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E";
 
@@ -94,13 +101,20 @@ $custom-svg-button5: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20wi
 @mixin button-custom($shape: 1) {
 	// Select the SVG based on the $shape parameter.
 	$svg: $custom-svg-button;
-	@if $shape == 2 {
+
+	@if $shape==2 {
 		$svg: $custom-svg-button2;
-	} @else if $shape == 3 {
+	}
+
+	@else if $shape==3 {
 		$svg: $custom-svg-button3;
-	} @else if $shape == 4 {
+	}
+
+	@else if $shape==4 {
 		$svg: $custom-svg-button4;
-	} @else if $shape == 5 {
+	}
+
+	@else if $shape==5 {
 		$svg: $custom-svg-button5;
 	}
 
@@ -120,9 +134,11 @@ $custom-svg-button5: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20wi
 	user-select: none;
 	z-index: 2;
 	position: relative;
+
 	span {
 		user-select: none;
 	}
+
 	&:hover {
 		background-color: $pink-color;
 		// optionally sharpen the shadow on hover
@@ -131,25 +147,31 @@ $custom-svg-button5: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20wi
 
 @mixin button-custom_pink() {
 	background-color: $pink-color;
+
 	&:hover {
 		background-color: $pink-color-hover;
 	}
 }
+
 // Helper function: Converts a color to a URL‑encoded string.
 // If given a color, it interpolates to a string and removes the "#"
 // (replaced with "%23" for URL encoding).
 
 // Helper function: encode a hex color for use in data URIs.
 @function encode-color($color) {
-	@if type-of($color) == "color" {
+	@if type-of($color)=="color" {
 		$color-string: "#{$color}";
-		@return "%23" + str-slice($color-string, 2);
-	} @else if type-of($color) == "string" {
+		@return "%23"+str-slice($color-string, 2);
+	}
+
+	@else if type-of($color)=="string" {
 		@if str-index($color, "#") {
-			@return "%23" + str-slice($color, 2);
+			@return "%23"+str-slice($color, 2);
 		}
+
 		@return $color;
 	}
+
 	@return $color;
 }
 
@@ -160,12 +182,10 @@ $custom-svg: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='100
 
 // Mixin: Apply the custom SVG to both sides of a header,
 // with the left side rotated 180 deg.
-@mixin custom-svg-decorated-header(
-	$size: 100px,
+@mixin custom-svg-decorated-header($size: 100px,
 	$offset: 12px,
 	// Gap between header text and decorative elements
-	$svg: $custom-svg
-) {
+	$svg: $custom-svg) {
 	position: relative;
 	text-align: center;
 	// Padding ensures the header text doesn't overlap the pseudo-elements.
@@ -207,7 +227,12 @@ $custom-svg: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='100
 	line-height: 120%;
 	width: fit-content;
 	margin: 0 auto;
+
 	@media screen and (max-width: 992px) {
-	font-size: 4.2rem;
+		font-size: 4.2rem;
+	}
+
+	@media screen and (max-width: 450px) {
+		font-size: 3.7rem;
 	}
 }

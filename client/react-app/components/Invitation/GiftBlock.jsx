@@ -13,9 +13,9 @@ export const GiftBlock = () => {
 			<div className="gift_container">
 				<div className="gift_container_item">
 					<p>Не турбуйтесь про вибір подарунку</p>
-					<div className="gift_images_wrapper">
+					<div className="gift_images_wrapper mobile">
 						<Image
-							className="gift_img mobile"
+							className="gift_img"
 							alt="Gift image"
 							src={I.gift_block_img}
 							height={400}
@@ -26,9 +26,9 @@ export const GiftBlock = () => {
 						<br /> $, є, грн., visa, mastercard :)
 					</p>
 				</div>
-				<div className="gift_images_wrapper">
+				<div className="gift_images_wrapper desktop">
 					<Image
-						className="gift_img desktop"
+						className="gift_img"
 						alt="Gift image"
 						src={I.gift_block_img}
 						height={350}

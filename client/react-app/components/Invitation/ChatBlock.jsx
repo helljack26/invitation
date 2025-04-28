@@ -14,13 +14,7 @@ export const ChatBlock = () => {
 				<Image
 					alt="bg big heart"
 					src={I.bg_heart_3}
-				/>
-			</div>
-			<div className="chat_block_arrow">
-				{/* Фото наречених. Замініть на свої */}
-				<Image
-					alt="swirl arrow bottom right icon"
-					src={I.swirl_arrow_icon}
+					fill
 				/>
 			</div>
 
@@ -30,13 +24,22 @@ export const ChatBlock = () => {
 					Приєднуйтесь до нашого телеграм-каналу з новинами! <br />
 					Також діліться відео та фото з нашого свята!
 				</p>
-				<a
-					href="https://t.me/yourTelegramChannel" // замініть на ваш канал
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<span>Приєднатися</span>
-				</a>
+				<div className="chat_block_btn_wrapper">
+					<a
+						href="https://t.me/yourTelegramChannel" // замініть на ваш канал
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<span>Приєднатися</span>
+					</a>
+					<div className="chat_block_arrow">
+						{/* Фото наречених. Замініть на свої */}
+						<Image
+							alt="swirl arrow bottom right icon"
+							src={I.swirl_arrow_icon}
+						/>
+					</div>
+				</div>
 			</div>
 		</section>
 	);
