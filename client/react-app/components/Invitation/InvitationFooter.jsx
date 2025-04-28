@@ -10,9 +10,9 @@ export const InvitationFooter = () => {
 			<p>Дякуємо, що розділите з нами радість цього незабутнього дня!</p>
 			<p>
 				З любов’ю
-				<br />
-				<strong>Марія і Дмитро</strong>
+			
 			</p>
+			<strong>Марія і Дмитро</strong>
 			{/* New paragraph for who created the invitations */}
 			<p className="creator">
 				© {new Date().getFullYear()} Запрошення створені Нареченими

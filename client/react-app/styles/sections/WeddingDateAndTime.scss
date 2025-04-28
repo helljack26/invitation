@@ -11,31 +11,106 @@
 	padding: 80px 20px;
 	padding-top: 30px;
 	overflow-x: clip;
+	max-height: 800px;
+
+	@media screen and (max-width: 1500px) {
+		padding-top: 60px;
+	}
+
 	@media screen and (max-width: 1200px) {
 		font-size: 0.9em;
-		padding-top: 50px;
+		padding-top: 20px;
 	}
+
 	@media screen and (max-width: 1100px) {
 		padding-top: 30px;
-	
 	}
+
+	@media screen and (max-width: 768px) {
+		padding-top: 60px;
+	}
+
+	@media screen and (max-width: 576px) {
+		padding-top: 40px;
+	}
+	@media screen and (max-width: 450px) {
+		padding: 0;
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+
 	.date_time_section_bg {
 		position: absolute;
-		top: -90px;
-		left: 0;
+		top: -40px;
+		left: 5vw;
 		width: 100vw;
 		height: 100%;
-		max-height: 950px;
+		max-height: 850px;
+
+		@media screen and (max-width: 1500px) {
+			top: -20px;
+			left: 1vw;
+		}
+
 		@media screen and (max-width: 1200px) {
-			top: -9%;
+			top: -4%;
 			max-height: 850px;
 		}
+
+		@media screen and (max-width: 992px) {
+			top: -3%;
+			left: -12vw;
+		}
+
+		@media screen and (max-width: 768px) {
+			left: -40vw;
+		}
+
+		@media screen and (max-width: 700px) {
+			left: -64vw;
+		}
+
+		@media screen and (max-width: 600px) {
+			left: -70vw;
+		}
+
+		@media screen and (max-width: 576px) {
+			top: -5%;
+		}
+		@media screen and (max-width: 450px) {
+			left: -85vw;
+		}
+
 		img {
-			transform: scale(1.1) scaleX(1.7) scaleY(0.9) rotate(6deg);
+			transform: scale(1.1) scaleX(1.7) scaleY(1) rotate(6deg);
 			user-select: none;
-			
+
+			@media screen and (max-width: 1500px) {
+				transform: scale(1.1) scaleX(2) scaleY(1) rotate(6deg);
+			}
+
 			@media screen and (max-width: 1400px) {
 				width: auto !important;
+			}
+
+			@media screen and (max-width: 1200px) {
+				transform: scale(1.1) scaleX(1.4) scaleY(1) rotate(5deg);
+			}
+
+			@media screen and (max-width: 992px) {
+				transform: scale(1.1) scaleX(1.4) scaleY(1) rotate(6deg);
+			}
+
+			@media screen and (max-width: 768px) {
+				transform: scale(1.05) scaleX(1.4) scaleY(1) rotate(6deg);
+			}
+
+			@media screen and (max-width: 576px) {
+				transform: scale(1) scaleX(1.4) scaleY(1) rotate(6deg);
+			}
+
+			@media screen and (max-width: 500px) {
+				transform: scale(1) scaleX(1.4) scaleY(1.15) rotate(6deg);
 			}
 		}
 	}
@@ -44,8 +119,13 @@
 		z-index: 1;
 
 		h1 {
-			@include headerWithRay($size: 110px, $offset: 12px);
+			@include headerWithRay($size: 110px, $offset: 5px);
 			color: $primary-color;
+
+			@media screen and (max-width: 450px) {
+				@include headerWithRay($size: 90px, $offset: 0px);
+
+			}
 
 			&::before,
 			&::after {
@@ -54,22 +134,49 @@
 		}
 
 		.schedule_container {
-			/* Gives a background to the entire schedule section, if desired */
 			padding: 3rem 2rem;
-			color: #fff; /* Ensure text contrasts with orange background */
+			color: #fff;
+
 			@media screen and (max-width: 992px) {
 				padding: 2rem 2rem;
-			
 			}
+
+			@media screen and (max-width: 576px) {
+				padding: 2rem 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+@media screen and (max-width: 400px) {
+font-size: 0.85em;
+}
 			.date_time_item {
-				display: flex; /* Time on the left, details on the right */
-				align-items: center; /* Align the top edges */
-				margin-bottom: 3rem; /* Spacing between each item */
+				display: flex;
+				/* Time on the left, details on the right */
+				align-items: center;
+				/* Align the top edges */
+				margin-bottom: 3rem;
+				/* Spacing between each item */
 				border-radius: 8px;
+
+				&:last-of-type {
+					@media screen and (max-width: 600px) {
+						margin-bottom: 1rem;
+					}
+					@media screen and (max-width: 450px) {
+						margin-bottom: 3rem;
+					}
+				}
+
 				.time_block {
 					font-size: 3em;
 					font-weight: bold;
+
+					@media screen and (max-width: 576px) {
+						font-size: 2.8em;
+					}
 				}
+
 				.line {
 					width: 30px;
 					height: 7px;
@@ -77,28 +184,44 @@
 					margin: 0 2vw;
 					content: "";
 					border-radius: 3.5px;
+					@media screen and (max-width: 400px) {
+						width: 25px;
+						margin: 0 3vw;
+					}
 				}
 
 				.event_details {
 					text-align: left;
+
 					h2 {
 						font-size: 2.2em;
-						text-transform: uppercase; /* If you want the event name in all caps */
+
+						@media screen and (max-width: 576px) {
+							font-size: 2em;
+						}
 					}
 
 					p {
 						padding-top: 6px;
 						padding-bottom: 16px;
 						font-size: 1.7em;
+
+						@media screen and (max-width: 576px) {
+							font-size: 1.5em;
+						}
 					}
 
 					.map_link {
 						@include button-custom(1);
-
 						text-decoration: none;
 						font-size: 1em;
+
+						@media screen and (max-width: 576px) {
+							font-size: 0.9em;
+						}
 					}
 				}
+
 				&:last-of-type {
 					.event_details {
 						.map_link {

@@ -1,32 +1,35 @@
 .rsvpBlock {
 	padding: 20px;
+	padding-top: 110px;
 	padding-bottom: 140px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	min-height: 85vh;
-@media screen and (max-width: 1200px) {
-font-size: 0.9em;
-padding-bottom: 50px;
-padding-top: 0;
-}
-@media screen and (max-width: 992px) {
-font-size: 0.8em;
-}
-	@media screen and (max-width: 768px) {
-		max-width: 90%;
-		padding: 15px;
-	}
+	min-height: fit-content;
+	height: 80vh;
+	max-height: 800px;
 
+	@media screen and (max-width: 1200px) {
+		font-size: 0.9em;
+		padding-top: 100px;
+		}
+
+		@media screen and (max-width: 992px) {
+		font-size: 0.85em;
+		padding-top: 100px;
+		}
 	h3 {
 		font-size: 2em;
 		color: $primary-color;
 		text-align: center;
+		@media screen and (max-width: 992px) {
+			padding: 0 15vw;
+		}
 	}
 
 	.guestContainer {
-		max-width: 700px;
+		max-width: 760px;
 		width: 100%;
 		margin: 20px auto;
 		margin-bottom: 30px;
@@ -35,6 +38,9 @@ font-size: 0.8em;
 		flex-direction: row;
 		gap: 3vw;
 
+		@media screen and (max-width: 768px) {
+			flex-direction: column;
+		}
 		.guestBlock {
 			min-width: 300px;
 			.guestRow {
@@ -75,6 +81,9 @@ font-size: 0.8em;
 							@include button-custom(5);
 							padding: 5px 40px;
 						}
+						@media screen and (max-width: 992px) {
+							font-size: 1.6em;
+						}
 					}
 				}
 			}
@@ -84,18 +93,14 @@ font-size: 0.8em;
 				flex-direction: column;
 				align-items: flex-start;
 				width: 100%;
-				margin-top: 20px;
-
-				@media screen and (max-width: 768px) {
-					text-align: center;
-				}
-
+				margin-top: 30px;
+				padding-left: 40px;
 				// Heading or text above the radios
 				p {
 					color: $plain-text-color;
 					font-family: $fRegular;
 					font-size: 1.3em;
-					margin-bottom: 24px;
+					margin-bottom: 16px;
 				}
 
 				// Each label wraps the hidden radio, the custom heart icon, and the label text
@@ -117,11 +122,6 @@ font-size: 0.8em;
 							}
 						}
 					}
-					@media screen and (max-width: 768px) {
-						display: block;
-						margin-bottom: 10px;
-					}
-
 					// Hide the native radio input
 					input[type="radio"] {
 						display: none;
@@ -138,10 +138,6 @@ font-size: 0.8em;
 						align-items: center;
 						justify-content: center;
 						transition: all 0.3s ease-in-out;
-						@media screen and (max-width: 768px) {
-							width: 28px;
-							height: 28px;
-						}
 
 						// Use ::before to render the SVG inline.
 						&::after,
@@ -175,12 +171,6 @@ font-size: 0.8em;
 						&:last-child {
 							font-size: 1.1em;
 						}
-
-						@media screen and (max-width: 768px) {
-							&:last-child {
-								font-size: 14px;
-							}
-						}
 					}
 				}
 
@@ -206,10 +196,13 @@ font-size: 0.8em;
 			}
 		}
 	}
-	.sendRvsp {
+	.send_rvsp {
 		@include button-custom_pink;
 
 		font-size: 0.9em;
 		padding: 16px 36px;
+		@media screen and (max-width: 992px) {
+			font-size: 1em;
+		}
 	}
 }

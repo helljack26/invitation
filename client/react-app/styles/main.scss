@@ -66,6 +66,7 @@ section {
 	}
 }
 main {
+	position: relative;
 	button {
 		@include button-custom(1);
 

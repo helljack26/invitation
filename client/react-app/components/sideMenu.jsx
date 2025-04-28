@@ -86,14 +86,6 @@ export const SideMenu = observer(() => {
 							);
 						})}
 				</nav>
-
-				<button
-					onClick={() => navigateTo("#getStartedForm")}
-					type="button"
-					className="sideMenu_header_button"
-				>
-					Apply
-				</button>
 			</div>
 		</>
 	);
