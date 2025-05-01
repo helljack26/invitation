@@ -9,11 +9,17 @@
 	flex-direction: column;
 	overflow-x: clip;
 	@media screen and (max-width: 1500px) {
-	padding-bottom: 0;
+		padding-bottom: 0;
 	}
 	@media screen and (max-width: 992px) {
-		padding-top: 5rem;
+		padding-top: 6rem;
 		padding-bottom: 0;
+	}
+	@media screen and (max-width: 600px) {
+		padding-top: 7rem;
+	}
+	@media screen and (max-width: 450px) {
+		padding-top: 8rem;
 	}
 
 	@mixin dress_code_block_bg {
@@ -28,12 +34,17 @@
 	.dress_code_block_women_bg {
 		@include dress_code_block_bg;
 		z-index: 1;
-
+		@media screen and (max-width: 768px) {
+			top: -30px;
+		}
 		img {
 			transform: scale(1.1) scaleX(1.7) scaleY(1.1) rotate(0deg);
 			user-select: none;
 			@media screen and (max-width: 992px) {
 				transform: scale(1.1) scaleX(1.2) scaleY(1) rotate(0deg);
+			}
+			@media screen and (max-width: 768px) {
+				transform: scale(1) scaleX(1.2) scaleY(1) rotate(0deg);
 			}
 		}
 	}
@@ -49,6 +60,10 @@
 			left: -14%;
 			top: 650px;
 		}
+		@media screen and (max-width: 768px) {
+			top: 600px;
+			left: -40%;
+		}
 		img {
 			transform: scale(1.1) scaleX(-1.7) scaleY(1.2) rotate(6deg);
 			filter: $pinkFilter;
@@ -58,9 +73,7 @@
 			}
 			@media screen and (max-width: 992px) {
 				transform: scale(1) scaleX(-1.2) scaleY(1) rotate(19deg);
-			
 			}
-			
 		}
 	}
 	.dress_code_block_women_bg,
@@ -77,11 +90,21 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding-top: 0px;
+		padding-top: 0;
+
 		h2 {
 			@include headerWithRay($size: 80px, $offset: 20px);
 			font-size: 4rem;
 			color: white;
+
+			@media screen and (max-width: 576px) {
+				@include headerWithRay($size: 70px, $offset: 15px);
+				font-size: 3.8rem;
+			}
+			@media screen and (max-width: 450px) {
+				@include headerWithRay($size: 60px, $offset: 12px);
+				font-size: 3.7rem;
+			}
 
 			&::before,
 			&::after {
@@ -90,14 +113,36 @@
 		}
 
 		p {
-			font-size: 2rem;
 			max-width: 700px;
 			color: white;
 			margin-top: 40px;
 			margin-bottom: 20px;
+			font-size: 2rem;
+
+			@media screen and (max-width: 768px) {
+				max-width: 96vw;
+			}
+			@media screen and (max-width: 576px) {
+				max-width: 94vw;
+				margin-top: 30px;
+				font-size: 1.8rem;
+			}
+			@media screen and (max-width: 450px) {
+				font-size: 1.6rem;
+				line-height: 110%;
+			}
 			b {
 				font-size: 2.7rem;
 				padding: 0 5px;
+				@media screen and (max-width: 576px) {
+					font-size: 2.5rem;
+				}
+				@media screen and (max-width: 450px) {
+					font-size: 2.3rem;
+				}
+				@media screen and (max-width: 450px) {
+					font-size: 2.1rem;
+				}
 			}
 		}
 
@@ -105,16 +150,33 @@
 			position: relative;
 			width: 800px;
 			height: 400px;
+
+			@media screen and (max-width: 576px) {
+				transform: scale(0.95) translateY(-15px);
+			}
+			@media screen and (max-width: 450px) {
+				transform: scale(0.8) translateY(-50px);
+			}
+
 			&:first-of-type {
 				margin-bottom: 250px;
 				@media screen and (max-width: 992px) {
 					margin-bottom: 200px;
+				}
+				@media screen and (max-width: 768px) {
+					margin-bottom: 120px;
+				}
+				@media screen and (max-width: 450px) {
+					margin-bottom: 85px;
 				}
 			}
 			&:last-of-type {
 				margin-bottom: 200px;
 				@media screen and (max-width: 992px) {
 					margin-bottom: 70px;
+				}
+				@media screen and (max-width: 450px) {
+					margin-bottom: 10px;
 				}
 			}
 			// We won’t use a simple horizontal row layout now because we want a scattered effect
@@ -125,6 +187,14 @@
 				@media screen and (max-width: 992px) {
 					width: 175px;
 					height: 175px;
+				}
+				@media screen and (max-width: 768px) {
+					width: 150px;
+					height: 150px;
+				}
+				@media screen and (max-width: 576px) {
+					width: 140px;
+					height: 140px;
 				}
 				.colorImage {
 					width: 100%;
@@ -162,11 +232,23 @@
 				@media screen and (max-width: 992px) {
 					left: 50px;
 				}
+				@media screen and (max-width: 768px) {
+					left: 120px;
+				}
+				@media screen and (max-width: 576px) {
+					left: 23%;
+				}
 			}
 
 			.color_item:nth-child(2) {
 				top: 40px;
 				left: 300px;
+				@media screen and (max-width: 768px) {
+					left: 330px;
+				}
+				@media screen and (max-width: 576px) {
+					top: 100px;
+				}
 			}
 
 			.color_item:nth-child(3) {
@@ -175,11 +257,24 @@
 				@media screen and (max-width: 992px) {
 					right: 50px;
 				}
+				@media screen and (max-width: 768px) {
+					right: 120px;
+				}
+				@media screen and (max-width: 576px) {
+					right: 23%;
+				}
 			}
 
 			.color_item:nth-child(4) {
 				top: 220px;
 				left: 150px;
+				@media screen and (max-width: 768px) {
+					top: 200px;
+					left: 190px;
+				}
+				@media screen and (max-width: 576px) {
+					top: 210px;
+				}
 			}
 
 			.color_item:nth-child(5) {
@@ -188,6 +283,14 @@
 				@media screen and (max-width: 992px) {
 					top: 220px;
 					right: 160px;
+				}
+				@media screen and (max-width: 768px) {
+					top: 200px;
+					right: 200px;
+				}
+				@media screen and (max-width: 576px) {
+					top: 230px;
+					right: 190px;
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 .rsvpBlock {
 	padding: 20px;
-	padding-top: 110px;
+	padding-top: 20px;
 	padding-bottom: 140px;
 	display: flex;
 	justify-content: center;
@@ -13,18 +13,31 @@
 	@media screen and (max-width: 1200px) {
 		font-size: 0.9em;
 		padding-top: 100px;
-		}
+	}
 
-		@media screen and (max-width: 992px) {
+	@media screen and (max-width: 992px) {
 		font-size: 0.85em;
 		padding-top: 100px;
-		}
+	}
+	@media screen and (max-width: 768px) {
+		padding-top: 70px;
+	}
+	@media screen and (max-width: 576px) {
+		padding-top: 80px;
+	}
 	h3 {
 		font-size: 2em;
 		color: $primary-color;
 		text-align: center;
 		@media screen and (max-width: 992px) {
 			padding: 0 15vw;
+		}
+		@media screen and (max-width: 768px) {
+			font-size: 1.7em;
+			padding: 0;
+		}
+		@media screen and (max-width: 450px) {
+			font-size: 1.5em;
 		}
 	}
 
@@ -61,6 +74,16 @@
 					color: $plain-text-color;
 					font-size: 2.7em;
 					color: $pink-color;
+					@media screen and (max-width: 768px) {
+						margin-bottom: 10px;
+					}
+					@media screen and (max-width: 576px) {
+						@include custom-svg-decorated-header(
+							$size: 30px,
+							$offset: 16px
+						);
+						font-size: 2.2em;
+					}
 				}
 
 				.guestRowButtons {
@@ -95,6 +118,13 @@
 				width: 100%;
 				margin-top: 30px;
 				padding-left: 40px;
+				@media screen and (max-width: 768px) {
+					padding-left: 0;
+					margin: 0 auto;
+					margin-top: 40px;
+					width: fit-content;
+					font-size: 1.2em;
+				}
 				// Heading or text above the radios
 				p {
 					color: $plain-text-color;
