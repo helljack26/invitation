@@ -14,6 +14,20 @@
 	@media screen and (max-width: 992px) {
 		padding-top: 40px;
 	}
+	@media screen and (max-width: 600px) {
+		padding-top: 0;
+	}
+	@media screen and (max-width: 576px) {
+		height: 600px;
+		padding: 0 2vw;
+		padding-bottom: 60px;
+	}
+	@media screen and (max-width: 450px) {
+		height: 500px;
+		padding: 0 4vw;
+		padding-bottom: 0px;
+	}
+
 	h2 {
 		@include headerWithRay($size: 90px, $offset: 20px);
 		font-size: 5rem;
@@ -21,6 +35,17 @@
 		margin-bottom: 60px;
 		@media screen and (max-width: 1500px) {
 			margin-bottom: 40px;
+		}
+		@media screen and (max-width: 992px) {
+			@include headerWithRay($size: 70px, $offset: 15px);
+			margin-bottom: 40px;
+		}
+		@media screen and (max-width: 450px) {
+			@include headerWithRay($size: 60px, $offset: 12px);
+			margin-bottom: 40px;
+		}
+		@media screen and (max-width: 450px) {
+			font-size: 3.5rem;
 		}
 	}
 
@@ -48,10 +73,23 @@
 				@media screen and (max-width: 1200px) {
 					font-size: 2.4rem;
 				}
+				@media screen and (max-width: 576px) {
+					font-size: 2.1rem;
+				}
+				@media screen and (max-width: 500px) {
+					font-size: 2rem;
+				}
+				@media screen and (max-width: 450px) {
+					font-size: 1.8rem;
+				}
+				@media screen and (max-width: 400px) {
+					font-size: 1.7rem;
+				}
 			}
-			}
+		}
 		.gift_images_wrapper {
-			display: inline-flex;
+			display: flex;
+			justify-content: center;
 			@media screen and (max-width: 1200px) {
 				margin: 24px 0;
 			}
@@ -63,17 +101,20 @@
 
 				@media screen and (max-width: 1500px) {
 					height: 100%;
-					}
-@media screen and (max-width: 1200px) {
-	height: 350px;
-}
+				}
+				@media screen and (max-width: 1200px) {
+					height: 350px;
+				}
 
-					@media screen and (max-width: 768px) {
-				height: auto;
-				width: 85vw;
+				@media screen and (max-width: 768px) {
+					height: auto;
+					width: 85vw;
 				}
+				@media screen and (max-width: 450px) {
+					width: 90vw;
 				}
-				}
+			}
+		}
 		.mobile {
 			display: none;
 

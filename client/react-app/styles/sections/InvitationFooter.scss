@@ -1,9 +1,10 @@
 .invitation_footer {
 	position: relative;
 	width: 100%;
-	padding: 200px 2rem;
 	text-align: center;
 	background-color: white;
+	padding: 200px 2rem;
+	padding-top: 0;
 	@media screen and (max-width: 1200px) {
 		padding-top: 250px;
 		font-size: 0.85em;
@@ -16,11 +17,11 @@
 		@media screen and (max-width: 992px) {
 			padding: 0 4vw;
 		}
-		}
+	}
 
-		strong {
-			@include headerWithRay($size: 80px, $offset: 30px);
-			color: $primary-color;
+	strong {
+		@include headerWithRay($size: 80px, $offset: 30px);
+		color: $primary-color;
 
 		&::before,
 		&::after {
