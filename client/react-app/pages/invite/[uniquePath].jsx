@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect,  useState} from "react";
 import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import { gsap, Power3 } from "gsap";
@@ -11,6 +11,7 @@ import { useUserGuestStore } from "../../stores/UserGuestStore";
 import { SmoothScrollProvider } from "../../stores/scroll";
 
 // Components
+import Loader from "../../components/Loader";
 import { Navbar } from "../../components/navbar";
 import { SideMenu } from "../../components/sideMenu";
 import { HeartsFalling } from "../../components/HeartsFalling";
@@ -28,7 +29,6 @@ import { GuestRSVP } from "../../components/Invitation/GuestRSVP";
 const InvitationPage = observer(() => {
 	const router = useRouter();
 	const { uniquePath } = router.query; // from URL: /invitation/[uniquePath]
-
 	const userGuestStore = useUserGuestStore();
 	const {
 		guestData,
@@ -38,7 +38,10 @@ const InvitationPage = observer(() => {
 		error,
 		isDirty,
 	} = userGuestStore;
+  
+  const [loaded, setLoaded] = useState(false);
 	// Fetch the guest whenever the URL param changes
+
 	useEffect(() => {
 		if (!uniquePath) return;
 		getGuestByUniquePath(uniquePath);
@@ -133,6 +136,7 @@ const InvitationPage = observer(() => {
 
 	return (
 		<>
+    {!loaded && <Loader onComplete={() => setLoaded(true)} />}
 			<Head>
 				<title>Запрошення на весілля</title>
 				<link

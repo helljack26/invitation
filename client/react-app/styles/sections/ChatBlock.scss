@@ -8,6 +8,7 @@
 	z-index: 10;
 	overflow: clip;
 	height: 800px;
+	min-height: 90vh;
 	@media screen and (max-width: 1200px) {
 		min-height: 700px;
 	}
@@ -21,40 +22,15 @@
 		left: 0;
 		width: 100%;
 		height: 720px;
-		z-index: 0;
-		@media screen and (max-width: 576px) {
-			left: -100px;
-		}
-		@media screen and (max-width: 450px) {
-			left: -150px;
-		}
-		@media screen and (max-width: 400px) {
-			left: -190px;
-		}
-		img {
+			transform-origin: center center;  
+			z-index: 0;
+	
+		svg {
 			width: auto;
 			position: absolute;
-			top: 80% !important;
-			transform: scale(2.6);
-			@media screen and (max-width: 1600px) {
-				transform: scale(2.5);
-				top: 75% !important;
-			}
-			@media screen and (max-width: 1500px) {
-				transform: scale(2.4);
-				top: 70% !important;
-			}
-			@media screen and (max-width: 1400px) {
-				transform: scale(2.3);
-				top: 65% !important;
-			}
-			@media screen and (max-width: 1300px) {
-				transform: scale(2);
-				top: 55% !important;
-			}
-			@media screen and (max-width: 768px) {
-				width: auto !important;
-			}
+			transform-origin: center center;  
+			left: 50%;
+			transform: translateX(-50%);
 		}
 	}
 
@@ -69,10 +45,10 @@
 			padding-top: 120px;
 		}
 		@media screen and (max-width: 768px) {
-			padding-top: 70px;
+			padding-top: 90px;
 		}
 		@media screen and (max-width: 400px) {
-			padding-top: 30px;
+			padding-top: 80px;
 		}
 
 		h2 {
@@ -128,7 +104,6 @@
 			@media screen and (max-width: 400px) {
 				margin-top: 20px;
 			}
-			
 		}
 		.chat_block_btn_wrapper {
 			position: relative;
@@ -158,8 +133,8 @@
 				}
 				@media screen and (max-width: 768px) {
 					left: 74%;
-				transform: rotate(163deg) scale(1);
-				top: 0%;
+					transform: rotate(163deg) scale(1);
+					top: 0%;
 				}
 			}
 		}

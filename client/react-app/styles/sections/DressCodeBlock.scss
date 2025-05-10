@@ -8,99 +8,161 @@
 	align-items: center;
 	flex-direction: column;
 	overflow-x: clip;
+
 	@media screen and (max-width: 1500px) {
 		padding-bottom: 0;
 	}
+
 	@media screen and (max-width: 992px) {
 		padding-top: 6rem;
 		padding-bottom: 0;
 	}
-	@media screen and (max-width: 600px) {
+
+	@media screen and (max-width: 768px) {
 		padding-top: 7rem;
 	}
+
+	@media screen and (max-width: 600px) {
+		padding-top: 120px;
+	}
+	@media screen and (max-width: 576px) {
+		padding-top: 110px;
+	}
+	
 	@media screen and (max-width: 450px) {
-		padding-top: 8rem;
+		padding-top: 120px;
 	}
 
-	@mixin dress_code_block_bg {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		height: 800px;
-	}
-
-	.dress_code_block_women_bg {
-		@include dress_code_block_bg;
-		z-index: 1;
-		@media screen and (max-width: 768px) {
-			top: -30px;
-		}
-		img {
-			transform: scale(1.1) scaleX(1.7) scaleY(1.1) rotate(0deg);
-			user-select: none;
-			@media screen and (max-width: 992px) {
-				transform: scale(1.1) scaleX(1.2) scaleY(1) rotate(0deg);
-			}
-			@media screen and (max-width: 768px) {
-				transform: scale(1) scaleX(1.2) scaleY(1) rotate(0deg);
-			}
-		}
-	}
-
-	.dress_code_block_men_bg {
-		@include dress_code_block_bg;
-		top: 650px;
-		height: 850px;
-		@media screen and (max-width: 1200px) {
-			top: 700px;
-		}
-		@media screen and (max-width: 992px) {
-			left: -14%;
-			top: 650px;
-		}
-		@media screen and (max-width: 768px) {
-			top: 600px;
-			left: -40%;
-		}
-		img {
-			transform: scale(1.1) scaleX(-1.7) scaleY(1.2) rotate(6deg);
-			filter: $pinkFilter;
-			user-select: none;
-			@media screen and (max-width: 1200px) {
-				transform: scale(1) scaleX(-1.2) scaleY(1.2) rotate(19deg);
-			}
-			@media screen and (max-width: 992px) {
-				transform: scale(1) scaleX(-1.2) scaleY(1) rotate(19deg);
-			}
-		}
-	}
-	.dress_code_block_women_bg,
-	.dress_code_block_men_bg {
-		img {
-			@media screen and (max-width: 1200px) {
-				width: auto !important;
-			}
-		}
-	}
 
 	.dress_code_content {
-		z-index: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 		padding-top: 0;
+
+		.dress_code_content_item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			&:first-of-type {
+				z-index: 1;
+			}
+		}
+
+		@mixin dress_code_block_bg {
+			position: absolute;
+			transform-origin: center center;  
+			left: 50%;
+			transform: translateX(-50%);
+			top: 0;
+			width: 100vw;
+			height: 800px;
+		}
+
+		.dress_code_block_women_bg {
+			@include dress_code_block_bg;
+			z-index: 1;
+
+			@media screen and (max-width: 576px) {
+				top: -30px;
+			}
+
+			svg {
+				transform: scale(1.1) scaleX(1.7) scaleY(1.1) rotate(0deg);
+				user-select: none;
+				max-height: 800px;
+
+				@media screen and (max-width: 992px) {
+					transform: scale(1.1) scaleX(1.2) scaleY(1) rotate(0deg);
+				}
+
+				@media screen and (max-width: 768px) {
+					transform: scale(1) scaleX(1.2) scaleY(1.1) rotate(0deg);
+				}
+				@media screen and (max-width: 600px) {
+					transform: scale(1) scaleX(1.2) scaleY(1.05) rotate(0deg);
+				}
+
+				@media screen and (max-width: 576px) {
+					transform: scale(1) scaleX(1.2) scaleY(1) rotate(0deg);
+				}
+			}
+		}
+
+		.dress_code_block_men_bg {
+			@include dress_code_block_bg;
+			top: 650px;
+			height: 900px;
+
+			@media screen and (max-width: 1200px) {
+				top: 650px;
+				left: 45%;
+			}
+				@media screen and (max-width: 992px) {
+				left: 35%;
+			}
+
+			@media screen and (max-width: 768px) {
+				top: 650px;
+				left: 10%;
+
+			}
+
+			@media screen and (max-width: 600px) {
+				top: 600px;
+				left: -7%;
+			}
+
+			@media screen and (max-width: 576px) {
+				top: 520px;
+			}
+			@media screen and (max-width: 450px) {
+				top: 570px;
+			}
+
+			svg {
+				transform: scale(1.1) scaleX(-1.7) scaleY(1.2) rotate(6deg);
+				filter: $pinkFilter;
+				user-select: none;
+				max-height: 850px;
+				width: 100%;
+
+				@media screen and (max-width: 1200px) {
+					transform: scale(1) scaleX(-1.2) scaleY(1.2) rotate(35deg);
+					max-height: 900px;
+				}
+
+				@media screen and (max-width: 992px) {
+					transform: scale(1) scaleX(-1.2) scaleY(1) rotate(35deg);
+				}
+				@media screen and (max-width: 768px) {
+					transform: scale(1) scaleX(-1.2) scaleY(1) rotate(23deg);
+				}
+				@media screen and (max-width: 600px) {
+					transform: scale(1) scaleX(-1.2) scaleY(1) rotate(30deg);
+				}
+			}
+		}
+
+		.dress_code_block_women_bg,
+		.dress_code_block_men_bg {
+			svg {
+				@media screen and (max-width: 1200px) {
+					width: auto !important;
+				}
+			}
+		}
 
 		h2 {
 			@include headerWithRay($size: 80px, $offset: 20px);
 			font-size: 4rem;
 			color: white;
+			z-index: 2;
+
 
 			@media screen and (max-width: 576px) {
 				@include headerWithRay($size: 70px, $offset: 15px);
 				font-size: 3.8rem;
 			}
+
 			@media screen and (max-width: 450px) {
 				@include headerWithRay($size: 60px, $offset: 12px);
 				font-size: 3.7rem;
@@ -118,84 +180,115 @@
 			margin-top: 40px;
 			margin-bottom: 20px;
 			font-size: 2rem;
+			z-index: 2;
+			position: relative;
 
 			@media screen and (max-width: 768px) {
-				max-width: 96vw;
-			}
-			@media screen and (max-width: 576px) {
 				max-width: 94vw;
-				margin-top: 30px;
 				font-size: 1.8rem;
+				line-height: 110%;
+			}
+
+			@media screen and (max-width: 576px) {
+				margin-top: 30px;
+				font-size: 1.6rem;
+			}
+
+			@media screen and (max-width: 500px) {
+				font-size: 1.4rem;
 			}
 			@media screen and (max-width: 450px) {
 				font-size: 1.6rem;
-				line-height: 110%;
+			margin-bottom: 40px;
+
 			}
+
 			b {
 				font-size: 2.7rem;
 				padding: 0 5px;
-				@media screen and (max-width: 576px) {
+
+				@media screen and (max-width: 768px) {
 					font-size: 2.5rem;
 				}
-				@media screen and (max-width: 450px) {
-					font-size: 2.3rem;
+				@media screen and (max-width: 576px) {
+					font-size: 2.4rem;
 				}
-				@media screen and (max-width: 450px) {
+
+				@media screen and (max-width: 500px) {
 					font-size: 2.1rem;
 				}
 			}
 		}
+		.block_colors_1 {
+			margin-bottom: 250px;
 
+			@media screen and (max-width: 992px) {
+				margin-bottom: 200px;
+			}
+
+			@media screen and (max-width: 600px) {
+				margin-bottom: 160px;
+			}
+			@media screen and (max-width: 576px) {
+				margin-bottom: 140px;
+			}
+
+			@media screen and (max-width: 450px) {
+				margin-bottom: 85px;
+			}
+		}
+
+		.block_colors_2 {
+			margin-bottom: 200px;
+
+			@media screen and (max-width: 992px) {
+				margin-bottom: 70px;
+			}
+
+			@media screen and (max-width: 450px) {
+				margin-bottom: 10px;
+			}
+		}
 		.dress_code_block_colors {
 			position: relative;
 			width: 800px;
 			height: 400px;
+			z-index: 2;
 
 			@media screen and (max-width: 576px) {
 				transform: scale(0.95) translateY(-15px);
 			}
+
 			@media screen and (max-width: 450px) {
-				transform: scale(0.8) translateY(-50px);
+				transform: scale(0.9) translateY(-50px);
+			}
+			@media screen and (max-width: 400px) {
+				transform: scale(0.8) translateY(-70px);
 			}
 
-			&:first-of-type {
-				margin-bottom: 250px;
-				@media screen and (max-width: 992px) {
-					margin-bottom: 200px;
-				}
-				@media screen and (max-width: 768px) {
-					margin-bottom: 120px;
-				}
-				@media screen and (max-width: 450px) {
-					margin-bottom: 85px;
-				}
-			}
-			&:last-of-type {
-				margin-bottom: 200px;
-				@media screen and (max-width: 992px) {
-					margin-bottom: 70px;
-				}
-				@media screen and (max-width: 450px) {
-					margin-bottom: 10px;
-				}
-			}
+			
+
 			// We won’t use a simple horizontal row layout now because we want a scattered effect
 			.color_item {
 				position: absolute;
 				width: 200px;
 				height: 200px;
+
 				@media screen and (max-width: 992px) {
 					width: 175px;
 					height: 175px;
 				}
+
 				@media screen and (max-width: 768px) {
 					width: 150px;
 					height: 150px;
 				}
+
 				@media screen and (max-width: 576px) {
 					width: 140px;
 					height: 140px;
 				}
+
 				.colorImage {
 					width: 100%;
 					height: 100%;
@@ -205,36 +298,33 @@
 
 			// Each nth-child gets a different heart mask + position
 			.color_item:nth-child(3n + 1) .colorImage {
-				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask.svg")
-					no-repeat center / contain;
-				mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat
-					center / contain;
+				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat center / contain;
+				mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat center / contain;
 			}
 
 			.color_item:nth-child(3n + 2) .colorImage {
-				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_1.svg")
-					no-repeat center / contain;
-				mask: url("../../img/dresscode/dresscode_heart_mask_1.svg")
-					no-repeat center / contain;
+				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_1.svg") no-repeat center / contain;
+				mask: url("../../img/dresscode/dresscode_heart_mask_1.svg") no-repeat center / contain;
 			}
 
 			.color_item:nth-child(3n) .colorImage {
-				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_2.svg")
-					no-repeat center / contain;
-				mask: url("../../img/dresscode/dresscode_heart_mask_2.svg")
-					no-repeat center / contain;
+				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_2.svg") no-repeat center / contain;
+				mask: url("../../img/dresscode/dresscode_heart_mask_2.svg") no-repeat center / contain;
 			}
 
 			// Now apply different random-ish top/left for each item
 			.color_item:nth-child(1) {
 				top: 10px;
 				left: 0;
+
 				@media screen and (max-width: 992px) {
 					left: 50px;
 				}
+
 				@media screen and (max-width: 768px) {
 					left: 120px;
 				}
+
 				@media screen and (max-width: 576px) {
 					left: 23%;
 				}
@@ -243,9 +333,11 @@
 			.color_item:nth-child(2) {
 				top: 40px;
 				left: 300px;
+
 				@media screen and (max-width: 768px) {
 					left: 330px;
 				}
+
 				@media screen and (max-width: 576px) {
 					top: 100px;
 				}
@@ -254,12 +346,15 @@
 			.color_item:nth-child(3) {
 				top: 20px;
 				right: 0;
+
 				@media screen and (max-width: 992px) {
 					right: 50px;
 				}
+
 				@media screen and (max-width: 768px) {
 					right: 120px;
 				}
+
 				@media screen and (max-width: 576px) {
 					right: 23%;
 				}
@@ -268,10 +363,12 @@
 			.color_item:nth-child(4) {
 				top: 220px;
 				left: 150px;
+
 				@media screen and (max-width: 768px) {
 					top: 200px;
 					left: 190px;
 				}
+
 				@media screen and (max-width: 576px) {
 					top: 210px;
 				}
@@ -280,14 +377,17 @@
 			.color_item:nth-child(5) {
 				top: 200px;
 				right: 135px;
+
 				@media screen and (max-width: 992px) {
 					top: 220px;
 					right: 160px;
 				}
+
 				@media screen and (max-width: 768px) {
 					top: 200px;
 					right: 200px;
 				}
+
 				@media screen and (max-width: 576px) {
 					top: 230px;
 					right: 190px;

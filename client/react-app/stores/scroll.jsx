@@ -33,7 +33,7 @@ export const SmoothScrollProvider = ({ children }) => {
                   },
                   tablet: {
                      smooth: false,
-                     breakpoint: 1100
+                     breakpoint: 1200
                   }
                });
 

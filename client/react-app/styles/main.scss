@@ -217,6 +217,7 @@ html.has-scroll-dragging {
 	bottom: 0;
 }
 
+@import "./common/loader.scss";
 @import "./common/header.scss";
 @import "./common/scroll.scss";
 /* Each block’s SCSS */

@@ -2,6 +2,8 @@
 import Image from "next/image";
 import I from "../../img/images";
 
+import GiftImg from "../../img/gift_block_img.svg";
+
 export const GiftBlock = () => {
 	return (
 		<section
@@ -14,10 +16,9 @@ export const GiftBlock = () => {
 				<div className="gift_container_item">
 					<p>Не турбуйтесь про вибір подарунку</p>
 					<div className="gift_images_wrapper mobile">
-						<Image
+						<GiftImg
 							className="gift_img"
 							alt="Gift image"
-							src={I.gift_block_img}
 							height={400}
 						/>
 					</div>
@@ -27,10 +28,9 @@ export const GiftBlock = () => {
 					</p>
 				</div>
 				<div className="gift_images_wrapper desktop">
-					<Image
+					<GiftImg
 						className="gift_img"
 						alt="Gift image"
-						src={I.gift_block_img}
 						height={350}
 					/>
 				</div>
