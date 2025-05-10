@@ -8,9 +8,11 @@
 	text-align: center;
 	position: relative;
 	z-index: 1;
-	padding: 80px 20px;
+	padding: 0 20px;
 	padding-top: 30px;
 	overflow-x: clip;
+	min-height: 800px;
+	height: 100vh;
 	max-height: 800px;
 
 	@media screen and (max-width: 1500px) {
@@ -30,14 +32,15 @@
 		padding-top: 60px;
 	}
 
-	@media screen and (max-width: 576px) {
-		padding-top: 40px;
-	}
 	@media screen and (max-width: 450px) {
 		padding: 0;
-		padding-top: 20px;
+		padding-top: 80px;
 		padding-bottom: 20px;
 	}
+	@media screen and (max-width: 400px) {
+		padding-top: 70px;
+	}
+	
 
 	.date_time_section_bg {
 		position: absolute;
@@ -81,9 +84,10 @@
 			left: -85vw;
 		}
 
-		img {
+		svg {
 			transform: scale(1.1) scaleX(1.7) scaleY(1) rotate(6deg);
 			user-select: none;
+			height: 850px;
 
 			@media screen and (max-width: 1500px) {
 				transform: scale(1.1) scaleX(2) scaleY(1) rotate(6deg);
@@ -95,6 +99,7 @@
 
 			@media screen and (max-width: 1200px) {
 				transform: scale(1.1) scaleX(1.4) scaleY(1) rotate(5deg);
+				height: 800px;
 			}
 
 			@media screen and (max-width: 992px) {
@@ -110,7 +115,7 @@
 			}
 
 			@media screen and (max-width: 500px) {
-				transform: scale(1) scaleX(1.4) scaleY(1.15) rotate(6deg);
+				transform: scale(1) scaleX(1.4) scaleY(1) rotate(6deg);
 			}
 		}
 	}

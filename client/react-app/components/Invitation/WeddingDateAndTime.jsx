@@ -4,7 +4,8 @@ import React from "react";
 
 // Images
 import Image from "next/image";
-import I from "../../img/images";
+
+import I from '../../img/images';
 
 export const WeddingDateAndTime = () => {
 	return (
@@ -15,12 +16,9 @@ export const WeddingDateAndTime = () => {
 		>
 			<div className="date_time_section_bg">
 				{/* Фото наречених. Замініть на свої */}
-				<Image
-					alt="bg paper texture"
-					src={I.bg_heart_2}
-					fill
-					priority
-				/>
+
+				<I.bg_heart_2  />
+
 			</div>
 
 			<div className="date_time_section_content">
@@ -29,13 +27,13 @@ export const WeddingDateAndTime = () => {
 				</h1>
 				<div className="schedule_container">
 					<div className="date_time_item">
-						<div className="time_block">12:00</div>
+						<div className="time_block">12:30</div>
 
 						<span className="line"></span>
 
 						<div className="event_details">
 							<h2>Розпис</h2>
-							<p>Подільський РАЦС</p>
+							<p>Подільський ДРАЦС</p>
 							<a
 								href="https://maps.app.goo.gl/kNo7nHinMg2YSkdo9"
 								target="_blank"
@@ -48,7 +46,7 @@ export const WeddingDateAndTime = () => {
 					</div>
 
 					<div className="date_time_item">
-						<div className="time_block">14:00</div>
+						<div className="time_block">14:30</div>
 
 						<span className="line"></span>
 

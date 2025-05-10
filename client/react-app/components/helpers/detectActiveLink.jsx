@@ -1,45 +1,54 @@
+// components/helpers/detectActiveLink.jsx
 import { useState, useEffect } from "react";
 import { menuData } from "../../res/menuLinks";
 
 export const detectActiveLink = ({ y }) => {
 	const [paragraphPosition, setParagraphPosition] = useState([]);
 	const [activeLink, setActiveLink] = useState(0);
-	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+	const [windowWidth, setWindowWidth] = useState(0);
 
-	// Update windowWidth on resize
+	// 1) Initialize & update windowWidth only on the client
 	useEffect(() => {
-		const handleResize = () => setWindowWidth(window.innerWidth);
+		if (typeof window === "undefined") return; // bail on server
+
+		const handleResize = () => {
+			setWindowWidth(window.innerWidth);
+		};
+
+		// set initial width & listen for changes
+		handleResize();
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
+	// 2) When windowWidth changes, recalc paragraph positions
 	useEffect(() => {
-		// Map over menuData and retrieve elements by id (removing '#' from linkHash)
-		const paragraphs = menuData.map((item) =>
-			document.getElementById(item.linkHash.slice(1))
-		);
-		// Ensure at least one element is available before proceeding
-		if (paragraphs.length && paragraphs[0]) {
-			const localPosition = paragraphs.map((p, index) => {
-				const offsetTop = p.offsetTop - 70;
-				// Use 0 for the first element; otherwise, use the computed offset
-				const paragraphBegin = index === 0 ? 0 : offsetTop;
-				const paragraphEnd = offsetTop + p.offsetHeight;
-				return { paragraphBegin, paragraphEnd };
-			});
-			setParagraphPosition(localPosition);
-		}
+		// find each section’s top & bottom
+		const paragraphs = menuData
+			.map((item) => document.getElementById(item.linkHash.slice(1)))
+			.filter(Boolean);
+
+		const positions = paragraphs.map((el, i) => {
+			const offsetTop = el.offsetTop - 70;
+			return {
+				paragraphBegin: i === 0 ? 0 : offsetTop,
+				paragraphEnd: offsetTop + el.offsetHeight,
+			};
+		});
+
+		setParagraphPosition(positions);
 	}, [windowWidth]);
 
+	// 3) On scroll y-change, pick the active section
 	useEffect(() => {
 		for (let i = 0; i < paragraphPosition.length; i++) {
 			const { paragraphBegin, paragraphEnd } = paragraphPosition[i];
-			if (paragraphBegin <= y && paragraphEnd >= y) {
+			if (y >= paragraphBegin && y <= paragraphEnd) {
 				setActiveLink(i);
 				return;
 			}
 		}
-		// If no section is currently active, set activeLink to undefined
+		// none matched
 		setActiveLink(undefined);
 	}, [y, paragraphPosition]);
 

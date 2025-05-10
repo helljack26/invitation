@@ -384,7 +384,8 @@
 				}
 			}
 			.sideMenu_navlink_active {
-				-webkit-text-stroke: 1px $primary-color;
+				color:$pink-color;
+				-webkit-text-stroke: 1px $pink-color;
 				transition: all 0.3s ease-in-out;
 				opacity: 1;
 			}

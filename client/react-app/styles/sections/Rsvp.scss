@@ -1,6 +1,6 @@
 .rsvpBlock {
 	padding: 20px;
-	padding-top: 20px;
+	padding-top: 170px;
 	padding-bottom: 140px;
 	display: flex;
 	justify-content: center;
@@ -17,10 +17,10 @@
 
 	@media screen and (max-width: 992px) {
 		font-size: 0.85em;
-		padding-top: 100px;
+		padding-top: 120px;
 	}
 	@media screen and (max-width: 768px) {
-		padding-top: 70px;
+		padding-top: 90px;
 	}
 	@media screen and (max-width: 576px) {
 		padding-top: 80px;
@@ -131,6 +131,7 @@
 					font-family: $fRegular;
 					font-size: 1.3em;
 					margin-bottom: 16px;
+					
 				}
 
 				// Each label wraps the hidden radio, the custom heart icon, and the label text

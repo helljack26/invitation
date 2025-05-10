@@ -1,5 +1,7 @@
-import I from "../../img/images";
 import Image from "next/image"; // Assuming you're using Next.js
+
+import I from "../../img/images";
+import BgHeart from "../../img/bg_heart_3.svg";
 
 // components/Invitation/ChatBlock.jsx
 export const ChatBlock = () => {
@@ -11,10 +13,8 @@ export const ChatBlock = () => {
 		>
 			<div className="chat_block_bg">
 				{/* Фото наречених. Замініть на свої */}
-				<Image
+				<I.bg_heart_3
 					alt="bg big heart"
-					src={I.bg_heart_3}
-					fill
 				/>
 			</div>
 
@@ -34,7 +34,7 @@ export const ChatBlock = () => {
 					</a>
 					<div className="chat_block_arrow">
 						{/* Фото наречених. Замініть на свої */}
-						<Image
+						<I.swirl_arrow_icon
 							alt="swirl arrow bottom right icon"
 							src={I.swirl_arrow_icon}
 						/>

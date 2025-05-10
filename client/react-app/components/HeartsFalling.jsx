@@ -29,19 +29,14 @@ export const HeartsFalling = observer(() => {
 		const id = Date.now() + Math.random();
 		const size = Math.floor(Math.random() * 25) + 15; // between 15px and 40px
 		const left = Math.random() * 100; // for positioning the heart container (in %)
-		// Horizontal animation: random start and end percentages
 		const startX = Math.random() * 100;
-		const endX = Math.random() * 60 + 20; // keep roughly centered
-		// Final vertical position near the bottom (80% to 95% of container height)
+		const endX = Math.random() * 60 + 20;
 		const endY = containerHeight * (Math.random() * 0.15 + 0.8);
-		// Use a slower fall duration (e.g. 8–11 seconds)
 		const duration = Math.random() * 3 + 8;
-		const delay = 0; // no extra delay once the heart is created
-		const rotation = Math.random() * 50 - 25; // random final rotation
+		const delay = 0;
+		const rotation = Math.random() * 50 - 25;
 
-		// Pick a random heart shape
-		const randomHeart =
-			heartsData[Math.floor(Math.random() * heartsData.length)];
+		const randomHeart = heartsData[Math.floor(Math.random() * heartsData.length)];
 
 		return {
 			id,
@@ -57,28 +52,24 @@ export const HeartsFalling = observer(() => {
 		};
 	};
 
-	// Add a new heart every 500ms (adjust as needed)
+	// Add a new heart every 500ms, but keep at most 500 hearts
 	useEffect(() => {
 		const interval = setInterval(() => {
 			const newHeart = createHeartData();
 			if (newHeart) {
-				setHearts((prev) => [...prev, newHeart]);
+				setHearts((prev) => {
+					const updated = [...prev, newHeart];
+					return updated.length > 100 ? updated.slice(-100) : updated;
+				});
 			}
 		}, 500);
 		return () => clearInterval(interval);
 	}, []);
 
 	return (
-		<div
-			ref={containerRef}
-			className="falling_hearts"
-		>
+		<div ref={containerRef} className="falling_hearts">
 			{hearts.map((heart) => (
-				<Heart
-					key={heart.id}
-					heart={heart}
-					containerRef={containerRef}
-				/>
+				<Heart key={heart.id} heart={heart} containerRef={containerRef} />
 			))}
 		</div>
 	);
@@ -89,7 +80,6 @@ const Heart = ({ heart, containerRef }) => {
 
 	useEffect(() => {
 		if (!heartRef.current || !containerRef.current) return;
-		// Animate the heart from above the container (y: -50) to its randomized endY.
 		gsap.fromTo(
 			heartRef.current,
 			{
@@ -128,10 +118,7 @@ const Heart = ({ heart, containerRef }) => {
 				fill={heart.randomHeart.color}
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<path
-					d={heart.randomHeart.path}
-					transform={heart.transform}
-				/>
+				<path d={heart.randomHeart.path} />
 			</svg>
 		</div>
 	);
