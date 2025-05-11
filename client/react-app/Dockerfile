@@ -1,23 +1,13 @@
-# Use a lightweight Node.js image
-FROM node:18-alpine
-
-# Set working directory
+# ---------- Build ----------  
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copy package.json first to leverage Docker layer caching
-COPY package.json package-lock.json ./
-
-# Install dependencies
-RUN npm install --legacy-peer-deps
-
-# Copy all project files
+COPY package*.json ./
+ENV NODE_ENV=production
+RUN npm ci --legacy-peer-deps
 COPY . .
-
-# Ensure all dependencies are properly installed
-RUN npm rebuild && npm install @babel/runtime
-
-# Expose Next.js port
-EXPOSE 3000
-
-# Start the Next.js app
-CMD ["npm", "run", "dev"]
+RUN npm run build 
+# ---------- Serve ----------  
+FROM nginx:stable-alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx","-g","daemon off;"]
