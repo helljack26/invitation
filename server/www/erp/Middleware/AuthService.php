@@ -108,8 +108,8 @@ class AuthService
     public function generateTemporaryToken($userId)
     {
         $payload = [
-            "iss" => "http://localhost",
-            "aud" => "http://localhost",
+            "iss" => "https://maria-dima-wedding.com.ua",
+            "aud" => "https://maria-dima-wedding.com.ua",
             "iat" => time(),
             "exp" => time() + (60 * 60), // Token expires in 1 hour
             "data" => [

@@ -11,7 +11,7 @@ html {
 }
 
 body {
-	overflow-x: hidden;
+	overflow: hidden;
 	margin: 0;
 	padding: 0;
 	scroll-behavior: smooth;
@@ -41,6 +41,13 @@ body {
 		);
 		background: linear-gradient(180deg, $pink-color, $primary-color);
 	}
+}
+html,
+body {
+	height: 100%;
+	overflow: hidden; /* ↪️ disable all native scrolling */
+	margin: 0;
+	padding: 0;
 }
 
 p,
@@ -163,6 +170,10 @@ html.has-scroll-dragging {
 	transition: transform 0.3s, opacity 0.3s;
 	opacity: 0;
 	z-index: 1000;
+
+	&:last-of-type {
+		display: none !important;
+	}
 }
 
 .c-scrollbar:hover {

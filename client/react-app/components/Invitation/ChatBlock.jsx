@@ -36,7 +36,6 @@ export const ChatBlock = () => {
 						{/* Фото наречених. Замініть на свої */}
 						<I.swirl_arrow_icon
 							alt="swirl arrow bottom right icon"
-							src={I.swirl_arrow_icon}
 						/>
 					</div>
 				</div>

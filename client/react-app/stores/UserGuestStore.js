@@ -4,7 +4,7 @@ import axios from "axios";
 import { createContext, useContext } from "react";
 
 class UserGuestStore {
-	apiUrl = "http://127.0.0.1";
+	apiUrl = "https://maria-dima-wedding.com.ua";
 	guestData = null; // For single guest details
 	loading = true;
 	error = null;
@@ -42,6 +42,10 @@ class UserGuestStore {
 				this.isDirty = false; // fresh data is synced
 			});
 		} catch (err) {
+			console.log(
+				"🚀 ~ UserGuestStore ~ getGuestByUniquePath= ~ err:",
+				err
+			);
 			runInAction(() => {
 				this.error = err;
 				this.loading = false;

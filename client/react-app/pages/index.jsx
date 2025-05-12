@@ -1,21 +1,11 @@
-// pages/index.js
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-import EnvelopeLoader from '../components/EnvelopeLoader';
+import dynamic from 'next/dynamic'
 
-// Replace with your actual invitation page component
+// import the real component, not the page file:
 const InvitationPage = dynamic(
-  () => import('../invitation/[uniquePath]'),
+  () => import('../components/InvitationPage'),
   { ssr: false }
-);
+)
 
 export default function Home() {
-  const [loaded, setLoaded] = useState(false);
-
-  return (
-    <>
-      {!loaded && <EnvelopeLoader onComplete={() => setLoaded(true)} />}
-      {loaded && <InvitationPage />}
-    </>
-  );
+  return <InvitationPage /* you can pass a code if you know one */ />
 }

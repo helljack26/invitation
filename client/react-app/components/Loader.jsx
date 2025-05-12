@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef } from "react";
 import LoaderHeart from "../img/loader_heart.svg";
 import LoaderText from "../img/loader_text.svg";
@@ -19,8 +17,8 @@ export default function Loader() {
       gsap.registerPlugin(DrawSVGPlugin);
 
       const heartWrapperEl = heartWrapperRef.current;
-      const heartEl = heartRef.current;
-      const textEl         = textRef.current;
+	  const heartEl = heartWrapperEl.querySelector('.loader__heart');
+	  const textEl = heartWrapperEl.querySelector('.loader__text-container');
       const paths          = textEl.querySelectorAll("path");
 
       paths.forEach((p) => {
@@ -102,8 +100,8 @@ export default function Loader() {
   return (
     <div ref={loaderRef} className="loader">
       <div className="loader__heart-wrapper" ref={heartWrapperRef}>
-        <LoaderHeart className="loader__heart"  ref={heartRef}/>
-        <div ref={textRef} className="loader__text-container">
+        <LoaderHeart className="loader__heart"  />
+        <div  className="loader__text-container">
           <LoaderText className="loader__text" width={220} height={'100%'}/>
         </div>
       </div>

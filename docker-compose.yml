@@ -1,93 +1,111 @@
 version: "3.8"
 
 services:
-  mysql:
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    env_file:
-      - .env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_PASSWORD:      ${MYSQL_PASSWORD}
-      MYSQL_DATABASE:      ${MYSQL_DATABASE}
-      TZ:                  ${TZ}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
+   mysql:
+      image: mysql:8.0
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      env_file:
+         - .env
+      environment:
+         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+         MYSQL_DATABASE: ${MYSQL_DATABASE}
+         MYSQL_USER: appuser
+         TZ: ${TZ}
+      ports:
+         - "3306:3306"
+      volumes:
+         - mysql_data:/var/lib/mysql
+      mem_limit: 512m
 
-  phpmyadmin:
-    container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
-    env_file:
-      - .env
-    environment:
-      PMA_HOST:     ${DB_HOST}
-      UPLOAD_LIMIT: 500M
-    ports:
-      - "8082:80"
+   phpmyadmin:
+      container_name: phpmyadmin
+      image: phpmyadmin/phpmyadmin:latest
+      env_file:
+         - .env
+      depends_on:
+         - mysql
+      links:
+         - mysql
+      environment:
+         PMA_HOST: mysql
+         PMA_PORT: 3306
+         PMA_USER: root
+         PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+         UPLOAD_LIMIT: 500M
+      ports:
+         - "8082:80"
+      volumes:
+         - ./server/phpmyadmin-servername.conf:/etc/apache2/conf-available/servername.conf:ro
+         - ./phpmyadmin/config.secret.inc.php:/etc/phpmyadmin/config.secret.inc.php:ro
+      command: >
+         sh -c "a2enconf servername &&
+                apache2-foreground"
 
-  php:
-    build: ./server/images
-    env_file:
-      - .env
-    depends_on:
-      - mysql
-    environment:
-      DB_HOST:          ${DB_HOST}
-      DB_DATABASE:      ${DB_DATABASE}
-      DB_USERNAME:      ${DB_USERNAME}
-      DB_PASSWORD:      ${DB_PASSWORD}
-      API_SECRET:       ${API_SECRET}
-      REDIS_SERVERS:    ${REDIS_SERVERS}
-      PHP_MEMORY_LIMIT: ${PHP_MEMORY_LIMIT}
-      ENCRYPTION_KEY:   ${ENCRYPTION_KEY}
-    volumes:
-      - ./server/www:/var/www
-      - ./server/www/erp/certs:/etc/ssl/certs:rw
-      - ./server/images/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
-      - ./tmp/nomenclature_images:/tmp/nomenclature_images
+   php:
+      build: ./server/images
+      env_file:
+         - .env
+      depends_on:
+         - mysql
+      environment:
+         DB_HOST: ${DB_HOST}
+         DB_DATABASE: ${DB_DATABASE}
+         DB_USERNAME: ${DB_USERNAME}
+         DB_PASSWORD: ${DB_PASSWORD}
+         API_SECRET: ${API_SECRET}
+         REDIS_SERVERS: ${REDIS_SERVERS}
+         PHP_MEMORY_LIMIT: ${PHP_MEMORY_LIMIT}
+         ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      volumes:
+         - ./server/www:/var/www:ro
+         - ./server/images/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+         - ./tmp/nomenclature_images:/tmp/nomenclature_images
+      command: ["php-fpm"]
 
-  nginx:
-    image: nginx:latest
-    env_file:
-      - .env
-    depends_on:
-      - php
-    environment:
-      DB_HOST:     ${DB_HOST}
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./server/hosts:/etc/nginx/conf.d:ro
-      - ./server/www:/var/www
-      - ./server/logs:/var/log/nginx
+   nginx:
+      image: nginx:latest
+      env_file:
+         - .env
+      depends_on:
+         - react-app
+         - php
+      environment:
+         DB_HOST: ${DB_HOST}
+         DB_DATABASE: ${DB_DATABASE}
+         DB_USERNAME: ${DB_USERNAME}
+         DB_PASSWORD: ${DB_PASSWORD}
+      ports:
+         - "80:80"
+         - "443:443"
+      volumes:
+         - ./server/hosts:/etc/nginx/conf.d:ro
+         - ./server/www:/var/www:ro # SAME path php uses
+         - /etc/letsencrypt:/etc/letsencrypt:ro # TLS certs
 
-  react-app:
-    build:
-      context: ./client/react-app
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    depends_on:
-      - nginx
-      - php
-    environment:
-      WATCHPACK_POLLING: ${WATCHPACK_POLLING}
-      NODE_ENV:         ${NODE_ENV}
-      REACT_APP_PATH:   ${REACT_APP_PATH}
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client/react-app:/app
-      - /app/node_modules
-
+   react-app:
+      build:
+         context: ./client/react-app
+         dockerfile: Dockerfile
+      volumes:
+         - ./client/react-app:/app # mount your code for live updates
+         - /app/node_modules
+      image: wedding-next-ssr:latest
+      container_name: nextjs
+      env_file:
+         - .env
+      depends_on:
+         - php
+         - mysql
+      environment:
+         # NODE_ENV: production
+         NODE_ENV: development
+      ports:
+         - "3000:3000"
+      restart: unless-stopped
+      command: ["npm", "run", "dev"]
 # ← This section must not be indented under "services":
 volumes:
-  mysql_data:
-  rabbitmq_data:
+   mysql_data:
+   rabbitmq_data:

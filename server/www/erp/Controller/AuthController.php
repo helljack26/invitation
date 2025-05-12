@@ -114,7 +114,7 @@ class AuthController
     private function generateJWT($userId)
     {
         $key = getenv('API_SECRET');
-        $FRONT_URL = getenv('FRONT_URL') ?: ($_SERVER['HTTP_HOST'] ?? '127.0.0.1');
+        $FRONT_URL = getenv('FRONT_URL') ?: ($_SERVER['HTTP_HOST'] ?? 'maria-dima-wedding.com.ua');
 
         $payload = [
             "iss" => "http://$FRONT_URL",
@@ -132,7 +132,7 @@ class AuthController
     // Placeholder for your existing cookie-setting logic
     private function setCookie($jwt)
     {
-        setcookie("token", $jwt, 0, "/", '127.0.0.1', false, true);
+        setcookie("token", $jwt, 0, "/", 'maria-dima-wedding.com.ua', false, true);
     }
 
     public function logout()
