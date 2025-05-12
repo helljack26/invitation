@@ -5,7 +5,7 @@ import axios from "axios";
 import { authAxiosConfig } from "./authAxiosConfig";
 
 class Auth {
-	apiUrl = "http://127.0.0.1";
+	apiUrl = "https://maria-dima-wedding.com.ua";
 	isAuthenticated = false;
 	appPath = process.env.REACT_APP_PATH;
 	axiosConfig = authAxiosConfig;
@@ -37,6 +37,7 @@ class Auth {
 				return response;
 			}
 		} catch (error) {
+			console.log("🚀 ~ Auth ~ loginUser= ~ error:", error);
 			return error.response;
 		}
 	};

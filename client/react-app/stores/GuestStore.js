@@ -4,7 +4,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { authAxiosConfig } from "./authAxiosConfig";
 
 class Guest {
-	apiUrl = "http://127.0.0.1";
+	apiUrl = "https://maria-dima-wedding.com.ua";
 	guestData = null; // For single guest details
 	guestsList = []; // For list of guests
 	loading = true;

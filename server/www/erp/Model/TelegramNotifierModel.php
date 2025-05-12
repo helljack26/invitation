@@ -133,7 +133,7 @@ class TelegramNotifierModel
         // --- End of added section ---
 
         // Append link to admin panel
-        $message .= "\n🔗 <a href=\"http://127.0.0.1:3000/admin\">Перейти до адмін панелі</a>";
+        $message .= "\n🔗 <a href=\"https://maria-dima-wedding.com.ua/admin\">Перейти до адмін панелі</a>";
 
         return $message;
     }

@@ -28,11 +28,10 @@
 	@media screen and (max-width: 576px) {
 		padding-top: 110px;
 	}
-	
+
 	@media screen and (max-width: 450px) {
 		padding-top: 120px;
 	}
-
 
 	.dress_code_content {
 		padding-top: 0;
@@ -49,7 +48,7 @@
 
 		@mixin dress_code_block_bg {
 			position: absolute;
-			transform-origin: center center;  
+			transform-origin: center center;
 			left: 50%;
 			transform: translateX(-50%);
 			top: 0;
@@ -96,14 +95,13 @@
 				top: 650px;
 				left: 45%;
 			}
-				@media screen and (max-width: 992px) {
+			@media screen and (max-width: 992px) {
 				left: 35%;
 			}
 
 			@media screen and (max-width: 768px) {
 				top: 650px;
 				left: 10%;
-
 			}
 
 			@media screen and (max-width: 600px) {
@@ -157,7 +155,6 @@
 			color: white;
 			z-index: 2;
 
-
 			@media screen and (max-width: 576px) {
 				@include headerWithRay($size: 70px, $offset: 15px);
 				font-size: 3.8rem;
@@ -199,8 +196,7 @@
 			}
 			@media screen and (max-width: 450px) {
 				font-size: 1.6rem;
-			margin-bottom: 40px;
-
+				margin-bottom: 40px;
 			}
 
 			b {
@@ -266,8 +262,6 @@
 				transform: scale(0.8) translateY(-70px);
 			}
 
-			
-
 			// We won’t use a simple horizontal row layout now because we want a scattered effect
 			.color_item {
 				position: absolute;
@@ -293,24 +287,27 @@
 					width: 100%;
 					height: 100%;
 					object-fit: cover;
+					mask-position: center;
+					mask-repeat: no-repeat;
+					mask-size: contain;
 				}
 			}
 
 			// Each nth-child gets a different heart mask + position
-			.color_item:nth-child(3n + 1) .colorImage {
-				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat center / contain;
-				mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat center / contain;
-			}
+			// .color_item:nth-child(3n + 1) .colorImage {
+			// 	-webkit-mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat center / contain;
+			// 	mask: url("../../img/dresscode/dresscode_heart_mask.svg") no-repeat center / contain;
+			// }
 
-			.color_item:nth-child(3n + 2) .colorImage {
-				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_1.svg") no-repeat center / contain;
-				mask: url("../../img/dresscode/dresscode_heart_mask_1.svg") no-repeat center / contain;
-			}
+			// .color_item:nth-child(3n + 2) .colorImage {
+			// 	-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_1.svg") no-repeat center / contain;
+			// 	mask: url("../../img/dresscode/dresscode_heart_mask_1.svg") no-repeat center / contain;
+			// }
 
-			.color_item:nth-child(3n) .colorImage {
-				-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_2.svg") no-repeat center / contain;
-				mask: url("../../img/dresscode/dresscode_heart_mask_2.svg") no-repeat center / contain;
-			}
+			// .color_item:nth-child(3n) .colorImage {
+			// 	-webkit-mask: url("../../img/dresscode/dresscode_heart_mask_2.svg") no-repeat center / contain;
+			// 	mask: url("../../img/dresscode/dresscode_heart_mask_2.svg") no-repeat center / contain;
+			// }
 
 			// Now apply different random-ish top/left for each item
 			.color_item:nth-child(1) {
