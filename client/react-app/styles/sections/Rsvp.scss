@@ -53,6 +53,7 @@
 
 		@media screen and (max-width: 768px) {
 			flex-direction: column;
+			gap: 40px;
 		}
 		.guestBlock {
 			min-width: 300px;
@@ -131,7 +132,6 @@
 					font-family: $fRegular;
 					font-size: 1.3em;
 					margin-bottom: 16px;
-					
 				}
 
 				// Each label wraps the hidden radio, the custom heart icon, and the label text
@@ -153,6 +153,26 @@
 							}
 						}
 					}
+					@media screen and (max-width: 1200px) {
+						&:hover {
+							color: $plain-text-color;
+
+							.customRadio {
+								&::after {
+									opacity: 0;
+								}
+							}
+						}
+						&:active {
+							color: $pink-color;
+
+							.customRadio {
+								&::after {
+									opacity: 1;
+								}
+							}
+						}
+					}
 					// Hide the native radio input
 					input[type="radio"] {
 						display: none;
@@ -162,41 +182,49 @@
 					// These variables must point to your external heart files.
 
 					// The container that will display the heart icon via a pseudo-element.
+					// 1) URL-encode (or base64-encode) your two SVGs and drop them into variables:
+
 					.customRadio {
+						position: relative;
 						width: 40px;
 						height: 40px;
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						transition: all 0.3s ease-in-out;
 
-						// Use ::before to render the SVG inline.
-						&::after,
-						&::before {
-							transition: all 0.3s ease-in-out;
-							display: block;
-							transform: scale(0.7);
+						&::before,
+						&::after {
+							content: "";
 							position: absolute;
-							top: -5px;
-							left: -5px;
+							top: 0;
+							left: 0;
+							width: 100%;
+							height: 100%;
+							background-repeat: no-repeat;
+							background-position: center;
+							background-size: contain;
+							transition: opacity 0.3s ease-in-out;
 						}
+
+						// outline heart by default
 						&::before {
-							content: url("../../img/radio_small_outline_heart.svg");
-							z-index: 0;
+							background-image: url("/img/radio_small_outline_heart.svg");
+							opacity: 1;
+						}
+						// filled heart hidden initially
+						&::after {
+							background-image: url("/img/radio_small_filled_heart.svg");
+							opacity: 0;
+						}
+					}
+					input[type="radio"]:checked + .customRadio {
+						&::before {
+							opacity: 0;
 						}
 						&::after {
-							content: url("../../img/radio_small_filled_heart.svg");
-							opacity: 0;
-							z-index: 1;
+							opacity: 1;
 						}
 					}
-
-					// When the radio is checked, update the pseudo-element to show the filled heart.
-					input[type="radio"]:checked + .customRadio::before {
-						transition: all 0.3s ease-in-out;
-						content: url("../../img/radio_small_filled_heart.svg");
-					}
-
 					// Label text styling
 					span {
 						&:last-child {

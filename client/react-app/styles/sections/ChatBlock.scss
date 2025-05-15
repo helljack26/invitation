@@ -69,8 +69,8 @@
 				font-size: 3rem !important;
 			}
 			@media screen and (max-width: 400px) {
-				@include headerWithRay($size: 40px, $offset: 22px);
-				font-size: 2.7rem !important;
+				@include headerWithRay($size: 40px, $offset: 18px);
+				font-size: 2.5rem !important;
 			}
 			&::before,
 			&::after {
@@ -85,6 +85,7 @@
 			margin-top: 50px;
 			margin-bottom: 30px;
 			text-align: center;
+			line-height: 120%;
 			@media screen and (max-width: 992px) {
 				max-width: 96vw;
 			}
@@ -111,6 +112,10 @@
 				@include button-custom(5);
 				@include button-custom_pink;
 				padding: 20px 40px;
+				@media screen and (max-width: 450px) {
+					padding: 18px 40px;
+				
+				}
 			}
 
 			.chat_block_arrow {
@@ -135,6 +140,10 @@
 					left: 74%;
 					transform: rotate(163deg) scale(1);
 					top: 0%;
+				}
+				svg{
+					height: 450px;
+					width: auto;
 				}
 			}
 		}

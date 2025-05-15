@@ -53,6 +53,7 @@ export const HeroSection = observer(() => {
 					<h2>
 						Щиро запрошуємо {guestData.first_name_plus_1 ? "Вас" : "Тебе"}{" "}
 						на наше весілля <br />
+						Яке відбудеться<br />
 						<span>21.06.2025</span>
 					</h2>
 					<span className="city desktop">Київ</span>

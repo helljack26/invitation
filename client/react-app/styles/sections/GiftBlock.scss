@@ -41,11 +41,9 @@
 			margin-bottom: 40px;
 		}
 		@media screen and (max-width: 450px) {
-			@include headerWithRay($size: 60px, $offset: 12px);
+			@include headerWithRay($size: 45px, $offset: 16px);
 			margin-bottom: 40px;
-		}
-		@media screen and (max-width: 450px) {
-			font-size: 3.5rem;
+			font-size: 3.2rem !important;
 		}
 	}
 

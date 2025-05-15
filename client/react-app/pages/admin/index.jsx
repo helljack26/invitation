@@ -73,6 +73,20 @@ const AdminPage = observer(() => {
 		}
 	}, [isAuthenticated]);
 
+	useEffect(() => {
+		const body = document.querySelector('body');
+		if (body) {
+		  // allow scrolling on the page
+		  body.style.overflow = 'scroll';
+		}
+		// cleanup: reset to whatever it was before
+		return () => {
+		  if (body) {
+			body.style.overflow = '';
+		  }
+		};
+	  }, []);
+
 	// ----------------------------------------------------------------
 	// CREATE A NEW GUEST
 	// ----------------------------------------------------------------
@@ -311,7 +325,7 @@ const AdminPage = observer(() => {
 						{guestsList.map((guest) => (
 							<tr key={guest.guest_id}>
 								<td>{guest.guest_id}</td>
-								<td>{guest.unique_path}</td>
+								<td>https://maria-dima-wedding.com.ua/invite/{guest.unique_path}</td>
 								<td>
 									<Link
 										target="_blank"

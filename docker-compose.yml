@@ -18,6 +18,7 @@ services:
       volumes:
          - mysql_data:/var/lib/mysql
       mem_limit: 512m
+      restart: "unless-stopped"
 
    phpmyadmin:
       container_name: phpmyadmin
@@ -42,6 +43,7 @@ services:
       command: >
          sh -c "a2enconf servername &&
                 apache2-foreground"
+      restart: "unless-stopped"
 
    php:
       build: ./server/images
@@ -63,6 +65,7 @@ services:
          - ./server/images/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
          - ./tmp/nomenclature_images:/tmp/nomenclature_images
       command: ["php-fpm"]
+      restart: "unless-stopped"
 
    nginx:
       image: nginx:latest
@@ -83,6 +86,7 @@ services:
          - ./server/hosts:/etc/nginx/conf.d:ro
          - ./server/www:/var/www:ro # SAME path php uses
          - /etc/letsencrypt:/etc/letsencrypt:ro # TLS certs
+      restart: "unless-stopped"
 
    react-app:
       build:

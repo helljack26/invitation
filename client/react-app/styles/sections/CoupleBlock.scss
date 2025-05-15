@@ -28,12 +28,12 @@
 	.couple_image_wrapper {
 		overflow: hidden;
 
-		-webkit-mask-image: url("../../img/couple_mask.svg");
+		-webkit-mask-image: url("/img/couple_mask.svg");
 		-webkit-mask-repeat: no-repeat;
 		-webkit-mask-position: top top;
 		-webkit-mask-size: 100% 100%;
 
-		mask-image: url("../../img/couple_mask.svg");
+		mask-image: url("/img/couple_mask.svg");
 		mask-repeat: no-repeat;
 		mask-position: top top;
 		mask-size: 100% 100%;
@@ -63,11 +63,13 @@
 			background-position-y: 30%;
 			display: inline-block;
 			filter: brightness(0.5);
-			
-		@media (max-width: 567px) {
-	background-position-x: 30%;
 
-		}
+			@media (max-width: 567px) {
+				background-position-x: 60%;
+			}
+			@media (max-width: 450px) {
+				background-position-x: 70%;
+			}
 		}
 	}
 
