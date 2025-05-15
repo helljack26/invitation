@@ -141,15 +141,37 @@ $custom-svg-button5: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20wi
 
 	&:hover {
 		background-color: $pink-color;
-		// optionally sharpen the shadow on hover
+	}
+	&:active {
+		background-color: $primary-color;
+	}
+	@media screen and (max-width: 768px) {
+		&:hover {
+			background-color: $primary-color;
+		}
+		&:active {
+			background-color: $pink-color;
+		}
 	}
 }
 
 @mixin button-custom_pink() {
+	@include button-custom(1);
 	background-color: $pink-color;
-
+	
 	&:hover {
 		background-color: $pink-color-hover;
+	}
+	&:active {
+		background-color: $pink-color;
+	}
+	@media screen and (max-width: 768px) {
+		&:hover {
+			background-color: $pink-color;
+		}
+		&:active {
+			background-color: $pink-color-hover;
+		}
 	}
 }
 

@@ -1,110 +1,121 @@
-import { useEffect, useRef } from "react";
+// components/Loader.js
+import React, { useEffect, useRef } from "react";
 import LoaderHeart from "../img/loader_heart.svg";
 import LoaderText from "../img/loader_text.svg";
+import useLenis from "../hooks/useLenis";
 
-export default function Loader() {
-  const loaderRef         = useRef(null);
-  const heartWrapperRef   = useRef(null);
-  const heartRef   = useRef(null);
-  const textRef           = useRef(null);
+export default function Loader({ onComplete }) {
+	const lenis = useLenis();
+	const loaderRef = useRef(null);
 
-  useEffect(() => {
-    let ctx;
+	const heartWrapperRef = useRef(null);
 
-    async function init() {
-      const { gsap }           = await import("gsap");
-      const { DrawSVGPlugin }  = await import("gsap/dist/DrawSVGPlugin");
-      gsap.registerPlugin(DrawSVGPlugin);
+	useEffect(() => {
+		let ctx;
+		async function init() {
+			const { gsap } = await import("gsap");
+			const { DrawSVGPlugin } = await import("gsap/dist/DrawSVGPlugin");
+			gsap.registerPlugin(DrawSVGPlugin);
 
-      const heartWrapperEl = heartWrapperRef.current;
-	  const heartEl = heartWrapperEl.querySelector('.loader__heart');
-	  const textEl = heartWrapperEl.querySelector('.loader__text-container');
-      const paths          = textEl.querySelectorAll("path");
+			if (!loaderRef.current || !heartWrapperRef.current) return;
 
-      paths.forEach((p) => {
-        const len = p.getTotalLength();
-        p.style.strokeDasharray  = len;
-        p.style.strokeDashoffset = len;
-      });
+			ctx = gsap.context(() => {
+				const heartEl =
+					heartWrapperRef.current.querySelector(".loader__heart");
+				const textEl = heartWrapperRef.current.querySelector(
+					".loader__text-container"
+				);
+				const paths = textEl.querySelectorAll("path");
 
-	  ctx = gsap.context(() => {
-		// initial states
-		gsap.set(heartWrapperEl, {
-		  opacity:         0,
-		  scale:           0.8,
-		  transformOrigin: "center center",
-		});
-		gsap.set(textEl, { opacity: 0 });
-	  
-		const tl = gsap.timeline();
-	  
-		// 1) fade in heart + text
-		tl.to(heartWrapperEl, {
-		  opacity:  1,
-		  scale:    1,
-		  duration: 1,
-		  ease:     "power2.out",
-		});
-		tl.to(textEl, { opacity: 1, duration: 0.8 }, "<");
-	  
-		// 2) two fast beats
-		tl.to(heartEl, {
-		  scale:    1.15,
-		  duration: 0.5,
-		  ease:     "power1.inOut",
-		  yoyo:     true,
-		  repeat:   1,      // 2 pulses total
-		});
-	  
-	  
-		// 4) two more fast beats
-		tl.to(heartEl, {
-		  scale:    1.15,
-		  duration: 0.5,
-		  ease:     "power1.inOut",
-		  yoyo:     true,
-		  repeat:   1,
-		  delay: 0.5
-		});
-	  
-		// 5) after a short hold, blow up + fade out
-		tl.to(heartEl, {
-		  delay:    0.5,
-		  scale:    12,
-		  opacity:  0,
-		  duration: 1.5,
-		  ease:     "power2.in",
-		});
-		tl.to(loaderRef.current, {
-		  opacity:       0,
-		  duration:      1.5,
-		  pointerEvents: "none",
-		}, "-=0.5");
-	  
-		// keep your text draw-on loop running in parallel…
-		gsap.to(paths, {
-		  strokeDashoffset: 1,
-		  duration:         5,
-		  ease:             "power3.out",
-		  stagger:          0.1,
-	
-		});
-	  }, loaderRef);
-	  
-    }
+				paths.forEach((p) => {
+					const len = p.getTotalLength();
+					p.style.strokeDasharray = len;
+					p.style.strokeDashoffset = len;
+				});
 
-    init();
-    return () => ctx && ctx.revert();
-  }, []);
+				gsap.set(heartWrapperRef.current, {
+					opacity: 0,
+					scale: 0.8,
+					transformOrigin: "center center",
+				});
+				gsap.set(textEl, { opacity: 0 });
 
-  return (
-    <div ref={loaderRef} className="loader">
-      <div className="loader__heart-wrapper" ref={heartWrapperRef}>
-        <LoaderHeart className="loader__heart"  />
-        <div  className="loader__text-container">
-          <LoaderText className="loader__text" width={220} height={'100%'}/>
-        </div>
-      </div>
-    </div>
-  );
+				const tl = gsap.timeline({
+					onComplete: () => onComplete && onComplete(),
+				});
+
+				tl.to(heartWrapperRef.current, {
+					opacity: 1,
+					scale: 1,
+					duration: 1,
+					ease: "power2.out",
+				});
+				tl.to(textEl, { opacity: 1, duration: 0.8 }, "<");
+
+				tl.to(heartEl, {
+					scale: 1.15,
+					duration: 0.5,
+					ease: "power1.inOut",
+					yoyo: true,
+					repeat: 1,
+				});
+				tl.to(heartEl, {
+					scale: 1.15,
+					duration: 0.5,
+					ease: "power1.inOut",
+					yoyo: true,
+					repeat: 1,
+					delay: 0.5,
+				});
+				
+				tl.to(heartEl, {
+					scale: 12,
+					opacity: 0,
+					duration: 1.5,
+					ease: "power2.in",
+					delay: 0.5,
+				});
+				tl.to(
+					loaderRef.current,
+					{
+						opacity: 0,
+						duration: 1.5,
+						pointerEvents: "none",
+					},
+					"-=0.5"
+				);
+
+				gsap.to(paths, {
+					strokeDashoffset: 1,
+					duration: 5,
+					ease: "power3.out",
+					stagger: 0.1,
+				});
+			}, loaderRef.current);
+		}
+
+		init();
+		return () => ctx && ctx.revert();
+	}, [onComplete]);
+
+	return (
+		<div
+			ref={loaderRef}
+			className="loader"
+		>
+			<div
+				ref={heartWrapperRef}
+				className="loader__heart-wrapper"
+			>
+				<LoaderHeart className="loader__heart" />
+				<div className="loader__text-container">
+					<LoaderText
+						className="loader__text"
+						width={220}
+						height="100%"
+					/>
+				</div>
+			</div>
+		</div>
+	);
 }

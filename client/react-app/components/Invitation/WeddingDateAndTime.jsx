@@ -23,7 +23,7 @@ export const WeddingDateAndTime = () => {
 
 			<div className="date_time_section_content">
 				<h1>
-					День <br /> весіллє
+					День <br /> весілля
 				</h1>
 				<div className="schedule_container">
 					<div className="date_time_item">

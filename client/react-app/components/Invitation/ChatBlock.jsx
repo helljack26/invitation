@@ -13,9 +13,7 @@ export const ChatBlock = () => {
 		>
 			<div className="chat_block_bg">
 				{/* Фото наречених. Замініть на свої */}
-				<I.bg_heart_3
-					alt="bg big heart"
-				/>
+				<I.bg_heart_3 alt="bg big heart" />
 			</div>
 
 			<div className="chat_block_content">
@@ -26,7 +24,7 @@ export const ChatBlock = () => {
 				</p>
 				<div className="chat_block_btn_wrapper">
 					<a
-						href="https://t.me/yourTelegramChannel" // замініть на ваш канал
+						href="https://t.me/+qEYb743idjgwMGMy" // замініть на ваш канал
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -34,9 +32,7 @@ export const ChatBlock = () => {
 					</a>
 					<div className="chat_block_arrow">
 						{/* Фото наречених. Замініть на свої */}
-						<I.swirl_arrow_icon
-							alt="swirl arrow bottom right icon"
-						/>
+						<I.swirl_arrow_icon alt="swirl arrow bottom right icon" />
 					</div>
 				</div>
 			</div>

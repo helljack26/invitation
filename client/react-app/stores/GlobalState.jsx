@@ -1,13 +1,21 @@
-import { observable, runInAction } from 'mobx'
+// GlobalState.js
+import { makeAutoObservable } from "mobx";
 
-const GlobalState = observable({
-  locoScroll: null,
-  scrollRef: null,
-  scroll: null,
-  isShowLeafFalling: false,
-  isSideMenuOpen: false,
+class GlobalState {
+  locoScroll = 0;
+  scroll = null;
+  isSideMenuOpen = false; 
 
-})
+  constructor() {
+    makeAutoObservable(this, {
+      setScroll: true,    // mark as action
+    });
+  }
 
-export default GlobalState;
+  setScroll(y, instance) {
+    this.locoScroll = y;
+    this.scroll = instance;
+  }
+}
 
+export default new GlobalState();

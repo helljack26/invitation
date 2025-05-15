@@ -8,7 +8,8 @@ import { gsap, Power3 } from "gsap";
 import { useUserGuestStore } from "../../stores/UserGuestStore";
 
 // SmoothScrollProvider (Locomotive Scroll or similar)
-import { SmoothScrollProvider } from "../../stores/scroll";
+
+import  {SmoothScrollProvider}  from "../../components/SmoothScrollProvider";
 
 // Components
 import Loader from "../../components/Loader";
@@ -147,7 +148,7 @@ const InvitationPage = observer(() => {
 			</Head>
 
 			{/* Locomotive Scroll or any smooth scroll wrapper */}
-			{/* <SmoothScrollProvider> */}
+			<SmoothScrollProvider>
 			<style
 				global
 				jsx
@@ -183,7 +184,7 @@ const InvitationPage = observer(() => {
 				<CoupleBlock />
 				<InvitationFooter />
 			</main>
-			{/* </SmoothScrollProvider> */}
+			</SmoothScrollProvider>
 		</>
 	);
 });
