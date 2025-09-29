@@ -4,4 +4,4 @@ server/mysql/*
 *.pyc
 ./mysql
 .env
-client/react-app/node_modules/*
+./node_modules/*
