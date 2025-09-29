@@ -1,0 +1,268 @@
+.admin_container {
+	width: 90%;
+	padding-top: 30px;
+	padding-bottom: 60px;
+	font-size: 0.6em;
+	@media screen and (max-width: 1200px) {
+		width: 94%;
+	}
+
+	h1 {
+		font-size: 3em;
+		font-family: $fRegular !important;
+	}
+	h2 {
+		font-size: 2em;
+		margin-bottom: 5px;
+	}
+	.logout_btn {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		z-index: 10;
+	}
+	a {
+		text-decoration: underline;
+		color: blue;
+		transition: all 0.3s ease-in-out;
+		&:hover {
+			text-decoration: none;
+			color: rgb(0, 0, 77);
+		}
+	}
+	.responsive-table {
+		tbody {
+			&::-webkit-scrollbar {
+				height: 16px;
+			}
+
+			&::-webkit-scrollbar-track {
+				background: #f7f3f4;
+				background: #f7f3f4;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				border-radius: 10px;
+				height: 16px;
+				border-radius: 10px;
+				background: -webkit-gradient(
+					linear,
+					left top,
+					left bottom,
+					from(#f2726c),
+					to(#7675fd)
+				);
+				background: linear-gradient(180deg, #f2726c, #7675fd);
+			}
+		}
+	}
+	.admin_container_form {
+		background-color: $bg-color-pink;
+		border-radius: 10px;
+		padding: 30px;
+		margin: 16px 0;
+
+		@media screen and (max-width: 450px) {
+			margin: 24px 0;
+			padding: 20px 10px;
+		}
+		h2 {
+			margin-bottom: 10px;
+			text-align: center;
+		}
+		input {
+			&::placeholder {
+				color: black;
+			}
+		}
+		label {
+			color: black;
+			span {
+				color: black;
+			}
+		}
+		.center_checkbox_container {
+			margin-top: 2rem;
+			label {
+				padding-left: 5.5vw;
+				@media screen and (max-width: 600px) {
+					padding-left: 0;
+				}
+			}
+		}
+		.right_select_container {
+			margin-top: 29px;
+			margin-bottom: 0;
+		}
+	}
+	.responsive-table {
+		overflow: hidden;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		th,
+		td {
+			text-align: center;
+			@media screen and (max-width: 576px) {
+				font-size: 0.8em;
+			}
+		}
+
+		thead {
+			background-color: $bg-color-pink;
+		}
+		th {
+			@media screen and (max-width: 576px) {
+				padding: 11px 0px;
+			}
+		}
+		tbody {
+			tr {
+				transition: all 0.3s ease-in-out;
+				&:hover {
+					background-color: $bg-color-pink;
+				}
+				@media screen and (max-width: 576px) {
+					padding: 0;
+				}
+			}
+		}
+		td {
+			padding: 15px;
+
+			i {
+				font-weight: bold;
+				font-style: normal;
+			}
+			@media screen and (max-width: 1400px) {
+				font-size: 0.9em;
+				padding: 10px;
+			}
+			@media screen and (max-width: 1100px) {
+				padding: 5px;
+			}
+			@media screen and (max-width: 992px) {
+				padding: 16px;
+			}
+			@media screen and (max-width: 576px) {
+				padding: 10px;
+			}
+		}
+		.table_button_row {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: row;
+			gap: 10px;
+			height: 100%;
+			@media screen and (max-width: 992px) {
+				flex-direction: column;
+			}
+
+			.btn {
+				margin-left: 0 !important;
+				@media screen and (max-width: 1400px) {
+					font-size: 0.8em;
+					line-height: 100%;
+					height: 27px;
+					padding: 0 12px;
+				}
+				@media screen and (max-width: 992px) {
+					width: 100%;
+				}
+			}
+		}
+	}
+
+	.alcohol_summary {
+		margin-top: 20px;
+		position: relative;
+		@media screen and (max-width: 768px) {
+			width: 100%;
+		}
+		@media screen and (max-width: 576px) {
+			font-size: 1.3em;
+		}
+		.card {
+			background-color: $bg-color-pink;
+		}
+	}
+
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(0, 0, 0, 0.3);
+		bottom: 0;
+		right: 0;
+		max-height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+		.modal-content {
+			background-color: white;
+			width: 40vw;
+			padding: 2rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			border-radius: 10px;
+
+			@media screen and (max-width: 992px) {
+				width: 60vw;
+			}
+			@media screen and (max-width: 768px) {
+				width: 90vw;
+			}
+
+			h4 {
+				margin-bottom: 10px;
+			}
+			p {
+				font-size: 1.2em;
+				text-align: center;
+			}
+			.modal-footer {
+				background-color: transparent;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: row;
+				margin-top: 10px;
+				button {
+					font-size: 1.2em;
+				}
+			}
+		}
+	}
+	.modal_edit {
+		.modal-content {
+			width: 50vw;
+			@media screen and (max-width: 992px) {
+				width: 90vw;
+			}
+			@media screen and (max-width: 450px) {
+				padding: 20px;
+			}
+
+			.row {
+				margin-left: 0;
+				margin-right: 0;
+				width: 100%;
+			}
+		}
+	}
+	.plus_one_checkbox {
+		margin-top: 2rem;
+		@media screen and (max-width: 600px) {
+			margin-top: 14px;
+		}
+		label {
+			@media screen and (max-width: 600px) {
+				position: relative;
+			}
+		}
+	}
+}
