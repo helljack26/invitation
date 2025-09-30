@@ -104,6 +104,11 @@
 							font-size: 1.6em;
 						}
 					}
+					.selected {
+						color: white;
+						user-select: none;
+						background-color: $pink-color !important;
+					}
 				}
 			}
 
