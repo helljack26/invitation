@@ -1,2 +1,0 @@
-докер запсукається, але некст джс вийобується
-https://chatgpt.com/c/67bb5372-ef64-800f-b2cd-56ae501a6dff?model=gpt-4o

@@ -1,0 +1,260 @@
+@import "./variables.scss";
+
+// Input
+@mixin mainInput() {
+	height: 64px;
+	outline: none;
+	border: none;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	border-radius: 40px;
+	font-family: $fRegular;
+	font-size: 14px;
+	padding-left: 24px;
+	padding-right: 24px;
+	transition: $mainTransition;
+
+	&:focus-visible {
+		outline: none;
+	}
+
+	&:focus {
+		outline: none;
+		border: none;
+	}
+
+	&:active {
+		outline: none;
+		border: none;
+	}
+
+	&:hover {
+		outline: none;
+		border: none;
+	}
+
+	&::placeholder {
+		color: $cBlackSecond;
+		user-select: none;
+	}
+}
+
+@mixin mainInputIcon() {
+	background-size: contain;
+	background-repeat: no-repeat;
+	content: "";
+	position: absolute;
+	user-select: none;
+	pointer-events: none;
+	top: 18px;
+	right: 16px;
+}
+
+@mixin mainInputErrorMessage() {
+	font-size: 14px;
+	font-family: $fRegular;
+	position: absolute;
+	bottom: -44px;
+	left: 0px;
+	line-height: 20px;
+	user-select: none;
+}
+
+//////// Buttons //////////
+@mixin buttonRounded() {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 16px;
+	font-family: $fBold;
+	height: 48px;
+	user-select: none;
+	transition: $mainTransition;
+	border-radius: 40px;
+}
+
+////////// Mask //////////
+@mixin maskIcon() {
+	width: 12px;
+	height: 12px;
+	mask-size: cover;
+	mask-repeat: no-repeat;
+	mask-position: center;
+}
+
+// Define your SVG variants as data URIs.
+$custom-svg-button: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='62.955662'%20height='15.671738'%20viewBox='0%200%2062.955662%2015.671738'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g14'%20transform='matrix(2.9088361,-3.2389591,3.2389591,2.9088361,-325.2915,-4.2212396)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2054.57826,67.559114%20c%20-1.913377,-2.932743%20-7.04134,-7.12586%20-7.022649,-8.416316%200.04496,-3.104229%201.462816,-3.737719%209.616957,6.129591%202.337483,2.828583%20-1.051148,4.652013%20-2.594308,2.286725z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E";
+
+$custom-svg-button2: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='44.263031'%20height='13.240067'%20viewBox='0%200%2044.263031%2013.240067'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g14'%20transform='matrix(2.9088361,-3.2389591,3.2389591,2.9088361,-336.12958,-8.7269756)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2053.991389,67.298704%20c%20-2.710727,-2.680664%20-6.103095,-5.743465%20-5.259549,-7.148545%201.169058,-1.94728%202.678489,0.125329%207.249845,5.187037%201.550121,1.716397%20-1.222657,2.720633%20-1.990296,1.961508z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E";
+
+$custom-svg-button3: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='55.025978'%20height='14.735199'%20viewBox='0%200%2055.025978%2014.735199'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g14'%20transform='matrix(2.9088361,-3.2389591,3.2389591,2.9088361,-327.30791,-6.4459879)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2053.37963,66.436102%20c%20-1.913377,-2.932743%20-6.852154,-6.344462%20-6.18294,-7.269659%201.87316,-2.589669%200.91617,-3.28831%209.513272,6.195554%201.553302,1.713519%20-1.787172,3.439393%20-3.330332,1.074105z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E";
+
+$custom-svg-button4: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='31.729397'%20height='13.078386'%20viewBox='0%200%2031.729397%2013.078387'%20sodipodi:docname='button_bg_3.svg'%20xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'%20xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview%20id='namedview1'%20pagecolor='%23505050'%20bordercolor='%23eeeeee'%20borderopacity='1'%20inkscape:showpageshadow='0'%20inkscape:pageopacity='0'%20inkscape:pagecheckerboard='0'%20inkscape:deskcolor='%23505050'%3E%3Cinkscape:page%20x='0'%20y='-1.198311e-17'%20width='31.729397'%20height='13.078387'%20id='page2'%20margin='0'%20bleed='0'/%3E%3C/sodipodi:namedview%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g14'%20transform='matrix(2.0396422,-3.2389591,2.2711206,2.9088361,-235.57187,-8.8886614)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2053.991389,67.298704%20c%20-2.710727,-2.680664%20-6.103095,-5.743465%20-5.259549,-7.148545%201.169058,-1.94728%202.055701,-0.654778%206.478156,4.534448%202.714657,3.185329%20-0.450968,3.373222%20-1.218607,2.614097z'%20id='path4'%20sodipodi:nodetypes='cssc'/%3E%3C/g%3E%3C/svg%3E";
+
+$custom-svg-button5: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='32.590038'%20height='13.989595'%20viewBox='0%200%2032.590038%2013.989596'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g14'%20transform='matrix(2.0396422,-3.2389591,2.2711206,2.9088361,-235.63308,-8.4351761)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2053.893357,67.542728%20c%20-2.122176,-2.679802%20-6.230939,-5.603121%20-5.161517,-7.392569%201.128446,-1.888213%202.397927,-0.513825%206.702495,4.613745%202.690309,3.204676%20-0.343042,3.674285%20-1.540978,2.778824%20z'%20/%3E%3C/g%3E%3C/svg%3E";
+
+// Mixin for a masked button using one of the SVG shapes.
+// The SVG is applied as a mask and the element's background-color shows only through the masked area.
+@mixin button-custom($shape: 1) {
+	// Select the SVG based on the $shape parameter.
+	$svg: $custom-svg-button;
+
+	@if $shape==2 {
+		$svg: $custom-svg-button2;
+	}
+
+	@else if $shape==3 {
+		$svg: $custom-svg-button3;
+	}
+
+	@else if $shape==4 {
+		$svg: $custom-svg-button4;
+	}
+
+	@else if $shape==5 {
+		$svg: $custom-svg-button5;
+	}
+
+	width: fit-content;
+	background-color: $primary-color;
+	-webkit-mask-image: url("#{$svg}");
+	mask-image: url("#{$svg}");
+	mask-size: contain;
+	mask-repeat: no-repeat;
+	mask-position: center;
+	transition: all 0.3s ease-in-out;
+	display: flex;
+	border: none;
+	cursor: pointer;
+	color: white;
+	padding: 15px 40px;
+	user-select: none;
+	z-index: 2;
+	position: relative;
+
+	span {
+		user-select: none;
+	}
+
+	&:hover {
+		background-color: $pink-color;
+	}
+	&:active {
+		background-color: $primary-color;
+	}
+	@media screen and (max-width: 768px) {
+		&:hover {
+			background-color: $primary-color;
+		}
+		&:active {
+			background-color: $pink-color;
+		}
+	}
+}
+
+@mixin button-custom_pink() {
+	@include button-custom(1);
+	background-color: $pink-color;
+	
+	&:hover {
+		background-color: $pink-color-hover;
+	}
+	&:active {
+		background-color: $pink-color;
+	}
+	@media screen and (max-width: 768px) {
+		&:hover {
+			background-color: $pink-color;
+		}
+		&:active {
+			background-color: $pink-color-hover;
+		}
+	}
+}
+
+// Helper function: Converts a color to a URL‑encoded string.
+// If given a color, it interpolates to a string and removes the "#"
+// (replaced with "%23" for URL encoding).
+
+// Helper function: encode a hex color for use in data URIs.
+@function encode-color($color) {
+	@if type-of($color)=="color" {
+		$color-string: "#{$color}";
+		@return "%23"+str-slice($color-string, 2);
+	}
+
+	@else if type-of($color)=="string" {
+		@if str-index($color, "#") {
+			@return "%23"+str-slice($color, 2);
+		}
+
+		@return $color;
+	}
+
+	@return $color;
+}
+
+// Custom SVG encoded as a data URI.
+// The provided SVG has been URL-encoded to be used as a background-image.
+// Note: We removed the XML declaration and comments for brevity.
+$custom-svg: "data:image/svg+xml,%3Csvg%20version='1.1'%20id='svg1'%20width='100'%20height='167.04778'%20viewBox='0%200%20100%20167.04778'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:svg='http://www.w3.org/2000/svg'%3E%3Cdefs%20id='defs1'/%3E%3Cg%20id='g1'%20transform='translate(-13.24938,32.855014)'%3E%3Cg%20id='g14'%20transform='matrix(2.9088361,-3.2389591,3.2389591,2.9088361,-291.28172,42.601296)'%20style='fill:%233a865b;fill-opacity:1'%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2071.091761,58.243902%20c%20-1.85792,-0.355837%20-9.43184,-3.548449%20-13.72638,-5.786038%20-8.993984,-4.686148%20-6.293754,-7.192033%202.90514,-2.696045%201.87141,0.914658%204.69856,2.220187%206.28256,2.901176%205.55294,2.3873%206.08813,2.652265%207.12,3.524984%201.18743,1.004282%201.31046,1.615438%200.42104,2.091443%20-0.701,0.375162%20-0.86842,0.373181%20-3.00236,-0.03552%20z'%3E%3C/path%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2053.448162,64.958993%20c%20-2.938802,-1.904058%20-7.022649,-6.798357%20-7.022649,-8.416316%200,-3.104554%206.048552,0.716736%209.584668,6.055302%202.02633,3.059199%200.57702,4.394804%20-2.562019,2.361014%20z'%3E%3C/path%3E%3Cpath%20style='fill:%233a865b;fill-opacity:1'%20d='m%2042.536946,78.850687%20c%20-1.300593,-1.359244%20-4.865421,-10.700745%20-5.6237,-14.736708%20-0.915666,-4.873658%201.922965,-5.127657%203.813136,-0.341196%204.730218,11.978278%205.574817,19.011877%201.810564,15.077904%20z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E";
+
+// Mixin: Apply the custom SVG to both sides of a header,
+// with the left side rotated 180 deg.
+@mixin custom-svg-decorated-header($size: 100px,
+	$offset: 12px,
+	// Gap between header text and decorative elements
+	$svg: $custom-svg) {
+	position: relative;
+	text-align: center;
+	// Padding ensures the header text doesn't overlap the pseudo-elements.
+	padding-left: calc(#{$size} + #{$offset});
+	padding-right: calc(#{$size} + #{$offset});
+
+	// Base pseudo-element styles.
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		width: $size;
+		height: $size;
+		background-image: url("#{$svg}");
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+	// Left side: rotate 180 deg using CSS transform.
+	&::before {
+		right: 80%;
+		margin-right: $offset;
+		transform: translateY(-50%) rotate(180deg);
+	}
+
+	// Right side: no rotation.
+	&::after {
+		left: 80%;
+		margin-left: $offset;
+		transform: translateY(-50%);
+	}
+}
+
+//////// Text //////////
+@mixin headerWithRay($size, $offset) {
+	@include custom-svg-decorated-header($size, $offset);
+	font-size: 4.5rem;
+	line-height: 120%;
+	width: fit-content;
+	margin: 0 auto;
+
+	@media screen and (max-width: 992px) {
+		font-size: 4.2rem;
+	}
+
+	@media screen and (max-width: 450px) {
+		font-size: 3.7rem;
+	}
+}
