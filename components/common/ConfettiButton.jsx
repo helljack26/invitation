@@ -214,25 +214,28 @@ const ConfettiButton = ({
 		}
 	};
 
+	// Коментар (укр): прибираємо зовнішній <div>, щоб <button>
+	// був прямим дочірнім елементом .guestRowButtons і стилі на
+	// селектор типу ".guestRowButtons > button.selected" коректно спрацьовували.
+
 	return (
-		<div>
+		<>
 			<button
 				type="button"
 				ref={buttonRef}
 				onClick={handleClick}
 				className={selected ? "selected" : ""}
-				style={{
-					display: "block",
-					cursor: "pointer",
-				}}
+				style={{ display: "block", cursor: "pointer" }}
 			>
 				<span>{buttonText}</span>
 			</button>
+
 			<audio
 				ref={audioRef}
 				src={soundSrc}
 				preload="auto"
 			/>
+
 			<canvas
 				ref={canvasRef}
 				style={{
@@ -245,7 +248,7 @@ const ConfettiButton = ({
 					zIndex: 0,
 				}}
 			/>
-		</div>
+		</>
 	);
 };
 

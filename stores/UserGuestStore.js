@@ -19,6 +19,19 @@ class UserGuestStore {
 		makeAutoObservable(this);
 	}
 
+	// Коментар (укр): допоміжний метод, який зберігає лише змінені поля
+	persistCurrentGuestPatch = (patch) => {
+		const list = loadGuests();
+		const idx = list.findIndex(
+			(g) => g.unique_path === this.guestData?.unique_path
+		);
+		if (idx !== -1) {
+			list[idx] = { ...list[idx], ...patch };
+			saveGuests(list);
+			this.guestData = list[idx]; // оновлюємо локально для реактивності
+		}
+	};
+
 	/**
 	 * Fetch a guest by its unique_path.
 	 */
@@ -53,6 +66,7 @@ class UserGuestStore {
 	 */
 
 	// 1) Set RSVP status in store only (no request)
+	// Коментар (укр): виставляємо статус і одразу пишемо у localStorage
 	setRSVPStatusInStore = (status, isPlusOne = false) => {
 		if (!this.guestData) return;
 		runInAction(() => {
@@ -63,9 +77,11 @@ class UserGuestStore {
 			}
 			this.isDirty = true;
 		});
+		this.persistCurrentGuestPatch(
+			isPlusOne ? { rsvp_status_plus_one: status } : { rsvp_status: status }
+		);
 	};
 
-	// 2) Alcohol preference
 	setAlcoholPreferenceInStore = (value, isPlusOne = false) => {
 		if (!this.guestData) return;
 		runInAction(() => {
@@ -76,9 +92,13 @@ class UserGuestStore {
 			}
 			this.isDirty = true;
 		});
+		this.persistCurrentGuestPatch(
+			isPlusOne
+				? { alcohol_preferences_plus_one: value }
+				: { alcohol_preferences: value }
+		);
 	};
 
-	// 3) Wine type preference
 	setWineTypeInStore = (value, isPlusOne = false) => {
 		if (!this.guestData) return;
 		runInAction(() => {
@@ -89,9 +109,11 @@ class UserGuestStore {
 			}
 			this.isDirty = true;
 		});
+		this.persistCurrentGuestPatch(
+			isPlusOne ? { wine_type_plus_one: value } : { wine_type: value }
+		);
 	};
 
-	// 4) Custom alcohol text
 	setCustomAlcoholInStore = (value, isPlusOne = false) => {
 		if (!this.guestData) return;
 		runInAction(() => {
@@ -102,6 +124,11 @@ class UserGuestStore {
 			}
 			this.isDirty = true;
 		});
+		this.persistCurrentGuestPatch(
+			isPlusOne
+				? { custom_alcohol_plus_one: value }
+				: { custom_alcohol: value }
+		);
 	};
 
 	/**
